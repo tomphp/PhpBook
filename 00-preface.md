@@ -1,0 +1,56 @@
+Preface
+=======
+
+I have been working with PHP professionally since 2000, since then I have seen
+it grow from a basic scripting language which allowed you to hack your ideas
+togther in version 3, to something that resembled a fully featured language in
+version 4, through to actually becoming that fully features language in version
+5.
+
+One of the fantastic features of PHP is it is so easy to get up and going
+quickly, it's so simple to add some dynamic elements to your existing HTML
+page. This however is also a problem, because anyone can start piecing
+together snippets of PHP code to get something to work it means there's a lot
+of people out there who write PHP code without ever really learning to how to
+program properly. Badly written code is often broken, very hard to add new
+functionality to, hard to maintain and rarely scalable.
+
+In this book I hope to bring together many programming concepts, techniques and
+tools and bring them into the PHP world to show how to apply them to create a
+well designed PHP application.  Some of these concepts, techniques and tools
+have been developed in recent years and many of them have been developed over
+the last 1 or 2 decades.
+
+I will be covering Object Oriented Programming, Design Patterns, elements from
+Domain Driven Design, Refactoring, The SOLID Principals, Test Driven
+Development and Behaviour Driven Development. None of these are brand new to
+PHP, in fact any serious PHP development company will be using at least some,
+if not all of these tools and techniques already, however if they are all new
+to you this will be quite a ride. I do not intend on covering any of these
+topics extensively, there are many great books and resources about all of them
+written by far cleverer people than myself and I encourage you to read and
+learn more about these subjects further, this book however should hopefully be
+a great introduction to some or many of these techniques, concepts and tools
+and show you how to quickly get started using them with PHP.
+
+This book aims to show you what you need to start building a well designed,
+managable and extendable, medium size PHP application. The approach and process
+of working in this book should fit very well in to an Agile process of working,
+however it will only deal with the actual development and architecture of the
+project rather than the full planning, communication and team management
+aspects included in the Agile way of working.
+
+The architecture of the application we shall build in this book is a fairly
+common approach to building applications, it will not be based on any
+frameworks but we will make use of some later on to see how frameworks can be
+very useful tools, in my mind this is how modern frameworks should be used.
+This architecture and approach to PHP application design is one we use often at
+the company I work for and is a tried and tested approach.
+
+So finally who is this book for? Firstly this is not an introduction to PHP, I
+assume you are already familiar with the language, you should be familar with
+and able to use classes and at least understand what an interface is. You
+probably have built at least one medium scale application but don't really know
+a lot about software design principals. If you have less experience than this
+you may struggle to to keep up, if you have more then there may be less to be
+learned from this book but hopefully it will still be helpful.
