@@ -111,34 +111,41 @@ class Contact
 Simple really right? From this point on in the book that is everything you will
 need to know about PHP namespaces.
 
+Front Controllers
+-----------------
+
+???
+
 Standards
 ---------
 
-As languages get more powerful it often allows many different ways an approaches
-to achieve the same thing and everyone has their own preferences of how they
-personally like to do things. On one hand this is great; it allows programmers
-to be to write their code in the way which best fits how they think, lay it out
-in they way which look the most asthetically pleasing to them, and structure it
-in the way which they find easiest to navigate. On the other hand this becomes
-a total nightmare when you are working with several libraries, all written by
-different programmers who each have their own way of doing all this. You have to
-learn each of the different approaches to efficiently navigate and understand
-the code. Also it may make it tricky for the libraries to happily interact with
-each other.
+As languages get more powerful it often allows many different ways an
+approaches to achieve the same thing and everyone has their own preferences of
+how they personally like to do things. On one hand this is great; it allows
+programmers to be to write their code in the way which best fits how they
+think, lay it out in they way which look the most asthetically pleasing to
+them, and structure it in the way which they find easiest to navigate. On the
+other hand this becomes a total nightmare when you are working with several
+libraries, all written by different programmers who each have their own way of
+doing all this. You have to learn each of the different approaches to
+efficiently navigate and understand the code. Also it may make it tricky for
+the libraries to happily interact with each other.
 
-So for the reasons just mentioned, programmers get together is groups and create
-standards with a nice middle ground which everyone is mostly happy with. You'll
-often find that you might not agree with everything define in a standard but
-by putting that to one side and accepting it you reap the benefits over have
-you code being much more consistent with all the other users of the standard's
-code, as well as any tools which have been built to work with that standard.
+So for the reasons just mentioned, programmers get together is groups and
+create standards with a nice middle ground which everyone is mostly happy with.
+You'll often find that you might not agree with everything define in a standard
+but by putting that to one side and accepting it you reap the benefits over
+have you code being much more consistent with all the other users of the
+standard's code, as well as any tools which have been built to work with that
+standard.
 
 ### PHP-FIG
 
-Introducing PHP-FIG! PHP-FIG or the PHP Framework Interop Group is a group built
-up of various key people in the PHP community who have got together and started
-to build some standards for using PHP. Many PHP software project have now adopted
-or are adopting many of these standards and I full recommend you do the same.
+Introducing PHP-FIG! PHP-FIG or the PHP Framework Interop Group is a group
+built up of various key people in the PHP community who have got together and
+started to build some standards for using PHP. Many PHP software project have
+now adopted or are adopting many of these standards and I full recommend you do
+the same.
 
 At the time of writing this there are 5 published standards:
 
@@ -157,9 +164,9 @@ For more Information on PHP-FIG visit the website at http://www.php-fig.org/
 ### PHP The Right Way
 
 PHP The Right Way is not a standard as such, it is simply a website which lists
-lots of things about how PHP should be used if you are serious about writing good
-code. It contains lots of fantastic advice and I thoroughily recommend studying
-it.
+lots of things about how PHP should be used if you are serious about writing
+good code. It contains lots of fantastic advice and I thoroughily recommend
+studying it.
 
 It can be found at http://www.phptherightway.com/
 
@@ -203,6 +210,8 @@ The basic rules are as follows:
 * The file name is the same name (and case) as the name of the class defined in it with `.php` appended to it
 * The file exists in directory stucture which fully matches the namespace which the class is defined within
 
+For the full PSR-0 specification see http://www.php-fig.org/psr/psr-0/
+
 ### Example
 
 A file located at
@@ -224,11 +233,61 @@ Whatever comes before the root namespace in the file name (in this case
 `/home/tom/projects/AutoloadExample/src`) is not important, so long as the 
 FQCN is mirror in the folder structure up to the class name.
 
-**From this point on in the book I will not mentioned file names when displaying
-code examples unless the file name does not match the PSR-0 standard.**
+**From this point on in the book I will not mentioned file names when
+displaying code examples unless the file name does not match the PSR-0
+standard.**
 
 Composer
 --------
+
+Composer is a dependency manager for PHP, it allows you to specify all the
+libraries and tools that your PHP project depends on in a simple JSON file, it
+will then correct versions of those dependencies into your project.
+
+This means it's easy to distribute your project without including its 3rd party
+dependencies while making it very easy for an users or developers working on
+the project to easily install the required dependencies. It also makes it easy
+to quickly update to newer versions of dependencies.
+
+Composer installs its dependencies locally to the project in a directory called
+`vendor`, rather than installing them globally onto the system your are running
+on.  This is a definite plus as it means you can run many different projects on
+the same system all working with different versions their dependencies without
+getting in to a mess.
+
+Now this is all very interesting but you might think you have no intention of
+using any external librarys or tools with your new project, so is Composer
+still useful?
+
+The answer is most definitely yes:
+
+* Firstly there are lots of great development tools which can be installed via
+Composer which you should definitely be using even if you don't intend on using
+3rd party libraries.
+* Secondly you may not intend on using 3rd party libraries but if you start off
+using Composer from the beginning you can always change your mind an add a
+dependency very easily.
+* And thirdly, Composer provides a nice and easy to set up autoloader for PHP.
+By simply adding a few line of JSON your autoloader is up and ready to go.
+
+While there are plenty of people out there who will have a good reason not to
+use Composer, in my oppion if you don't have on then you should definitely be
+using it in your projects.
+
+So that's a little intro on what Composer can do for you. The full
+documentation can be found at https://getcomposer.org/ but to save you the
+hassle of reading it all now lets have a look at a little example of the
+basics.
+
+### Composer example
+
+#### Installing
+
+#### Setting up the Autoloader
+
+#### Adding a Dependency
+
+#### Adding Development Tools
 
 Coding Style
 ------------
