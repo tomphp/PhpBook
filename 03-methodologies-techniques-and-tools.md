@@ -13,11 +13,11 @@ Dependency Injection
 The SOLID Principals
 --------------------
 
-Uncle Bob's Clean Code
-----------------------
-
 Refactoring
 -----------
+
+Code Calisthenics
+-----------------
 
 Automated Testing
 -----------------
@@ -27,6 +27,9 @@ Test Driven Development (TDD)
 
 Behaviour Driven Development (BDD)
 ----------------------------------
+
+Uncle Bob's Clean Code
+----------------------
 
 Domain Driven Design (DDD)
 --------------------------
