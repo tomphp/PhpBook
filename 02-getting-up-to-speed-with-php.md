@@ -114,7 +114,116 @@ need to know about PHP namespaces.
 Front Controllers
 -----------------
 
-???
+The front controller design pattern for web applications which  involves
+creating a single entry point into your application. It requires configuring
+your webserver to redirect all requests to a single PHP script which then
+processes the request and decides what content to display.
+
+Lets take a look at a little example:
+
+### The Traditional Approach
+
+First lets look at the traditional approach of using PHP. Lets create 2 files
+inside an empty folder, the first one we'll call `page1.php`:
+
+```php
+<?php
+
+echo 'You are viewing page 1';
+```
+
+And the second one we'll call `page2.php`
+
+```php
+<?php
+
+echo 'You are viewing page 2';
+```
+
+Next open a terminal and `cd` into the directory containing these files and use
+the following command to start up PHP's built in webserver:
+
+`php -S localhost:8080`
+
+Now if you open your browser and go to `http://localhost:8080/page1.php` then
+you see `You are viewing page 1` and if you go to
+`http://localhost:8080/page2.php` you see `You are viewing page 2`.
+
+When you are done, press `CTRL+C` in your terminal to stop the webserver.
+
+This is the normal approach that you normally first learn when starting with
+PHP.  There's nothing wrong with this approach, but in general using a front
+controller is better so let's take a look at that.
+
+### Single Entry Point
+
+Create a new folder and this time create a single file called `index.php` containing:
+
+```php
+<?php
+
+echo 'You are looking at: ' . $_SERVER['REQUEST_URI'];
+```
+
+No in the terminal again `cd` to this new directory. This timestart the PHP
+built in webserver with the name of the file we want to use as the application
+entry point:
+
+`php -S localhost:8080 index.php`
+
+Again open your browser and visit `http://localhost:8080/page1` and you should see
+`You are looking at: /page1`, and again `http://localhost:8080/page2` and you should see
+`You are looking at: /page2`.
+
+So as you can see anything you type after the `http://localhost:8080` is redirected
+to the `index.php` file and you can use the `$_SERVER` superglobal to get the
+URI requested.
+
+### The Simplest Front Controller in the World
+
+So lets modify the `index.php` file to look like this:
+
+```php
+<?php
+
+switch ($_SERVER['REQUEST_URI']) {
+    case '/page1':
+        echo 'You are viewing page 1';
+        break;
+
+    case '/page2':
+        echo 'You are viewing page 2';
+        break;
+
+    default:
+        header('HTTP/1.0 404 Not Found');
+
+        echo '<html>'
+            . '<head><title>404 Not Found</title></head>'
+            . '<body><h1>404 Not Found</h1></body>'
+            . '</html>';
+}
+
+```
+
+Now if we go to our browser and go to `http://localhost:8080/page1` or
+`http://localhost:8080/page2` then they work as expected. Also going to
+`http://localhost:8080/anything-else` now shows a 404 message.
+
+Obviously this is a pretty pointless and limiting front controller but hopefully
+you now understand the theory behind it.
+
+Stop the webserver again by pressing `CTRL+C` in the terminal.
+
+### Front Controllers using Apache
+
+In order to use a front controller with Apache you need to tell Apache where to
+find the PHP script to use for the application entry point. As of Apache version
+`2.2.16` you can simply add:
+
+`FallbackResource /index.php`
+
+to your `.htaccess` file in your document root.
 
 Standards
 ---------
