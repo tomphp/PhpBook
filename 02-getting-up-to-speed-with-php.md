@@ -240,6 +240,7 @@ call methods on objects which are not in the typehinted interface, it's not an
 error but it's not good practice:
 
 ```php
+<?php
 
 interface Fooer
 {
