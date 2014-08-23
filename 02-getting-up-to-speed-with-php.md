@@ -566,13 +566,175 @@ documentation can be found at https://getcomposer.org/ but to save you the
 hassle of reading it all now lets have a look at a little example of the
 basics.
 
-### Composer example
+### Composer Example
 
 #### Installing
 
+The various installion options for Composer can be found at
+https://getcomposer.org/
+
+You can either install a copy locally to your project which means your call it
+by running:
+
+`./composer.phar`
+
+Or you can install it globally on your system and rename it to `composer` which
+is what I have done. So on my system I run Composer by simply typing:
+
+`composer`
+
+But if you have installed it differently you will need to adjust my
+instructions accordingly.
+
 #### Setting up the Autoloader
 
+To start of create a new project folder and `cd` into it:
+
+```
+mkdir ComposerExample
+cd ComposerExample
+```
+
+If you want to you Composer locally you'll want to install it inside this
+folder now, if you have installed it global already then you can just carry on.
+
+Next up create a file in the project folder called `composer.json` and add the
+following content:
+
+```json
+{
+    "autoload": {
+        "psr-0": {
+            "ComposerExample\\": "./src"
+        }
+    }
+}
+```
+
+What we have told Composer to do here is set up an autoloader to local any
+classes in the `ComposerExample` namespace using the PSR-0 file structure inside
+a directory inside our project directory called `src`.
+
+Now tell Composer to apply these settings with the following command (remember
+you will need to adjust it if you have installed Composer locally):
+
+`composer install`
+
+Once it has finished you will notice it has created a folder called `vendor`
+and another file called `composer.lock`. If you're are using a Source Control
+System like git (and you really should be!) then you should instruct it to
+ignore your `vendor` directory from the repository, the `composer.lock` file
+should be added to the repository though.
+
+Next up create a directory structure for our PSR-0 classes to go:
+
+`mkdir -p src/ComposerExample`
+
+The create a file called `src/ComposerExample/HelloApplication.php` with the
+following content:
+
+```php
+<?php
+
+namespace ComposerExample;
+
+class HelloApplication
+{
+    public function run()
+    {
+        echo "Hello beautiful World!";
+    }
+}
+```
+
+And finally create a class called `run.php` containing:
+
+```php
+<?php
+
+// Load up Composer's autoloader
+require_once __DIR__ . '/vendor/autoload.php';
+
+// This class will loaded automatically
+$app = new \ComposerExample\HelloApplication();
+$app->run();
+```
+
+Now to see it work run:
+
+`php run.php`
+
+Ta da!
+
 #### Adding a Dependency
+
+Now lets dress it up a bit using a 3rd party library. I had a little hunt
+around for something interesting to try and found Maxime Bouroumeau-Fuseau's
+ConsoleKit library.
+
+First up lets add it to the project as a dependency by updating our
+`composer.json` file to contain the following:
+
+```json
+{
+    "require": {
+        "maximebf/consolekit": ">=1.0.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "ComposerExample\\": "./src"
+        }
+    }
+}
+```
+
+Next we tell Composer to download it new dependency by running:
+
+`composer update`
+
+It should download the ConsoleKit package which will now be ready to use. Let's
+update our `ComposerExample\HelloApplication` class to look like this:
+
+```php
+<?php
+
+namespace ComposerExample;
+
+use ConsoleKit\Console;
+
+class HelloApplication extends Command
+{
+    public function run()
+    {
+        $console = new Console();
+        $console->addCommand('ComposerExample\\HelloCommand`);
+        $conssole->run();
+    }
+}
+```
+
+And let's add a new class called `ComposerExample\HelloCommand` like so:
+
+```php
+<?php
+
+namespace ComposerExample;
+
+use ConsoleKit\Command;
+use ConsoleKit\Colors;
+
+class HelloCommand extends Command
+{
+    public function execute(array $args, array $options = array())
+    {
+        $this->writeln('Hello green World!', Colors::GREEN);
+    }
+}
+```
+
+And there we have it, we have simply added a dependency to our app and used it
+leaving Composer to do all the hardwork of downloading it and setting up the
+autoload to find it.
 
 #### Adding Development Tools
 
