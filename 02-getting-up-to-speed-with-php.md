@@ -176,7 +176,7 @@ C++ version of the last example:
 ```c++
 
 int fn(int p) {
-    return $p;
+    return p;
 }
 
 int x = 42; // x contains an integer
@@ -208,7 +208,8 @@ Since static typing does have benifits PHP introduced typehints on function
 arguments. Typehints allow you to specify exactly what user defined type a function
 accepts for each parameter, it will throw an exception if the wrong type is given:
 
-```<?php
+```php
+<?php
 
 class C1
 {
