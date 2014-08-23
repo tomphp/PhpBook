@@ -742,6 +742,51 @@ autoload to find it.
 
 #### Adding Development Tools
 
+Composer's `require` section lets you define the requirements your project
+needs to run but it also has a `require-dev` section which for dependencies
+which you want to use for development (testing tools for example).
+
+CodeSniffer is a tool which checks that your code follows a given coding style,
+lets add it to our project.
+
+Update the `composer.json` file to include the CodeSniffer dev dependency:
+
+```json
+{
+    "require": {
+        "maximebf/consolekit": ">=1.0.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "ComposerExample\\": "./src"
+        }
+    }
+}
+```
+
+Once again tell Composer to update it's dependencies by running:
+
+`composer update`
+
+After it has finished CodeSniffer is ready to be used. When Composer installs
+tool it will install the executable files in a local directory, by default this
+directory is `vendor/bin`. We can run CodeSniffer by running:
+
+`vendor/bin/phpcs --standard=psr2 src`
+
+If all the code in our `src` directory conforms to the PSR-2 coding style then
+CodeSniffer should have complete without and errors.
+
+To make life easier your can add `vendor/bin` to your operating systems `PATH`
+variable so you can execute your tools more easily. On Linux you do this by adding:
+
+`PATH=./vendor/bin:$PATH`
+
+To your `.bashrc` file in your home directory.
+
 Coding Style
 ------------
 

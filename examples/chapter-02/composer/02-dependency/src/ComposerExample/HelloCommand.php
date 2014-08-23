@@ -12,4 +12,3 @@ class HelloCommand extends Command
         $this->writeln('Hello green World!', Colors::GREEN);
     }
 }
-
