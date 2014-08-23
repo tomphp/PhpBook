@@ -642,7 +642,7 @@ class HelloApplication
 {
     public function run()
     {
-        echo "Hello beautiful World!";
+        echo "Hello beautiful World!\n";
     }
 }
 ```
@@ -702,13 +702,13 @@ namespace ComposerExample;
 
 use ConsoleKit\Console;
 
-class HelloApplication extends Command
+class HelloApplication extends Console
 {
     public function run()
     {
         $console = new Console();
-        $console->addCommand('ComposerExample\\HelloCommand`);
-        $conssole->run();
+        $console->addCommand('ComposerExample\\HelloCommand');
+        $console->run();
     }
 }
 ```
@@ -731,6 +731,10 @@ class HelloCommand extends Command
     }
 }
 ```
+
+Now to try and run it:
+
+`php run.php hello`
 
 And there we have it, we have simply added a dependency to our app and used it
 leaving Composer to do all the hardwork of downloading it and setting up the
