@@ -4,8 +4,15 @@ Methodologies, Techniques and Tools
 Object Oriented Programming
 ---------------------------
 
+### Encapsulation
+
+### Inheritance vs. Composition
+
 Design Patterns
 ---------------
+
+Value Objects & Immutability
+----------------------------
 
 Dependency Injection
 --------------------
@@ -37,3 +44,5 @@ Domain Driven Design (DDD)
 Agile
 -----
 
+User Stories
+------------
