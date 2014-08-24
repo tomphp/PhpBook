@@ -126,30 +126,30 @@ explain for completeness. Take the following code:
 ```php
 <?php
 
-$coll = new WordCollection();
+$collection = new WordCollection();
 
-$coll->addWord('hello');
-$coll->incrementCounter();
+$collection->addWord('hello');
+$collection->incrementCounter();
 ```
 
-It looks ok and `$coll` is left in a valid state right, but is it always in a
+It looks ok and `$collection` is left in a valid state right, but is it always in a
 valid state? Look again:
 
 ```php
 <?php
 
-$coll = new WordCollection();
+$collection = new WordCollection();
 
 // words in list = 0
 // counter = 0
 
-$coll->addWord('hello');
+$collection->addWord('hello');
 
 // words in list = 1
 // counter = 0
 // Oh dear!
 
-$coll->incrementCounter();
+$collection->incrementCounter();
 
 // words in list = 1
 // counter = 1
@@ -157,7 +157,7 @@ $coll->incrementCounter();
 
 So there's a point in the middle whether the state of the object is invalid, we
 do fix it in the next line of code but what if a developer forgot to increment
-the counter, it could lead to a nasty bug!
+the counter? It could lead to a nasty bug!
 
 The solution is simple, design the class so it can never be put into an invalid
 state:
