@@ -114,8 +114,8 @@ class Contact
 It's all pretty simple really right? That's everything you'll need to know about
 namespaces to continue with this book.
 
-Typehinting
------------
+Typehints
+---------
 
 PHP started off as a dynamically typed language. It has a few basic, scalar
 types:
@@ -132,11 +132,11 @@ types:
 false; // boolean
 ```
 
-It also has arrays, callables and any user define class or interface which are
-all also types.
+It also has arrays, callables and any user define classes or interfaces which
+are all also types.
 
-Being a dynamic language means that an variable or function arguement can contain
-any type at any time (this also goes for function return types):
+Being a dynamically typed language means that a variable or function arguement
+can contain any type at any time (this also goes for function return types):
 
 ```php
 <?php
@@ -144,6 +144,14 @@ any type at any time (this also goes for function return types):
 function fn($p)
 {
     return $p;
+}
+
+class C1
+{
+}
+
+class C2
+{
 }
 
 $x = 42; // $x contains an integer
@@ -154,14 +162,6 @@ $y = fn(123); // $p in fn() contains an integer and $y contains an integer
 
 $y = fn(fals); // $p in fn() contains a boolean and $y contains a boolean
 
-class C1
-{
-}
-
-class C2
-{
-}
-
 $c = new C1(); // $c contains a C1 instance
 
 $c = new C2(); // $c contains a C2 instance
@@ -169,23 +169,14 @@ $c = new C2(); // $c contains a C2 instance
 ```
 
 In contrast, in a statically typed language a variable, function argument or
-return value can only ever be the type it is defined to contain, if another
-type is assigned it will either be an error or it will get converted. Here's a
-C++ version of the last example:
+return value can only ever be the type it is defined to contain. If another
+type is assigned it it will either be an error or it will get converted. Here's
+a C++ version of the last example:
 
 ```c++
-
 int fn(int p) {
     return p;
 }
-
-int x = 42; // x contains an integer
-
-x = 12.5; // x contains 12, it keeps only the integer part
-
-y = fn(123); // p in fn() contains an integer and y contains an integer
-
-y = fn(false); // p in fn() contains 0 and y contains 0
 
 class C1 {
 };
@@ -193,20 +184,31 @@ class C1 {
 class C2 {
 };
 
-C1 *c = new C1(); // c contains a C1 instance
+int main() {
+    int x = 42; // x contains an integer
 
-c = new C2(); // this is an error as c can only contains instances of C1
+    x = 12.5; // x contains 12, it keeps only the integer part
+
+    y = fn(123); // p in fn() contains an integer and y contains an integer
+
+    y = fn(false); // p in fn() contains 0 and y contains 0
+
+    C1 *c = new C1(); // c contains a C1 instance
+
+    c = new C2(); // this is an error as c can only contains instances of C1
+}
 ```
 
 Statically typed languages actually have great benefits, because you always
 know what type everything is there's never a chance of you doing something to a
-variable which you are not allow to do to the type it contains. On the other
-hand dynamically typed langauges let you get on and do things quickly without
+variable which you are not allowed to do to the type it contains. On the other
+hand, dynamically typed langauges let you get on and do things quickly without
 having to worry about how to work with type constraints.
 
 Since static typing does have benifits PHP introduced typehints on function
-arguments. Typehints allow you to specify exactly what user defined type a function
-accepts for each parameter, it will throw an exception if the wrong type is given:
+arguments. Typehints allow you to specify exactly what user defined type a
+function accepts for each parameter, it will throw an exception if the wrong
+type is given:
 
 ```php
 <?php
@@ -230,14 +232,14 @@ fn(new C2()); // error
 fn(5); // error
 ```
 
-Frustratingly PHP does not allow typehint for scalar types or function return
+Frustratingly PHP does not allow typehints for scalar types or function return
 values.
 
 However even though PHP is a dynamically typed language you should still strive
 to keep your typing sensible, this means if you create a variable that contains
-a specific type try not to reuse it to contain a different type. Also don't
-call methods on objects which are not in the typehinted interface, it's not an
-error but it's not good practice:
+a specific type try not to reuse it by assigning a new value of a different
+type. Also don't call methods on objects which are not in the typehinted
+interface, if you do it will not be an error but it's not good practice:
 
 ```php
 <?php
@@ -273,8 +275,9 @@ performAction(new FooBar());
 
 Throughout this book I will be writing as if I'm writing in a statically typed
 language 90% of the time and typehint whenever possible. However PHP is a
-dynamic language and some times its helpful to take advantage of this, whenever
-I do do this I will point it out.
+dynamic language and some times it's helpful to take advantage of this,
+whenever I do do this I will point it out and explain my reason for choosing to
+do it.
 
 Front Controllers
 -----------------
@@ -789,5 +792,29 @@ To your `.bashrc` file in your home directory.
 
 Coding Style
 ------------
+
+Coding Style is simply the way you layout and format your code.  In the
+Standards section I talk about how they where introduced to maintain a
+consistent approach to using a programming langauge between many developers,
+using a coding style is one element of this.
+
+Coding style standards definite things like:
+* How many spaces should be used to indent code
+* Should the opening brace for a function body goes on the same line as the
+function definition or on the line after 
+* Should variables be named using camelCase or snake_case
+* etc.
+
+As with all standards you'll unlikely find one which you agree with every bit
+of, but rather that creating your own perfect one which no one else uses, you
+should use a well using one you like.
+
+At the moment the best one to use for PHP in my opinion is the one defined by
+PSR-2 as many people have adopted it. All application code I present in this book will follow
+the PSR-2 standard with a couple of exceptions:
+
+test code
+
+template code
 
 ### Logic & Display Seperation
