@@ -456,6 +456,61 @@ it.
 
 It can be found at http://www.phptherightway.com/
 
+Docblocks
+---------
+
+Docblocks are comments which contain annotations whic can be added to your code
+to make it possible to generate documentation about your codebase
+automatically. One such too is phpDocumentor: http://www.phpdoc.org/
+
+This can be fantasically useful if you are building a library for others to use
+as you can generate great API documentation using it.
+
+There is however another use for it; we've already talked about typehints
+which, by enforcing the types of function arguments, provided an extra level of
+documentation to people reading the code and help them understand it quicker.
+It also helps IDEs provide auto completion functionality while you're writing
+the code. This is great but so far PHP has only gone half way, as I said
+earlier there are no typehints for function return values or for scalar types,
+also the type of a variable cannot be defined.  Therefore I've made it a habit
+to document these by using PHPdoc tags. I hope one day PHP will add more
+complete typehinting.
+
+The format of docblocks are fairly standard now but there's work to fully
+standardise it with PSR-5.
+
+Here's a little example of how I'll be using docblocks in the code in this book:
+
+```php
+<?php
+
+class Example
+{
+    /** @var string */
+    private $name;
+
+    /** @var Email */
+    private $email;
+    
+    /** @param string $name */
+    public function addCustomer($name, Email $email)
+    {
+        // ...
+    }
+
+    /** @return Customer[] */
+    public function getCustomers()
+    {
+        // ...
+    }
+}
+```
+
+Docblocks allow alot more detail than I've given here, you can give
+descriptions for details for the file, the class, any variables or parameters,
+etc. But since I don't want to generate an API document for this code base I'm
+only using it to specify the types which cannot be specified directly in PHP.
+
 The Autoloader
 --------------
 
@@ -784,21 +839,99 @@ If all the code in our `src` directory conforms to the PSR-2 coding style then
 CodeSniffer should have complete without and errors.
 
 To make life easier your can add `vendor/bin` to your operating systems `PATH`
-variable so you can execute your tools more easily. On Linux you do this by adding:
+variable so you can execute your tools more easily. On Linux you do this by
+adding:
 
 `PATH=./vendor/bin:$PATH`
 
 To your `.bashrc` file in your home directory.
 
+Keeping Logic and Display Code Seperate
+---------------------------------------
+
+PHP lets you easily mix text output (usually HTML) with your logic. This makes
+PHP a really useful and powerful web templating language but it also makes it
+very easy to write hideous code which mixes all your application logic in with
+you HTML output like so:
+
+```php
+<?php
+
+$repository = new CustomerRepository();
+
+?>
+
+<h1>List Customers</h1>
+
+<?php
+
+function escape($string)
+{
+    return htmlentities($string);
+}
+
+if ($_POST['search']) {
+    try {
+        $customers = $repository->getMatching($_POST['search']);
+    } catch (LoadingException $e) {
+        die('The was an error');
+    }
+}
+
+if (count($customers)) { ?>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($customers as $customer) { 
+                echo '<tr>';
+                echo '<td>' . escape($customer->name) . '</td>';
+                $customer->printEmail();
+                ?>
+                    <td><?php echo escape($customer->phone); ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } else {  ?>
+    <p>No customers found.</p>
+<?php } ?>
+```
+
+I think we call all agree that is pretty ugly but if left to get out of control
+it can get a whole lot uglier!
+
+The solution to this is to not mix your HTML & PHP code together and maintain a
+clear sepration between the to. This also allows designers to work on the user
+interface without have to understand the codebase.
+
+There are templating libraries for PHP such as Twig and Smarty which introduce
+their own template tags for using in your HTML templates. Or you can use of PHP
+itself to do the templating but maintain the discipline of keeping logic and
+view code seperate. It may even be worth using different file extentions to
+keep it clear; `.php` for logic and `.phtml` for HTML templates.
+
+The choice between using PHP or a dedicated templating library can often be
+down to who is going to have access to modify the view templates. If you
+designers are in house, trust worthy and trained then using PHP can be the
+easiest approach. However if you are out sourcing the design work to people you
+trust less then using a templating engine means they cannot compromise the
+security of the application by adding bad PHP code into the templates.
+
 Coding Style
 ------------
 
-Coding Style is simply the way you layout and format your code.  In the
-Standards section I talk about how they where introduced to maintain a
+Coding Style is simply the way you layout and format your code. In the previous
+Standards section I talked about how they where introduced to maintain a
 consistent approach to using a programming langauge between many developers,
 using a coding style is one element of this.
 
-Coding style standards definite things like:
+Coding style standards define things like:
 * How many spaces should be used to indent code
 * Should the opening brace for a function body goes on the same line as the
 function definition or on the line after 
@@ -807,14 +940,67 @@ function definition or on the line after
 
 As with all standards you'll unlikely find one which you agree with every bit
 of, but rather that creating your own perfect one which no one else uses, you
-should use a well using one you like.
+should use a well used one you like mostly.
 
 At the moment the best one to use for PHP in my opinion is the one defined by
-PSR-2 as many people have adopted it. All application code I present in this book will follow
-the PSR-2 standard with a couple of exceptions:
+PSR-2 as many people have adopted it. All application code I present in this
+book will follow the PSR-2 standard with a couple of exceptions:
 
-test code
+### 1. Unit Tests
 
-template code
+When writing unit tests I follow PSR-2 completely apart from 2 elements; the
+method names for the tests. Firstly, instead of using camelCase for these
+method names I use snake_case because the method names are sentences and with
+snake_case is easier to seperate the words when reading it. And secondly I'll
+omit the `public` access specifier as it's the default in PHP and keeps the
+line shorter with long method names:
 
-### Logic & Display Seperation
+```php
+<?php
+
+namespace spec;
+
+use PhpSpec\ObjectBehavior;
+
+class ExampleSpec extends ObjectBehavior
+{
+    function it_adds_2_numbers_together()
+    {
+        $this->add(5, 2)->shouldReturn(7);
+    }
+}
+```
+
+### 2. Template Code
+
+When writing template code using PHP I prefer to keep it looking as close to
+HTML as possible. I try to keep the code inside PHP tags to single expressions
+and I uses the `foreach :`/`endforeach`, `if :`/`endif` style of code blocks as
+I think they are easier to match up. Here's an example:
+
+```php
+<h1>List Customers</h1>
+
+<?php if (count($customers)) : ?>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($customers as $customer) : ?>
+                <tr>
+                    <td><?php echo escape($customer->name); ?></td>
+                    <td><?php echo escape($customer->email); ?></td>
+                    <td><?php echo escape($customer->phone); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else : ?>
+    <p>No customers found.</p>
+<?php endif; ?>
+```
