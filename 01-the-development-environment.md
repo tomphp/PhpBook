@@ -17,7 +17,7 @@ Where we are using it in a web environment I will be using a tool called
 Vagrant, it allows you to run your development environment in a virtual machine
 on your computer. This removes the need to set up and configure a webserver (or
 database servers) directly on your computer and therefore is the way I would
-recommend doing it. However if you do want to set up the relevent webserver &
+recommend doing it. However if you do want to set up the relevant webserver &
 database servers on your development machine manually, then you can do that but
 you will have to work that out yourself.
 
@@ -27,7 +27,7 @@ Vagrant
 Vagrant is a neat little tool, it allows many developers working on the same
 project to easily run a local copy of the project's environment without having
 to install all the projects dependencies on their development machines. It does
-this by bulding and running a virtual machine from a config file included in the
+this by building and running a virtual machine from a config file included in the
 project.
 
 Vagrant itself simply instructs a virtualisation provider on what type of
@@ -64,7 +64,7 @@ the version in the Software Center. This PPA can be found at:
 Once you have Vagrant, VirtualBox and Ansible installed it's time to build a
 Vagrant configuration.
 
-It's not hard to build a Vagrant configfile by hand or to build the config
+It's not hard to build a Vagrant config file by hand or to build the config
 automation scripts. However it is a bit tedious, takes some learning and is not
 really something this book intends to cover. Luckily there are some fantastic
 online tools available which make this process a whole lot easier. Since we
@@ -73,7 +73,7 @@ using http://www.phansible.com/ to create out config for us.
 
 First of all open `http://www.phansible.com/` in your browser.
 
-You will see a form asking questions about the development enviroment that you
+You will see a form asking questions about the development environment that you
 want to create, for this example choose the following options:
 
 Operating System: **Ubuntu Trusty Tahr (14.04) 64**
@@ -130,16 +130,16 @@ connected to the Internet, type:
 `vagrant up`
 
 This may take some time and you may be prompted to enter your password to allow
-Vagant to `sudo` to update some config files, but just be patient.
+Vagrant to `sudo` to update some config files, but just be patient.
 
-When it is done, open your brower and enter the IP address we selected earlier
+When it is done, open your browser and enter the IP address we selected earlier
 into the location bar like so:
 
 `http://192.168.5.1/`
 
 If all has gone to plan you should see `Hello wonderful World!` displayed on
-the page! Success, we have created a PHP development enviroment for our project
-without installing and configuring a webserver on our local machine.
+the page! Success, we have created a PHP development environment for our
+project without installing and configuring a webserver on our local machine.
 
 Once you have marvelled in the glory of Vagrant you can shut down the virtual
 machine by typing:

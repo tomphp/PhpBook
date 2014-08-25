@@ -40,7 +40,7 @@ class Contact
 ```
 
 This defines the class `Contact` inside the `Entity` namespace which is inside
-the `MyApp` namespace. Namespaces are seperated by backslashes.
+the `MyApp` namespace. Namespaces are separated by backslashes.
 
 To use a class in a piece of code in the same namespace you can simply refer
 to it by name:
@@ -53,8 +53,8 @@ namespace MyApp\Entity;
 $contact = new Contact();
 ```
 
-To use the class in a piece of code in a differnt namespace you can refer to it
-by it's fully qualified class name (FQCN) like so:
+To use the class in a piece of code in a different namespace you can refer to
+it by it's fully qualified class name (FQCN) like so:
 
 ```php
 <?php
@@ -135,7 +135,7 @@ false; // boolean
 It also has arrays, callables and any user define classes or interfaces which
 are all also types.
 
-Being a dynamically typed language means that a variable or function arguement
+Being a dynamically typed language means that a variable or function argument
 can contain any type at any time (this also goes for function return types):
 
 ```php
@@ -202,10 +202,10 @@ int main() {
 Statically typed languages actually have great benefits, because you always
 know what type everything is there's never a chance of you doing something to a
 variable which you are not allowed to do to the type it contains. On the other
-hand, dynamically typed langauges let you get on and do things quickly without
+hand, dynamically typed languages let you get on and do things quickly without
 having to worry about how to work with type constraints.
 
-Since static typing does have benifits PHP introduced typehints on function
+Since static typing does have benefits PHP introduced typehints on function
 arguments. Typehints allow you to specify exactly what user defined type a
 function accepts for each parameter, it will throw an exception if the wrong
 type is given:
@@ -403,8 +403,8 @@ preferences of how they personally like to do things.
 
 On one hand this is great; it allows programmers to be to write their code in
 the way which best fits how they think, lay it out in they way which look the
-most asthetically pleasing to them, and structure it in the way which they find
-easiest to navigate.
+most aesthetically pleasing to them, and structure it in the way which they
+find easiest to navigate.
 
 On the other hand this becomes a total nightmare when you are working with
 several libraries, all written by different programmers who each have their own
@@ -422,7 +422,7 @@ standard.
 
 ### PHP-FIG
 
-Introducing PHP-FIG! PHP-FIG or the PHP Framework Interop Group is a group
+Introducing PHP-FIG! PHP-FIG or the PHP Framework Interoperability Group is a group
 built up of various key people in the PHP community who have got together and
 started to build some standards for using PHP. Many PHP software project have
 now adopted or are adopting many of these standards and I full recommend you do
@@ -459,12 +459,12 @@ It can be found at http://www.phptherightway.com/
 Docblocks
 ---------
 
-Docblocks are comments which contain annotations whic can be added to your code
+Docblocks are comments which contain annotations which can be added to your code
 to make it possible to generate documentation about your codebase
 automatically. One such too is phpDocumentor: http://www.phpdoc.org/
 
-This can be fantasically useful if you are building a library for others to use
-as you can generate great API documentation using it.
+This can be fantastically useful if you are building a library for others to
+use as you can generate great API documentation using it.
 
 There is however another use for it; we've already talked about typehints
 which, by enforcing the types of function arguments, provided an extra level of
@@ -506,9 +506,9 @@ class Example
 }
 ```
 
-Docblocks allow alot more detail than I've given here, you can give
-descriptions for details for the file, the class, any variables or parameters,
-etc. But since I don't want to generate an API document for this code base I'm
+Docblocks allow you to add much more detail than I've given here. You can give
+descriptions and details for the file, the class, any variables or parameters,
+etc. But since I don't want to generate an API document for this codebase I'm
 only using it to specify the types which cannot be specified directly in PHP.
 
 The Autoloader
@@ -523,7 +523,7 @@ section now!
 
 The autoloader is a system in PHP where you can create a callback function that
 will be called if your try and use a class which has not yet been defined. This
-callback recieves the name of the class trying to be used a a parameter and the
+callback receives the name of the class trying to be used a parameter and the
 function can then use this to lookup and require the file needed to provide the
 class definition.
 
@@ -551,8 +551,8 @@ The basic rules are as follows:
 * There is exactly one class defined per file
 * The file name is the same name (and case) as the name of the class defined
 inside it with `.php` appended to it
-* The file exists in directory stucture which fully matches the namespace which
-the class is defined in
+* The file exists in directory structure which fully matches the namespace
+which the class is defined in
 
 For the full PSR-0 specification see http://www.php-fig.org/psr/psr-0/
 
@@ -628,7 +628,7 @@ basics.
 
 #### Installing
 
-The various installion options for Composer can be found at
+The various installation options for Composer can be found at
 https://getcomposer.org/
 
 You can either install a copy locally to your project which means your call it
@@ -636,12 +636,12 @@ by running:
 
 `./composer.phar`
 
-Or you can install it globally on your system and rename it to `composer` which
-is what I have done. So on my system I run Composer by simply typing:
+Or you can install it globally on your system and rename it to `composer`. I
+have done it this way so on my system I run Composer by simply typing:
 
 `composer`
 
-But if you have installed it differently you will need to adjust my
+If you have installed it differently to me you will need to adjust my
 instructions accordingly.
 
 #### Setting up the Autoloader
@@ -795,8 +795,8 @@ Now to try and run it:
 `php run.php hello`
 
 And there we have it, we have simply added a dependency to our app and used it
-leaving Composer to do all the hardwork of downloading it and setting up the
-autoload to find it.
+leaving Composer to do all the hard work of downloading it and setting up the
+autoloader to find it.
 
 #### Adding Development Tools
 
@@ -846,7 +846,7 @@ adding:
 
 To your `.bashrc` file in your home directory.
 
-Keeping Logic and Display Code Seperate
+Keeping Logic and Display Code Separate
 ---------------------------------------
 
 PHP lets you easily mix text output (usually HTML) with your logic. This makes
@@ -907,13 +907,13 @@ I think we call all agree that is pretty ugly but if left to get out of control
 it can get a whole lot uglier!
 
 The solution to this is to not mix your HTML & PHP code together and maintain a
-clear sepration between the to. This also allows designers to work on the user
+clear separation between the to. This also allows designers to work on the user
 interface without have to understand the codebase.
 
 There are templating libraries for PHP such as Twig and Smarty which introduce
 their own template tags for using in your HTML templates. Or you can use of PHP
 itself to do the templating but maintain the discipline of keeping logic and
-view code seperate. It may even be worth using different file extentions to
+view code separate. It may even be worth using different file extensions to
 keep it clear; `.php` for logic and `.phtml` for HTML templates.
 
 The choice between using PHP or a dedicated templating library can often be
@@ -928,7 +928,7 @@ Coding Style
 
 Coding Style is simply the way you layout and format your code. In the previous
 Standards section I talked about how they where introduced to maintain a
-consistent approach to using a programming langauge between many developers,
+consistent approach to using a programming language between many developers,
 using a coding style is one element of this.
 
 Coding style standards define things like:
@@ -951,7 +951,7 @@ book will follow the PSR-2 standard with a couple of exceptions:
 When writing unit tests I follow PSR-2 completely apart from 2 elements; the
 method names for the tests. Firstly, instead of using camelCase for these
 method names I use snake_case because the method names are sentences and with
-snake_case is easier to seperate the words when reading it. And secondly I'll
+snake_case is easier to separate the words when reading it. And secondly I'll
 omit the `public` access specifier as it's the default in PHP and keeps the
 line shorter with long method names:
 

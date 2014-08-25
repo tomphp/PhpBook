@@ -2,7 +2,7 @@ Methodologies, Techniques and Tools
 ===================================
 
 In this chapter I want to introduce the paradigms, methodologies and techniques
-incorperated in this book. Like the previous chapter I don't want to go into
+incorporated in this book. Like the previous chapter I don't want to go into
 any real depth with any of these topics, rather I just want to give a primer on
 the various subjects which should be enough to understand the content of this
 book. As always I do encourage you dig deeper into each of the subjects
@@ -14,7 +14,7 @@ Object Oriented Programming (OOP)
 
 Sometimes I think there is a misconception that if you use classes in your code
 then you are doing OOP. This is not the case, OOP is an approach to modelling
-which involves grouping related data and behavior (methods) in your code as
+which involves grouping related data and behaviour (methods) in your code as
 classes and then defining how they interact with each other.
 
 OOP style of programming can be even be done in languages which have no
@@ -132,7 +132,7 @@ $collection->addWord('hello');
 $collection->incrementCounter();
 ```
 
-It looks ok and `$collection` is left in a valid state right, but is it always in a
+It looks OK and `$collection` is left in a valid state right, but is it always in a
 valid state? Look again:
 
 ```php
@@ -209,7 +209,7 @@ Value Objects & Immutability
 Method Names
 ------------
 
-Command Query Seperation (CQS)
+Command Query Separation (CQS)
 ------------------------------
 
 Dependency Injection
@@ -221,7 +221,7 @@ The SOLID Principals
 Refactoring
 -----------
 
-Code Calisthenics
+Code Callisthenics
 -----------------
 
 Automated Testing

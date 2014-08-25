@@ -34,7 +34,7 @@ a great introduction to some or many of these techniques, concepts and tools
 and show you how to quickly get started using them with PHP.
 
 This book aims to show you what you need to start building a well designed,
-managable and extendable, medium size PHP application. The approach and process
+manageable and extendible, medium size PHP application. The approach and process
 of working in this book should fit very well in to an Agile process of working,
 however it will only deal with the actual development and architecture of the
 project rather than the full planning, communication and team management
@@ -48,7 +48,7 @@ This architecture and approach to PHP application design is one we use often at
 the company I work for and is a tried and tested approach.
 
 So finally who is this book for? Firstly this is not an introduction to PHP, I
-assume you are already familiar with the language, you should be familar with
+assume you are already familiar with the language, you should be familiar with
 and able to use classes and at least understand what an interface is. You
 probably have built at least one medium scale application but don't really know
 a lot about software design principals. If you have less experience than this
