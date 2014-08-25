@@ -1,0 +1,8 @@
+-# Prerequisites
+
+This section of the book makes sure you have all the knowledge and tools which
+will be needed to progress through the rest of the book. It will cover a lot of
+topics briefly; the idea is to give you enough information on each topic for
+you to progress through this book, however, each topic will have will be much
+deep than I will go into (any many of them have many books covering that topic
+exclusively) so I encourage you to learn more on each of them.

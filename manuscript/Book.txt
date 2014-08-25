@@ -1,7 +1,9 @@
 00-preface.txt
+section1.txt
 01-the-development-environment.txt
 02-getting-up-to-speed-with-php.txt
 03-methodologies-techniques-and-tools.txt
 04-an-introduction-to-testing-and-tdd.txt
+section2.txt
 05-getting-started.txt
 06-phing.txt
