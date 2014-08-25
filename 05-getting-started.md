@@ -1,11 +1,7 @@
-Getting Started
-===============
+# Getting Started
 
-The Application
----------------
+## The Application
 
-Creating the Project
---------------------
+## Creating the Project
 
-Our First Story
----------------
+## Our First Story

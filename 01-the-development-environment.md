@@ -1,13 +1,11 @@
-The Development Environment
-===========================
+# The Development Environment
 
 First up I will be using a Linux system in all my examples, therefore most of
 the content in terms of using the command line and configuration should
 translate directly if your are a Mac OS X user. If you are a Windows user
 things may be a bit different but shouldn't be too hard to work out.
 
-Requirements
-------------
+## Requirements
 
 The only real requirement for working through this book is that you are using
 PHP 5.5 or above. Throughout this book we will be using PHP both from the
@@ -21,8 +19,7 @@ recommend doing it. However, if you do want to set up the relevant webserver &
 database servers on your development machine manually, then you can do that but
 you will have to work that out yourself.
 
-Vagrant
--------
+## Vagrant
 
 Vagrant is a neat little tool, it allows many developers working on the same
 project to easily run a local copy of the project's environment without having

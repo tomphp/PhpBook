@@ -1,2 +1,1 @@
-Phing
-=====
+# Phing

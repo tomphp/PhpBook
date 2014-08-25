@@ -1,5 +1,4 @@
-Preface
-=======
+# Preface
 
 I have been working with PHP professionally since 2000, since then I have seen
 it grow from a basic scripting language which allowed you to hack your ideas

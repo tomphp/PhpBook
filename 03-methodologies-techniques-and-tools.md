@@ -1,5 +1,4 @@
-Methodologies, Techniques and Tools
-===================================
+# Methodologies, Techniques and Tools
 
 In this chapter I want to introduce the paradigms, methodologies and techniques
 incorporated in this book. Like the previous chapter I don't want to go into
@@ -9,8 +8,7 @@ book. As always I do encourage you dig deeper into each of the subjects
 yourself. I will provide references of where to start looking when you want
 to do this.
 
-Object Oriented Programming (OOP)
----------------------------
+## Object Oriented Programming (OOP)
 
 Sometimes I think there is a misconception that if you use classes in your code
 then you are doing OOP. This is not the case, OOP is an approach to modelling
@@ -200,47 +198,32 @@ SORTED!
 
 ### Inheritance vs. Composition
 
-Design Patterns
----------------
+## Design Patterns
 
-Value Objects & Immutability
-----------------------------
+## Value Objects & Immutability
 
-Method Names
-------------
+## Method Names
 
-Command Query Separation (CQS)
-------------------------------
+## Command Query Separation (CQS)
 
-Dependency Injection
---------------------
+## Dependency Injection
 
-The SOLID Principals
---------------------
+## The SOLID Principals
 
-Refactoring
------------
+## Refactoring
 
-Code Callisthenics
------------------
+## Code Callisthenics
 
-Automated Testing
------------------
+## Automated Testing
 
-Test Driven Development (TDD)
------------------------------
+## Test Driven Development (TDD)
 
-Behaviour Driven Development (BDD)
-----------------------------------
+## Behaviour Driven Development (BDD)
 
-Uncle Bob's Clean Code
-----------------------
+## Uncle Bob's Clean Code
 
-Domain Driven Design (DDD)
---------------------------
+## Domain Driven Design (DDD)
 
-Agile
------
+## Agile
 
-User Stories
-------------
+## User Stories

@@ -1,5 +1,4 @@
-An Introduction to Testing and TDD
-==================================
+# An Introduction to Testing and TDD
 
 Here's I'm going to quickly cover some of the testing tools we will be using
 and give a brief introduction to TDD. This is an optional chapter if you are
@@ -11,23 +10,16 @@ as a brief introduction to give you what you will need to work through the rest
 of this book. As always I recommend you research further with all the wonderful
 resources out there.
 
-Types of Test
--------------
+## Types of Test
 
-Tools
------
+## Tools
 
-Acceptance Testing with Behat
------------------------------
+## Acceptance Testing with Behat
 
-Mink & Selinium
----------------
+## Mink & Selinium
 
-PHPSpec vs PHPUnit
-------------------
+## PHPSpec vs PHPUnit
 
-Unit Testing with PHPSpec
--------------------------
+## Unit Testing with PHPSpec
 
-Resources
----------
+## Resources

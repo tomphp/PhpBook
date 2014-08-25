@@ -1,5 +1,4 @@
-Getting up to Speed with PHP
-============================
+# Getting up to Speed with PHP
 
 As I said previously this book assumes you are already familiar with PHP. In
 this chapter I will just quickly cover a few newer additions to PHP as well as
@@ -10,8 +9,7 @@ I don't intend to go into anything in too much depth, it will contain just
 enough information of the things we will be using and I encourage you to
 research them further yourself.
 
-Namespaces
-----------
+## Namespaces
 
 If namespaces are new to you then I think the easiest analogy I can think of is
 that they are like folders for your code. Using namespaces means you can have 2
@@ -114,8 +112,7 @@ class Contact
 It's all pretty simple really right? That's everything you'll need to know about
 namespaces to continue with this book.
 
-Typehints
----------
+## Typehints
 
 PHP started off as a dynamically typed language. It has a few basic, scalar
 types:
@@ -279,8 +276,7 @@ dynamic language and some times it's helpful to take advantage of this,
 whenever I do this I will point it out and explain my reason for choosing to
 do it.
 
-Front Controllers
------------------
+## Front Controllers
 
 The front controller is a design pattern for web applications which involves
 creating a single entry point into your application. It requires configuring
@@ -394,8 +390,7 @@ version `2.2.16` you can do this by simply adding:
 
 to your `.htaccess` file in your document root.
 
-Standards
----------
+## Standards
 
 As a language get more powerful it often allows many different ways and
 approaches to achieve the same thing. Each person then has their own
@@ -456,8 +451,7 @@ it.
 
 It can be found at http://www.phptherightway.com/
 
-Docblocks
----------
+## Docblocks
 
 Docblocks are comments which contain annotations which can be added to your code
 to make it possible to generate documentation about your codebase
@@ -511,8 +505,7 @@ descriptions and details for the file, the class, any variables or parameters,
 etc. But since I don't want to generate an API document for this codebase I'm
 only using it to specify the types which cannot be specified directly in PHP.
 
-The Autoloader
---------------
+## The Autoloader
 
 You may never have written a PHP autoloader callback, or maybe never have heard
 of one, but you may well have used it if you have build any PHP applications
@@ -539,8 +532,7 @@ Composer which can take care of that for you.
 However, if you do want to look into autoloading in more detail you can read
 about it in the manual here http://php.net/manual/en/language.oop5.autoload.php
 
-PSR-0 - Autoloading Standard
-----------------------------
+## PSR-0 - Autoloading Standard
 
 Before talking about Composer I'd like to first introduce PSR-0. PSR-0 is a
 standard which was designed to make it easy to find the files where given
@@ -581,8 +573,7 @@ FQCN is mirrored in the folder structure up to the class name.
 displaying code examples unless the file name does not match the PSR-0
 standard.**
 
-Composer
---------
+## Composer
 
 Composer is a dependency manager for PHP, it allows you to specify all the
 libraries and tools that your PHP project depends on in a simple JSON file, it
@@ -846,8 +837,7 @@ adding:
 
 To your `.bashrc` file in your home directory.
 
-Keeping Logic and Display Code Separate
----------------------------------------
+## Keeping Logic and Display Code Separate
 
 PHP lets you easily mix text output (usually HTML) with your logic. This makes
 PHP a really useful and powerful web templating language but it also makes it
@@ -923,8 +913,7 @@ easiest approach. However, if you are out sourcing the design work to people you
 trust less, then using a templating engine means they cannot compromise the
 security of the application by adding bad PHP code into the templates.
 
-Coding Style
-------------
+## Coding Style
 
 Coding Style is simply the way you layout and format your code. In the previous
 Standards section I talked about how they were introduced to maintain a
