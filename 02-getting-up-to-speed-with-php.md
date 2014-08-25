@@ -54,7 +54,7 @@ $contact = new Contact();
 ```
 
 To use the class in a piece of code in a different namespace you can refer to
-it by it's fully qualified class name (FQCN) like so:
+it by its fully qualified class name (FQCN) like so:
 
 ```php
 <?php
@@ -170,7 +170,7 @@ $c = new C2(); // $c contains a C2 instance
 
 In contrast, in a statically typed language a variable, function argument or
 return value can only ever be the type it is defined to contain. If another
-type is assigned it it will either be an error or it will get converted. Here's
+type is assigned it will either be an error or it will get converted. Here's
 a C++ version of the last example:
 
 ```c++
@@ -274,9 +274,9 @@ performAction(new FooBar());
 ```
 
 Throughout this book I will be writing as if I'm writing in a statically typed
-language 90% of the time and typehint whenever possible. However PHP is a
+language 90% of the time and typehint whenever possible. However, PHP is a
 dynamic language and some times it's helpful to take advantage of this,
-whenever I do do this I will point it out and explain my reason for choosing to
+whenever I do this I will point it out and explain my reason for choosing to
 do it.
 
 Front Controllers
@@ -287,11 +287,11 @@ creating a single entry point into your application. It requires configuring
 your webserver to redirect all requests to a single PHP script which then
 processes the request and decides what content to display.
 
-Lets take a look at a little example:
+Let's take a look at a little example:
 
 ### The Traditional Approach
 
-First lets look at the traditional approach of using PHP. Lets create 2 files
+First lets look at the traditional approach of using PHP. Let's create 2 files
 inside an empty folder, the first one we'll call `page1.php`:
 
 ```php
@@ -350,7 +350,7 @@ to get the actual URI requested.
 
 ### The Simplest Front Controller in the World
 
-So lets modify the `index.php` file to look like this:
+So let's modify the `index.php` file to look like this:
 
 ```php
 <?php
@@ -376,7 +376,7 @@ switch ($_SERVER['REQUEST_URI']) {
 ```
 
 Now if we go to our browser and go to `http://localhost:8080/page1` or
-`http://localhost:8080/page2` then they work as expected. Also going to
+`http://localhost:8080/page2` then they work as expected. Also, going to
 `http://localhost:8080/anything-else` now shows a 404 message.
 
 Obviously this is a pretty pointless and limiting front controller but
@@ -397,7 +397,7 @@ to your `.htaccess` file in your document root.
 Standards
 ---------
 
-As languages get more powerful it often allows many different ways and
+As a language get more powerful it often allows many different ways and
 approaches to achieve the same thing. Each person then has their own
 preferences of how they personally like to do things.
 
@@ -409,7 +409,7 @@ find easiest to navigate.
 On the other hand this becomes a total nightmare when you are working with
 several libraries, all written by different programmers who each have their own
 way of doing all things. You have to learn each of the different approaches to
-efficiently navigate and understand each author's code. Also it may make it
+efficiently navigate and understand each author's code. Also, it may make it
 tricky for some of the libraries to happily interact with each other.
 
 So for the reasons just mentioned, programmers get together is groups and
@@ -472,7 +472,7 @@ documentation to people reading the code and help them understand it quicker.
 It also helps IDEs provide auto completion functionality while you're writing
 the code. This is great but so far PHP has only gone half way, as I said
 earlier there are no typehints for function return values or for scalar types,
-also the type of a variable cannot be defined.  Therefore I've made it a habit
+also the type of a variable cannot be defined.  Therefore, I've made it a habit
 to document these by using PHPdoc tags. I hope one day PHP will add more
 complete typehinting.
 
@@ -522,7 +522,7 @@ referencing code in different files by using PHP's `require`, `require_once`,
 section now!
 
 The autoloader is a system in PHP where you can create a callback function that
-will be called if your try and use a class which has not yet been defined. This
+will be called if your try to use a class which has not yet been defined. This
 callback receives the name of the class trying to be used a parameter and the
 function can then use this to lookup and require the file needed to provide the
 class definition.
@@ -536,7 +536,7 @@ Now you know what an autoloader is there's some good news, there's no actual
 need to write the autoloader function yourself, there's a wonderful tool called
 Composer which can take care of that for you.
 
-However if you do want to look into autoloading in more detail you can read
+However, if you do want to look into autoloading in more detail you can read
 about it in the manual here http://php.net/manual/en/language.oop5.autoload.php
 
 PSR-0 - Autoloading Standard
@@ -577,7 +577,7 @@ Whatever comes before the root namespace in the file name (in this case
 `/home/tom/projects/AutoloadExample/src`) is not important, so long as the 
 FQCN is mirrored in the folder structure up to the class name.
 
-**From this point on in the book I will not mentioned file names when
+**From this point on in the book I will not mention file names when
 displaying code examples unless the file name does not match the PSR-0
 standard.**
 
@@ -589,15 +589,15 @@ libraries and tools that your PHP project depends on in a simple JSON file, it
 will then fetch the correct versions of those dependencies into your project.
 
 This means it's easy to distribute your project without including its 3rd party
-dependencies, while making it very easy for an users or developers working on
+dependencies, while making it very easy for users or developers working on
 the project to easily install them themselves. It also makes it easy to quickly
 update to newer versions of dependencies.
 
 Composer installs its dependencies locally to the project in a directory called
 `vendor` rather than installing them globally onto the system on. This is a
-definite plus as it means you can run many different projects on the same
-system, all working with different versions their dependencies, without getting
-in to a mess.
+definite plus as it means you can run many projects on the same system, all
+working with different versions their dependencies, without getting in to a
+mess.
 
 Now this is all very interesting but you might think you have no intention of
 using any external libraries or tools with your new project, so is Composer
@@ -609,10 +609,10 @@ The answer is most definitely yes:
 Composer which you should definitely be using even if you don't intend on using
 3rd party libraries
 * Secondly, you may not intend on using 3rd party libraries but if you start
-off using Composer from the beginning you can always change your mind an add a
+off using Composer from the beginning you can always change your mind and add a
 dependency very easily
 * And thirdly, Composer provides a nice and easy to set up autoloader for PHP.
-By simply adding a few line of JSON to your project your autoloader is up and
+By simply adding a few lines of JSON to your project your autoloader is up and
 ready to go
 
 While there are plenty of people out there who will have a good reason not to
@@ -621,7 +621,7 @@ using it in your projects.
 
 So that's a little intro on what Composer can do for you. The full
 documentation can be found at https://getcomposer.org/ but to save you the
-hassle of reading it all now lets have a look at a little example of the
+hassle of reading it all now let's have a look at a little example of the
 basics.
 
 ### Composer Example
@@ -688,7 +688,7 @@ Next up create a directory structure for our PSR-0 classes to go:
 
 `mkdir -p src/ComposerExample`
 
-The create a file called `src/ComposerExample/HelloApplication.php` with the
+Then create a file called `src/ComposerExample/HelloApplication.php` with the
 following content:
 
 ```php
@@ -713,7 +713,7 @@ And finally create a class called `run.php` containing:
 // Load up Composer's autoloader
 require_once __DIR__ . '/vendor/autoload.php';
 
-// This class will loaded automatically
+// This class will load automatically
 $app = new \ComposerExample\HelloApplication();
 $app->run();
 ```
@@ -727,7 +727,7 @@ Ta da!
 #### Adding a Dependency
 
 Now lets dress it up a bit using a 3rd party library. I had a little hunt
-around for something interesting to try and found Maxime Bouroumeau-Fuseau's
+around for something interesting to try, I found Maxime Bouroumeau-Fuseau's
 ConsoleKit library.
 
 First up lets add it to the project as a dependency by updating our
@@ -790,7 +790,7 @@ class HelloCommand extends Command
 }
 ```
 
-Now to try and run it:
+Now to try to run it:
 
 `php run.php hello`
 
@@ -825,7 +825,7 @@ Update the `composer.json` file to include the CodeSniffer dev dependency:
 }
 ```
 
-Once again tell Composer to update it's dependencies by running:
+Once again tell Composer to update its dependencies by running:
 
 `composer update`
 
@@ -903,8 +903,8 @@ if (count($customers)) { ?>
 <?php } ?>
 ```
 
-I think we call all agree that is pretty ugly but if left to get out of control
-it can get a whole lot uglier!
+I think we can all agree that is pretty ugly but if left to get out of control
+it can get a lot uglier!
 
 The solution to this is to not mix your HTML & PHP code together and maintain a
 clear separation between the to. This also allows designers to work on the user
@@ -919,15 +919,15 @@ keep it clear; `.php` for logic and `.phtml` for HTML templates.
 The choice between using PHP or a dedicated templating library can often be
 down to who is going to have access to modify the view templates. If you
 designers are in house, trust worthy and trained then using PHP can be the
-easiest approach. However if you are out sourcing the design work to people you
-trust less then using a templating engine means they cannot compromise the
+easiest approach. However, if you are out sourcing the design work to people you
+trust less, then using a templating engine means they cannot compromise the
 security of the application by adding bad PHP code into the templates.
 
 Coding Style
 ------------
 
 Coding Style is simply the way you layout and format your code. In the previous
-Standards section I talked about how they where introduced to maintain a
+Standards section I talked about how they were introduced to maintain a
 consistent approach to using a programming language between many developers,
 using a coding style is one element of this.
 
@@ -975,7 +975,7 @@ class ExampleSpec extends ObjectBehavior
 
 When writing template code using PHP I prefer to keep it looking as close to
 HTML as possible. I try to keep the code inside PHP tags to single expressions
-and I uses the `foreach :`/`endforeach`, `if :`/`endif` style of code blocks as
+and I use the `foreach :`/`endforeach`, `if :`/`endif` style of code blocks as
 I think they are easier to match up. Here's an example:
 
 ```php

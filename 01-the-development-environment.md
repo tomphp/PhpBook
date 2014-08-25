@@ -4,20 +4,20 @@ The Development Environment
 First up I will be using a Linux system in all my examples, therefore most of
 the content in terms of using the command line and configuration should
 translate directly if your are a Mac OS X user. If you are a Windows user
-things may be a little bit different but shouldn't be too hard to work out.
+things may be a bit different but shouldn't be too hard to work out.
 
 Requirements
 ------------
 
 The only real requirement for working through this book is that you are using
 PHP 5.5 or above. Throughout this book we will be using PHP both from the
-command line as well as in a webserver environment.
+command line and in a webserver environment.
 
 Where we are using it in a web environment I will be using a tool called
 Vagrant, it allows you to run your development environment in a virtual machine
 on your computer. This removes the need to set up and configure a webserver (or
 database servers) directly on your computer and therefore is the way I would
-recommend doing it. However if you do want to set up the relevant webserver &
+recommend doing it. However, if you do want to set up the relevant webserver &
 database servers on your development machine manually, then you can do that but
 you will have to work that out yourself.
 
@@ -37,7 +37,7 @@ configure that virtual machine.
 Different providers, such as VMWare, are available for use with Vagrant but I
 will be using VirtualBox.
 
-Also different configuration automation systems, such as Chef and Puppet, can
+Also, different configuration automation systems, such as Chef and Puppet, can
 be used with Vagrant. I am choosing to use Ansible just because I prefer the
 syntax.
 
@@ -61,13 +61,13 @@ the version in the Software Center. This PPA can be found at:
 
 ### Creating a Vagrant Config for PHP Development
 
-Once you have Vagrant, VirtualBox and Ansible installed it's time to build a
+Once you have Vagrant, VirtualBox and Ansible installed its time to build a
 Vagrant configuration.
 
 It's not hard to build a Vagrant config file by hand or to build the config
-automation scripts. However it is a bit tedious, takes some learning and is not
-really something this book intends to cover. Luckily there are some fantastic
-online tools available which make this process a whole lot easier. Since we
+automation scripts. However, it is a bit tedious, takes some learning and is
+not really something this book intends to cover. Luckily there are some
+fantastic online tools available which make this process a lot easier. Since we
 want to build a PHP development environment and we're going to use Ansible lets
 using http://www.phansible.com/ to create out config for us.
 
@@ -149,5 +149,5 @@ machine by typing:
 at your command line.
 
 **PLEASE NOTE: I have found that if I forget to shutdown my virtual machines on
-before I try to shutdown my computer it hangs during the shutdown process. If
+before I try to shut down my computer it hangs during the shut down process. If
 you have a solution to this problem I'd love to heard it!**

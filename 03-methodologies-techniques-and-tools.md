@@ -36,10 +36,10 @@ public methods and properties).  Generally there are rules as to what are the
 valid values for the state. Encapsulation is making that state private so that
 it can only be changed via the public interface methods.
 
-The point I want to make here is your should design your public methods so that
+The point I want to make here is you should design your public methods so that
 there is not way that the object can be put into an invalid state.
 
-Lets look at a couple of examples:
+Let's look at a couple of examples:
 
 An object to represent an email address should not contain strings which could
 not be valid email addresses. In this case it would make sense to throw an
@@ -72,10 +72,10 @@ class EmailAddress
 }
 ```
 
-In the example above we chosen the simple rule that anything with an `@` symbol
-in it could be an email address (obviously in production code this needs to be
-more strict). If you study the code you will find that there is no way that you
-can get it create an instance with an email address which does not contain an
+In the example above we chose the simple rule that *anything with an `@` symbol
+in it could be an email address* (obviously in production code this needs to be
+more strict). If you study the code above you will find that there is no way
+that you can create an instance with an email address which does not contain an
 `@` symbol. This is good design.
 
 In another example consider implementing a collection words which maintains a

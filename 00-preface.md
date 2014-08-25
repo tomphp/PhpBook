@@ -3,7 +3,7 @@ Preface
 
 I have been working with PHP professionally since 2000, since then I have seen
 it grow from a basic scripting language which allowed you to hack your ideas
-togther in version 3, to something that resembled a fully featured language in
+together in version 3, to something that resembled a fully featured language in
 version 4, through to actually becoming that fully features language in version
 5.
 
@@ -44,7 +44,7 @@ The architecture of the application we shall build in this book is a fairly
 common approach to building applications, it will not be based on any
 frameworks but we will make use of some later on to see how frameworks can be
 very useful tools, in my mind this is how modern frameworks should be used.
-This architecture and approach to PHP application design is one we use often at
+This architecture and approach to PHP application design is one we often use at
 the company I work for and is a tried and tested approach.
 
 So finally who is this book for? Firstly this is not an introduction to PHP, I
@@ -52,5 +52,5 @@ assume you are already familiar with the language, you should be familiar with
 and able to use classes and at least understand what an interface is. You
 probably have built at least one medium scale application but don't really know
 a lot about software design principals. If you have less experience than this
-you may struggle to to keep up, if you have more then there may be less to be
+you may struggle to keep up, if you have more then there may be less to be
 learned from this book but hopefully it will still be helpful.
