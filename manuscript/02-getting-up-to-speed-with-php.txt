@@ -350,7 +350,7 @@ to get the actual URI requested.
 
 So let's modify the `index.php` file to look like this:
 
-<<[index.php](examples/chapter-02/front-controller/02-simple-front-controller/index.php)
+<<[index.php](examples/chapter-02/front-controller/03-simple-front-controller/index.php)
 
 Now if we go to our browser and go to `http://localhost:8080/page1` or
 `http://localhost:8080/page2` then they work as expected. Also, going to

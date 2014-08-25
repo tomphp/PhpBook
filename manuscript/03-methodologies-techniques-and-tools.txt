@@ -586,7 +586,7 @@ function logEmailSent(MutableEmailAddress $address)
 $address = new MutableEmailAddress('bill@microsoft.com');
 
 sendEmail($address);    // send email to bill@microsoft.com
-logEmailSent($address); // but logs "A message was sent to steve@apple.com" - OOPS
+logEmailSent($address); // but logs "A message was sent to steve@apple.com"
 ~~~~~~~~
 
 So looking at just the last 3 lines of code you would expect the message would
