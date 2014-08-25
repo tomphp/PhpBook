@@ -43,7 +43,8 @@ An object to represent an email address should not contain strings which could
 not be valid email addresses. In this case it would make sense to throw an
 exception if the email address provided does not look like an email address:
 
-```php
+{title="Well defined value object example", lang=php}
+~~~~~~~~
 <?php
 
 class EmailAddress
@@ -68,7 +69,7 @@ class EmailAddress
         return $this->address;
     }
 }
-```
+~~~~~~~~
 
 In the example above we chose the simple rule that *anything with an `@` symbol
 in it could be an email address* (obviously in production code this needs to be
@@ -82,7 +83,8 @@ properties, the list of words and the count. In order to add word to the
 collection we add the word to the list and increment the count, firstly lets do
 this with 2 seperate methods:
 
-```php
+{title="Bad state consistency example", lang=php}
+~~~~~~~~
 <?php
 
 class WordCollection
@@ -116,24 +118,26 @@ class WordCollection
         return $this->count;
     }
 }
-```
+~~~~~~~~
 
 Now you can probably see what's wrong with that straight away but let me
 explain for completeness. Take the following code:
 
-```php
+{lang=php}
+~~~~~~~~
 <?php
 
 $collection = new WordCollection();
 
 $collection->addWord('hello');
 $collection->incrementCounter();
-```
+~~~~~~~~
 
 It looks OK and `$collection` is left in a valid state right, but is it always in a
 valid state? Look again:
 
-```php
+{lang=php}
+~~~~~~~~
 <?php
 
 $collection = new WordCollection();
@@ -151,7 +155,7 @@ $collection->incrementCounter();
 
 // words in list = 1
 // counter = 1
-```
+~~~~~~~~
 
 So there's a point in the middle whether the state of the object is invalid, we
 do fix it in the next line of code but what if a developer forgot to increment
@@ -160,7 +164,8 @@ the counter? It could lead to a nasty bug!
 The solution is simple, design the class so it can never be put into an invalid
 state:
 
-```php
+{title="Good state consistency example", lang=php}
+~~~~~~~~
 <?php
 
 class WordCollection
@@ -192,7 +197,7 @@ class WordCollection
         return $this->count;
     }
 }
-```
+~~~~~~~~
 
 SORTED!
 

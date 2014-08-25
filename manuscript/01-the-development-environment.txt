@@ -42,19 +42,18 @@ syntax.
 
 In order to use Vagrant you will need to install:
 
-* Vagrant - http://www.vagrantup.com/
-* VirtualBox - http://www.virtualbox.org/
-* Ansible - http://www.ansible.com/
+* [Vagrant](http://www.vagrantup.com/)
+* [VirtualBox](http://www.virtualbox.org/)
+* [Ansible](http://www.ansible.com/)
 
 I recommend that you install both Vagrant and VirtualBox by downloading the
 distribution packages directly from their websites so you get the current
 versions.
 
 With Ansible you need to make sure you have an up to date version, on Ubuntu I
-tend to install it via Rodney Quillo's PPA which as it's more up to date than
-the version in the Software Center. This PPA can be found at:
-
-`https://launchpad.net/~rquillo/+archive/ubuntu/ansible`
+tend to install it via
+[Rodney Quillo's PPA](https://launchpad.net/~rquillo/+archive/ubuntu/ansible)
+which as it's more up to date than the version in the Software Center.
 
 ### Creating a Vagrant Config for PHP Development
 
@@ -65,26 +64,29 @@ It's not hard to build a Vagrant config file by hand or to build the config
 automation scripts. However, it is a bit tedious, takes some learning and is
 not really something this book intends to cover. Luckily there are some
 fantastic online tools available which make this process a lot easier. Since we
-want to build a PHP development environment and we're going to use Ansible lets
-using http://www.phansible.com/ to create out config for us.
+want to build a PHP development environment and we're going to use Ansible,
+let's use [Phansible](http://www.phansible.com/) to create our config for us.
 
-First of all open `http://www.phansible.com/` in your browser.
+First of all open http://www.phansible.com/ in your browser.
 
 You will see a form asking questions about the development environment that you
 want to create, for this example choose the following options:
 
-Operating System: **Ubuntu Trusty Tahr (14.04) 64**
-Name: **Vagrant Example**
-IP Address: **192.168.5.1** (you can use different local IP address if you want but remember it as we will need to know it shortly)
-Memory: **512**
-Shared Folder: **./**
+| Options          | Value                         |
+|------------------|-------------------------------|
+| Operating System | Ubuntu Trusty Tahr (14.04) 64 |
+| Name             | Vagrant Example               |
+| IP Address       | 192.168.5.1                   |
+| Memory           | 512                           |
+| Shared Folder    | ./                            |
+| Webserver        | Apache + PHP5                 |
+| PHP Version      | 5.5                           |
 
-Webserver: **Apache + PHP5**
+You can use different local IP address if you want but remember it as we will
+need to know what it is shortly.
 
-PHP Version: 5.5
-
-Ignore the Database and Package settings for now and finally choose an
-appropriate Timezone.
+Ignore the **Database** and **Package** settings for now and finally choose an
+appropriate **Timezone**.
 
 Next click the **Generate** button at the bottom and save the generated `.zip`
 file to your hard drive.
@@ -98,33 +100,29 @@ add the Vagrant configuration to it.
 
 At your terminal `cd` to where ever you want to create your project:
 
-`cd /home/tom/Projects`
+`$ cd /home/tom/Projects`
 
 Next create a directory for your new project and `cd` into it:
 
 ```
-mkdir VagrantExample
-cd VagrantExample
+$ mkdir VagrantExample
+$ cd VagrantExample
 ```
 
 Now create a file inside this directory called `index.php` and with your
 favourite IDE or text editor and add the following content:
 
-```php
-<?php
-
-echo 'Hello wonderful World!';
-```
+<<[index.php](../examples/chapter-01/VagrantExample/index.php)
 
 Next unpack the contents of the Vagrant configuration `.zip` file that we
 downloaded from the Phansible website earlier,
 
-`unzip /home/tom/Downloads/phansible_VagrantExample.zip`
+`$ unzip /home/tom/Downloads/phansible_VagrantExample.zip`
 
 Finally, while still inside the project's directory and with your computer
-connected to the Internet, type:
+connected to the Internet, run:
 
-`vagrant up`
+`$ vagrant up`
 
 This may take some time and you may be prompted to enter your password to allow
 Vagrant to `sudo` to update some config files, but just be patient.
@@ -139,12 +137,14 @@ the page! Success, we have created a PHP development environment for our
 project without installing and configuring a webserver on our local machine.
 
 Once you have marvelled in the glory of Vagrant you can shut down the virtual
-machine by typing:
+machine by running:
 
-`vagrant halt`
+`$ vagrant halt`
 
-at your command line.
+at your terminal.
 
-**PLEASE NOTE: I have found that if I forget to shutdown my virtual machines on
-before I try to shut down my computer it hangs during the shut down process. If
-you have a solution to this problem I'd love to heard it!**
+E>## Shutting Down
+E>
+E> I have found that if I forget to shutdown my virtual machines on before I try
+E> to shut down my computer it hangs during the shut down process. If you have a
+E> solution to this problem I'd love to heard it!
