@@ -112,7 +112,7 @@ $ cd VagrantExample
 Now create a file inside this directory called `index.php` and with your
 favourite IDE or text editor and add the following content:
 
-<<[index.php](../examples/chapter-01/VagrantExample/index.php)
+<<[index.php](examples/chapter-01/VagrantExample/index.php)
 
 Next unpack the contents of the Vagrant configuration `.zip` file that we
 downloaded from the Phansible website earlier,
