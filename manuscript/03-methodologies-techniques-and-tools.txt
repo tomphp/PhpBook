@@ -612,13 +612,90 @@ a variable that was typehinted in the method argument list. This is a benefit
 of typehints rather than value objects, however, by using value objects
 abundantly you will have more types to typehint.
 
-## Method Names
+## Dependency Injection (DI) & Inversion of Control (IoC)
 
-## Command Query Separation (CQS)
+Dependency Injection simply means that if you have a class that relies one
+another class, rather than letting it create that other class internally, you
+have to *inject* the dependency into it:
 
-## Dependency Injection
+{title="No dependency injection example", lang=php}
+~~~~~~~~
+<?php
+
+class Fooer
+{
+    public function doFoo()
+    {
+        // ...
+    }
+}
+
+class Bar
+{
+    /** @var Fooer */
+    private $fooer;
+
+    public function __construct()
+    {
+        $this->fooer = new Fooer();
+    }
+
+    public function doBar()
+    {
+        $this->fooer->doFoo();
+    }
+}
+~~~~~~~~
+
+{title="Dependency injection example", lang=php}
+~~~~~~~~
+<?php
+
+class Fooer
+{
+    public function doFoo()
+    {
+        // ...
+    }
+}
+
+class Bar
+{
+    /** @var Fooer */
+    private $fooer;
+
+    public function __construct()
+    {
+        $this->fooer = new Fooer();
+    }
+
+    public function doBar()
+    {
+        $this->fooer->doFoo();
+    }
+}
+~~~~~~~~
+
+That's it, *Dependency Injection* is as easy as that, but why do it?
+
+### Substituting Behaviour
+
+### Inversion Of Control
+
+### Testing
+
+### Dependency Inject Containers (DIC) & Service Managers
+
+These are tools which can manage the creation of objects and ensure that the
+required dependencies get injected into the upon creation. I'm not going to
+talk about them here but will cover them in more detail when we need one.
+
+All I will add is that there are many DICs and Service Manager libraries
+available should you ever decide you need one.
 
 ## The SOLID Principals
+
+## Command Query Separation (CQS)
 
 ## Refactoring
 
@@ -631,6 +708,8 @@ abundantly you will have more types to typehint.
 ## Behaviour Driven Development (BDD)
 
 ## Uncle Bob's Clean Code
+
+## Method Names
 
 ## Domain Driven Design (DDD)
 
