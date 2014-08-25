@@ -203,9 +203,414 @@ SORTED!
 
 ### Inheritance vs. Composition
 
+Inheritance is a very useful and powerful tool in OOP but it is often misused,
+the most common misuse of inheritance is using it to bring common functionality
+into 2 unrelated classes.
+
+An example could be a bird and a aeroplane both have wings so it might seem
+reasonable to inherit both a `Bird` class and an `Aeroplane` class from a
+`FlyingThing` superclass:
+
+{title="Misused Inheritance", lang=php}
+~~~~~~~~
+<?php
+
+abstract class FlyingThing
+{
+    public function startFlying()
+    {
+        // ...
+    }
+
+    // ...
+}
+
+class Bird extends FlyingThing
+{
+}
+
+class Aeroplane extends FlyingThing
+{
+}
+~~~~~~~~
+
+There are a few reasons why this is a problem, firstly we have single
+inheritance in PHP which means we can't extend from more than one super class.
+Birds can communicate with each other and aeroplanes (well the pilots) can
+communicate with each other, if we wanted to add a `CommunicatingThing` class
+then we couldn't inherit from it as well as `FlyingThing` without creating a
+horrible `CommunicatingFlyingThing` class instead.
+
+Next up birds start flying by *flapping their wings* whereas an aeroplane is
+propelled be its engines, so now we have 2 different types of `FlyingThing`.
+The same goes for communicating, birds do it by *tweeting* and aeroplanes do it
+by *radio*.
+
+Finally, we've categorised birds and aeroplanes, which are 2 very different things,
+together as *flying things* and *communicating things* which we have had to make
+up. A much more sensible category for an aeroplane might be a *vehical*, and
+for a bird maybe an *animal*.
+
+So have to fix it? Well so far we've been talking about *is a*; *a bird **is a**
+flying thing*. Inheritance is all about *is a*, but we also have *has a*. What
+might be better is if we say *a bird **has a** flight system* or *an aeroplane
+**has a** communication system*. When talking about **has a** we are talking
+about composition so let's take a look at a better example of how to model this:
+
+{title="Using composition", lang=php}
+~~~~~~~~
+<?php
+
+class FlightSystem
+{
+    public function startFlying()
+    {
+        // ...
+    }
+
+    // ...
+}
+
+class CommunicationSystem
+{
+    /** @param string $message */
+    public function sendMessage($message)
+    {
+        // ...
+    }
+
+    // ...
+}
+
+class Bird
+{
+    /** @var FlightSystem */
+    private $flightSystem;
+
+    /** @var CommunicationSystem */
+    private $communicationSystem;
+
+    public function __construct()
+    {
+        $this->flightSystem = new FlightSystem();
+        $this->communicationSystem = new CommunicationSystem();
+    }
+
+    public function startFlying()
+    {
+        $this->flightSystem->startFlying();
+    }
+
+    /** @param string $message */
+    public function sendMessage($message)
+    {
+        $this->communicationSystem->setMessage($message);
+    }
+}
+
+
+class Aeroplane
+{
+    /** @var FlightSystem */
+    private $flightSystem;
+
+    /** @var CommunicationSystem */
+    private $communicationSystem;
+
+    public function __construct()
+    {
+        $this->flightSystem = new FlightSystem();
+        $this->communicationSystem = new CommunicationSystem();
+    }
+
+    public function startFlying()
+    {
+        $this->flightSystem->startFlying();
+    }
+
+    /** @param string $message */
+    public function sendMessage($message)
+    {
+        $this->communicationSystem->setMessage($message);
+    }
+}
+~~~~~~~~
+
+What's more once we start to realise that a bird's flight system is very
+different from an aeroplane's then we can start have different flight systems
+which can still but be instructed to start flying in the same way:
+
+{title="Flexible flight systems", lang=php}
+~~~~~~~~
+interface FlightSystem
+{
+    public function startFlying();
+}
+
+class FlappingFlightSystem implements FlightSystem
+{
+    public function startFlying()
+    {
+        // ...
+    }
+}
+
+class PropelledFlightSystem implements FlightSystem
+{
+    public function startFlying()
+    {
+        // ...
+    }
+}
+
+class Bird
+{
+    // ...
+
+    public function __construct()
+    {
+        $this->flightSystem = new FlappingFlightSystem();
+        // ...
+    }
+
+    // ...
+}
+
+class Aeroplane
+{
+    // ...
+
+    public function __construct()
+    {
+        $this->flightSystem = new FlappingFlightSystem();
+        // ...
+    }
+
+    // ...
+}
+~~~~~~~~
+
+The general rule here is first of all determine if you are really modelling an
+**is a** relationship or a **has a** relationship. Don't bend your model to fit
+your code, rather make your code fit the model. When done properly you should
+find you use inheritance pretty rarely.
+
 ## Design Patterns
 
+Design Patterns are tried and testing solutions to various problems programmers
+often face. There are several common design patterns which are very well known
+and these are called things like the *visitor pattern* and the *strategy
+pattern*.
+
+The de facto resource on this subject is the book titled *Design Patterns:
+Elements of Reusable Object-Oriented Software* by the Gang of
+Four[^the-gang-of-four], Robert C. Martin says this book is *"probably the most
+important book in software engineering written in the last 30 years"*. This
+book is definitely a *must read* resource, however you can now find all the
+common design patterns listed and explained on
+[Wikipedia](http://en.wikipedia.org/wiki/Software_design_pattern#Classification_and_list).
+
+I'm not going to go into any more details on design patterns here, I just wanted
+you to know what they are for now. As we work though the book we will be using
+various design patterns and as we do I shall point out which one we are using
+and the reason for the choice in doing so.
+
+[^gang-of-four]: Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides.
+
 ## Value Objects & Immutability
+
+When we say something is immutable we mean that its value is fixed and can not
+be changed. This means our classes are either *mutable* or *immutable* depending
+on whether its public interface allows methods for changing its internal state.
+
+{title="Mutable email address class", lang=php}
+~~~~~~~~
+<?php
+
+class MutableEmailAddress
+{
+    /** @var string */
+    private $address;
+
+    /** @var string */
+    public function __construct($address)
+    {
+        $this->address = $address;
+    }
+
+    /** @var string */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    public function __toString()
+    {
+        return $this->address;
+    }
+}
+~~~~~~~~
+
+{title="Immutable email address class", lang=php}
+~~~~~~~~
+<?php
+
+class ImmutableEmailAddress
+{
+    /** @var string */
+    private $address;
+
+    /** @var string */
+    public function __construct($address)
+    {
+        $this->address = $address;
+    }
+
+    public function __toString()
+    {
+        return $this->address;
+    }
+}
+~~~~~~~~
+
+These *immutable* classes we call *value objects*, that is an instance of that
+class represents a value and only that value. In the same way that we can say 5
+will always be 5, we can say that an `ImmutableEmailAddress` object containing
+the email address `bill@microsoft.com` will always contain the email address
+`bill@microsoft.com`, there for this object represents the *value* of that
+email address.
+
+Value objects should be used to classify anything which is a specific thing.
+
+### An Example
+
+Instead of using a *float* for temperate use a `Temperature` value object, even
+if it simple contains a single *float* value. You might also want to store the
+unit (Fahrenheit or Celsius) in the `Temperate` object so a value object can
+contain more than 1 scalar value. Also, the unit of temperature is a specific
+thing so make that a value object too. Your value object should also only be
+able to be created with valid values, we don't want anyone to be able to create
+a temperature of *"30 degrees **hotness**"*!
+
+For completeness let's look a good implementation of what we've just discussed:
+
+{title="Temperature; a good use of value objects", lang=php}
+~~~~~~~~
+<?php
+
+class TemperatureUnit
+{
+    const CELSIUS    = 'c';
+    const FAHRENHEIT = 'f';
+
+    /** @var string */
+    private $value;
+
+    /** @param string $value */
+    public function __construct($value)
+    {
+        $this->assertValueIsValid($value);
+
+        $this->value = (float) $value;
+    }
+
+    /** @return string */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    private function assertValueIsValid($value)
+    {
+        if (!in_array($value, [self::CELSIUS, self::FAHRENHEIT])) {
+            throw new InvalidArgumentException(
+                'A temperature unit must be celsius or fahrenheit'
+            );
+        }
+    }
+}
+
+class Temperature
+{
+    /** @var float */
+    private $degrees;
+
+    /** @var TemperatureUnit */
+    private $unit;
+
+    /** @param float $degrees */
+    public function __construct($degrees, TemperatureUnit $unit)
+    {
+        $this->degrees = $degrees;
+        $this->unit    = $unit;
+    }
+
+    /** @return float */
+    public function getDegrees()
+    {
+        return $this->degrees;
+    }
+
+    /** @return TemperatureUnit */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+}
+~~~~~~~~
+
+### The benefits
+
+There are several benefits to using value objects:
+
+#### Confidence
+
+With a value object you know that it can't change unexpectedly, using our
+`MutableEmailAddress` class from earlier consider the following code:
+
+{title="Unexpected change of value", lang=php}
+~~~~~~~~
+<?php
+
+function sendEmail(MutableEmailAddress $address)
+{
+    mail($address->getValue(), 'Hello', '...');
+    $address->setValue('steve@apple.com');
+}
+
+function logEmailSent(MutableEmailAddress $address)
+{
+    echo "A message was sent to " . $address->getValue();
+}
+
+$address = new MutableEmailAddress('bill@microsoft.com');
+
+sendEmail($address);    // send email to bill@microsoft.com
+logEmailSent($address); // but logs "A message was sent to steve@apple.com" - OOPS
+~~~~~~~~
+
+So looking at just the last 3 lines of code you would expect the message would
+get sent to Bill and the log message would reflect that, but it doesn't.
+
+If we used an `ImmutableEmailAddress` object instead the
+`$address->setValue('steve@apple.com');` line of code would not have been allowed
+and would have caused an error. Therefore, we can be certain that our last 3
+lines of code would work as expected.
+
+#### Consistency
+
+If we create a function that that takes a `Temperate` as an argument we can be
+sure that the value we get is a valid `Temperate`. We don't need to write any
+defensive code to check if that unit is valid or that degrees are specified as
+a floating point value because all that was taken care of in the class
+definitions of our value objects.
+
+#### Documentation 
+
+When you open a file and look at the code it's much easier to know the type of
+a variable that was typehinted in the method argument list. This is a benefit
+of typehints rather than value objects, however, by using value objects
+abundantly you will have more types to typehint.
 
 ## Method Names
 
