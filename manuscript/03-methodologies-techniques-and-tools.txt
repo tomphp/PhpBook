@@ -410,6 +410,10 @@ book is definitely a *must read* resource, however you can now find all the
 common design patterns listed and explained on
 [Wikipedia](http://en.wikipedia.org/wiki/Software_design_pattern#Classification_and_list).
 
+If you'd prefer to learn about Design Patterns from a PHP point of view then
+Brandon Savage has writting a book on the subject called
+[Practical Design Patterns in PHP](http://practicaldesignpatternsinphp.com/).
+
 I'm not going to go into any more details on design patterns here, I just wanted
 you to know what they are for now. As we work though the book we will be using
 various design patterns and as we do I shall point out which one we are using
