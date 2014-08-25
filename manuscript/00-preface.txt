@@ -24,13 +24,14 @@ I will be covering Object Oriented Programming, Design Patterns, elements from
 Domain Driven Design, Refactoring, The SOLID Principals, Test Driven
 Development and Behaviour Driven Development. None of these are brand new to
 PHP, in fact any serious PHP development company will be using at least some,
-if not all of these tools and techniques already, however if they are all new
+if not all of these tools and techniques already. However, if they are all new
 to you this will be quite a ride. I do not intend on covering any of these
-topics extensively, there are many great books and resources about all of them
-written by far cleverer people than myself and I encourage you to read and
-learn more about these subjects further, this book however should hopefully be
-a great introduction to some or many of these techniques, concepts and tools
-and show you how to quickly get started using them with PHP.
+topics extensively, there are already many great books and resources covering
+all of them already and written by far cleverer people than myself. Therefore,
+I encourage you to read and learn more about all these subjects further. This
+book should however, hopefully be a great introduction to many of these
+techniques, concepts and tools and show you how to quickly get started using
+them with PHP.
 
 This book aims to show you what you need to start building a well designed,
 manageable and extendible, medium size PHP application. The approach and process

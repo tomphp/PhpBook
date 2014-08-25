@@ -120,8 +120,7 @@ namespaces to continue with this book.
 
 ## Typehints
 
-PHP started off as a dynamically typed language. It has a few basic, scalar
-types:
+PHP is a dynamically typed language and has a few basic, scalar types:
 
 {title="Scalar types in PHP", lang=php}
 ~~~~~~~~
@@ -136,11 +135,12 @@ types:
 false; // boolean
 ~~~~~~~~
 
-It also has *arrays*, *callables* and any user define classes or interfaces which
-are all also types.
+It also has *arrays*, *callables* and any user define classes or interfaces
+which are all also types.
 
 Being a dynamically typed language means that a variable or function argument
-can contain any type at any time (this also goes for function return types):
+can contain any type of value at any time (this also goes for function return
+types):
 
 {title="Dynamic typing example", lang=php}
 ~~~~~~~~
@@ -212,8 +212,8 @@ having to worry about how to work with type constraints.
 
 Since static typing does have benefits PHP introduced typehints on function
 arguments. Typehints allow you to specify exactly what user defined type a
-function accepts for each parameter, it will throw an exception if the wrong
-type is given:
+function accepts for each parameter, it will throw an
+`InvalidArgumentException` exception if the wrong type is given:
 
 {title="PHP typehint example", lang=php}
 ~~~~~~~~
@@ -244,8 +244,9 @@ values.
 However even though PHP is a dynamically typed language you should still strive
 to keep your typing sensible, this means if you create a variable that contains
 a specific type try not to reuse it by assigning a new value of a different
-type. Also don't call methods on objects which are not in the typehinted
-interface, if you do it will not be an error but it's not good practice:
+type to it. Also, don't call methods on objects if they are not in the
+typehinted interface, if you do it will not be an error but it's not good
+practice:
 
 {title="Mis-using an interface in PHP", lang=php}
 ~~~~~~~~
@@ -280,11 +281,11 @@ function performAction(Fooer $f)
 performAction(new FooBar());
 ~~~~~~~~
 
-Throughout this book I will be writing as if I'm writing in a statically typed
-language 90% of the time and typehint whenever possible. However, PHP is a
-dynamic language and some times it's helpful to take advantage of this,
-whenever I do this I will point it out and explain my reason for choosing to
-do it.
+Throughout this book I will be writing PHP code as if I'm writing in a
+statically typed language 90% of the time and typehint whenever possible.
+However, PHP is a dynamic language and some times it's helpful to take
+advantage of this; whenever I do this I will point it out and explain my reason
+for choosing to do it.
 
 ## Front Controllers
 
@@ -564,7 +565,8 @@ I> code examples unless the file name does not match the PSR-0 standard.
 
 Composer is a dependency manager for PHP, it allows you to specify all the
 libraries and tools that your PHP project depends on in a simple JSON file, it
-will then fetch the correct versions of those dependencies into your project.
+will then fetch the correct versions of those dependencies (and all their
+dependencies) into your project.
 
 This means it's easy to distribute your project without including its 3rd party
 dependencies, while making it very easy for users or developers working on
@@ -574,33 +576,32 @@ update to newer versions of dependencies.
 Composer installs its dependencies locally to the project in a directory called
 `vendor` rather than installing them globally onto the system on. This is a
 definite plus as it means you can run many projects on the same system, all
-working with different versions their dependencies, without getting in to a
+working with different versions their dependencies and without getting in to a
 mess.
 
-Now this is all very interesting but you might think you have no intention of
-using any external libraries or tools with your new project, so is Composer
-still useful?
+Now this is all very interesting but you might have no intention of using any
+external libraries or tools with your new project, so is Composer still useful?
 
 The answer is most definitely yes:
 
 * Firstly, there are lots of great development tools which can be installed via
-Composer which you should definitely be using even if you don't intend on using
-3rd party libraries
+Composer and that you should definitely be using even if you don't intend on
+using 3rd party libraries
 * Secondly, you may not intend on using 3rd party libraries but if you start
 off using Composer from the beginning you can always change your mind and add a
 dependency very easily
 * And thirdly, Composer provides a nice and easy to set up autoloader for PHP.
-By simply adding a few lines of JSON to your project your autoloader is up and
-ready to go
+By simply adding a few lines of JSON to your project your autoloader is set up
+and ready to go
 
 While there are plenty of people out there who will have a good reason not to
 use Composer, in my opinion if you don't have on then you should definitely be
 using it in your projects.
 
-So that's a little intro on what Composer can do for you. The full
-documentation can be found at https://getcomposer.org/ but to save you the
-hassle of reading it all now let's have a look at a little example of the
-basics.
+So that's a little intro on what Composer can do for you. You can find out
+about all its features and settings in the
+[documentation](https://getcomposer.org/) but to save you the hassle of reading
+it all now let's have a look at a little example of the basics.
 
 ### Composer Example
 
@@ -609,7 +610,7 @@ basics.
 The various installation options for Composer can be found on the
 [website](https://getcomposer.org/).
 
-You can either install a copy locally to your project which means your call it
+You can either install a copy locally to your project which means your use it
 by running:
 
 ```
@@ -628,24 +629,25 @@ instructions accordingly.
 
 #### Setting up the Autoloader
 
-To start of create a new project folder and `cd` into it:
+To start off, create a new project directory and `cd` into it:
 
 ```
 $ mkdir ComposerExample
 $ cd ComposerExample
 ```
 
-If you want to you Composer locally you'll want to install it inside this
-folder now, if you have installed it global already then you can just carry on.
+If you want to use Composer locally you'll want to install it inside this
+directory now. However, if you have installed it global already then you can
+just carry on.
 
-Next up create a file in the project folder called `composer.json` and add the
+Next up, create a file in the project folder called `composer.json` and add the
 following content:
 
 <<[composer.json](examples/chapter-02/composer/01-autoloader/composer.json)
 
-What we have told Composer to do here is set up an autoloader to local any
-classes in the `ComposerExample` namespace using the PSR-0 file structure inside
-a directory inside our project directory called `src`.
+What we have told Composer to do here is set up an autoloader to locate any
+classes in the `ComposerExample` namespace using the PSR-0 file structure
+inside a directory inside our project called `src`.
 
 Now tell Composer to apply these settings with the following command (remember
 you will need to adjust it if you have installed Composer locally):
@@ -654,11 +656,11 @@ you will need to adjust it if you have installed Composer locally):
 $ composer install
 ```
 
-Once it has finished you will notice it has created a folder called `vendor`
-and another file called `composer.lock`. If you're are using a Source Control
-System like git (and you really should be!) then you should instruct it to
-ignore your `vendor` directory from the repository, the `composer.lock` file
-should be added to the repository though.
+Once it has finished you will notice it has created a new directory called
+`vendor` and another file called `composer.lock`. If you're are using a *source
+control system* like *git* (and you really should be!) then you should instruct
+it to ignore the `vendor` directory from the repository. The `composer.lock`
+file should be added to the repository though.
 
 Next up create a directory structure for our PSR-0 classes to go:
 
@@ -685,8 +687,8 @@ Ta da!
 
 #### Adding a Dependency
 
-Now lets dress it up a bit using a 3rd party library. I had a little hunt
-around for something interesting to try, I found Maxime Bouroumeau-Fuseau's
+Next let's dress it up a bit using a 3rd party library. I had a little hunt
+around for something interesting to try and I found Maxime Bouroumeau-Fuseau's
 ConsoleKit library.
 
 First up lets add it to the project as a dependency by updating our
@@ -706,7 +708,7 @@ First up lets add it to the project as a dependency by updating our
 }
 ~~~~~~~~
 
-Next we tell Composer to download it new dependency by running:
+Next we tell Composer to download its new dependency by running:
 
 ```
 $ composer update
@@ -727,15 +729,15 @@ Now to try to run it:
 $ php run.php hello
 ```
 
-And there we have it, we have simply added a dependency to our app and used it
-leaving Composer to do all the hard work of downloading it and setting up the
-autoloader to find it.
+There we have it, we've simply added a dependency to our app and made use of
+it, leaving Composer to do all the hard work of downloading it and setting up
+the autoloader required to find it.
 
 #### Adding Development Tools
 
 Composer's `require` section lets you define the requirements your project
-needs to run but it also has a `require-dev` section which for dependencies
-which you want to use for development (testing tools for example).
+needs to run but it also has a `require-dev` section which is for dependencies
+which you want to use for development only (testing tools for example).
 
 CodeSniffer is a tool which checks that your code follows a given coding style,
 lets add it to our project.
@@ -744,37 +746,39 @@ Update the `composer.json` file to include the CodeSniffer dev dependency:
 
 <<[composer.json](examples/chapter-02/composer/02-dependency/composer.json)
 
-Once again tell Composer to update its dependencies by running:
+Once again, tell Composer to update its dependencies by running:
 
 ```
 $ composer update
 ```
 
 After it has finished CodeSniffer is ready to be used. When Composer installs
-tool it will install the executable files in a local directory, by default this
-directory is `vendor/bin`. We can run CodeSniffer by running:
+any tools it will install the executable files in a local directory, by default
+this directory is `vendor/bin`.
+
+We can now run CodeSniffer by running:
 
 ```
 $ vendor/bin/phpcs --standard=psr2 src
 ```
 
 If all the code in our `src` directory conforms to the PSR-2 coding style then
-CodeSniffer should have complete without and errors.
+CodeSniffer should have completed without and errors.
 
-To make life easier your can add `vendor/bin` to your operating systems `PATH`
+To make life easier your can add `vendor/bin` to your operating system's `PATH`
 variable so you can execute your tools more easily. On Linux you do this by
 adding:
 
 `PATH=./vendor/bin:$PATH`
 
-To your `.bashrc` file in your home directory.
+to your `.bashrc` file in your home directory.
 
 ## Keeping Logic and Display Code Separate
 
 PHP lets you easily mix text output (usually HTML) with your logic. This makes
-PHP a really useful and powerful web templating language but it also makes it
-very easy to write hideous code which mixes all your application logic in with
-you HTML output like so:
+PHP a really useful and powerful web templating language, but it also makes it
+very easy to write hideous code which mixes application logic in with the HTML
+output like so:
 
 {title="Mixing logic and display code", lang=php}
 ~~~~~~~~
@@ -826,34 +830,37 @@ if (count($customers)) { ?>
 <?php } ?>
 ~~~~~~~~
 
-I think we can all agree that is pretty ugly but if left to get out of control
-it can get a lot uglier!
+I think we can all agree that is pretty ugly but if it's left to get out of
+control it can get a lot uglier!
 
-The solution to this is to not mix your HTML & PHP code together and maintain a
-clear separation between the to. This also allows designers to work on the user
-interface without have to understand the codebase.
+The solution to this is to not mix your HTML & PHP code together and instead,
+maintain a clear separation between the two. This also allows designers to work
+on the user interface without have to understand the codebase.
 
-There are templating libraries for PHP such as Twig and Smarty which introduce
-their own template tags for using in your HTML templates. Or you can use of PHP
-itself to do the templating but maintain the discipline of keeping logic and
-view code separate. It may even be worth using different file extensions to
-keep it clear; `.php` for logic and `.phtml` for HTML templates.
+There are templating libraries for PHP such as
+[Twig](http://twig.sensiolabs.org/) and [Smarty](http://www.smarty.net/) which
+introduce their own template tags for using in your HTML templates. You can
+also use of PHP itself to do the templating but your really should maintain the
+discipline of keeping logic and view code separate; it may even be worth using
+different file extensions to keep it clear, `.php` for logic and `.phtml` for
+HTML templates is often used.
 
 The choice between using PHP or a dedicated templating library can often be
-down to who is going to have access to modify the view templates. If you
-designers are in house, trust worthy and trained then using PHP can be the
-easiest approach. However, if you are out sourcing the design work to people you
-trust less, then using a templating engine means they cannot compromise the
+down to who is going to have access to modify the view templates. If your
+designers are in house, trustworthy and trained, then using PHP can be the
+easiest approach. However, if you are out sourcing the design work to people
+you trust less, then using a templating engine means they cannot compromise the
 security of the application by adding bad PHP code into the templates.
 
 ## Coding Style
 
-Coding Style is simply the way you layout and format your code. In the previous
-Standards section I talked about how they were introduced to maintain a
-consistent approach to using a programming language between many developers,
+*Coding style* is simply the way you layout and format your code. In the
+previous Standards section I talked about how they were introduced to maintain
+a consistent approach to using a programming language between many developers,
 using a coding style is one element of this.
 
 Coding style standards define things like:
+
 * How many spaces should be used to indent code
 * Should the opening brace for a function body goes on the same line as the
 function definition or on the line after 
@@ -861,7 +868,7 @@ function definition or on the line after
 * etc.
 
 As with all standards you'll unlikely find one which you agree with every bit
-of, but rather that creating your own perfect one which no one else uses, you
+of but, rather that creating your own perfect one which no one else uses, you
 should use a well used one you like mostly.
 
 At the moment the best one to use for PHP in my opinion is the one defined by
@@ -870,12 +877,14 @@ book will follow the PSR-2 standard with a couple of exceptions:
 
 ### 1. Unit Tests
 
-When writing unit tests I follow PSR-2 completely apart from 2 elements; the
-method names for the tests. Firstly, instead of using camelCase for these
-method names I use snake_case because the method names are sentences and with
-snake_case is easier to separate the words when reading it. And secondly I'll
-omit the `public` access specifier as it's the default in PHP and keeps the
-line shorter with long method names:
+When writing unit tests I follow PSR-2 apart from 2 elements; both regarding
+the method names for the tests.
+
+* Firstly, instead of using camelCase for test method names I use snake_case.
+This is because the method names are sentences and with snake_case is easier to
+separate the words when reading it.
+* Secondly I'll omit the `public` access specifier as it's the default in PHP
+and keeps the line shorter with long method names. 
 
 {title="Unit test coding style example", lang=php}
 ~~~~~~~~
@@ -898,8 +907,9 @@ class ExampleSpec extends ObjectBehavior
 
 When writing template code using PHP I prefer to keep it looking as close to
 HTML as possible. I try to keep the code inside PHP tags to single expressions
-and I use the `foreach :`/`endforeach`, `if :`/`endif` style of code blocks as
-I think they are easier to match up. Here's an example:
+and I use the `foreach :`/`endforeach`, `if :`/`endif`, etc. style of code
+blocks as I think they are easier to match up in this context. Here's an
+example:
 
 {title="Neat display template code example", lang=php}
 ~~~~~~~~

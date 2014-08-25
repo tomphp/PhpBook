@@ -3,45 +3,49 @@
 In this chapter I want to introduce the paradigms, methodologies and techniques
 incorporated in this book. Like the previous chapter I don't want to go into
 any real depth with any of these topics, rather I just want to give a primer on
-the various subjects which should be enough to understand the content of this
+the each subject which should provide enough to understand the content of this
 book. As always I do encourage you dig deeper into each of the subjects
-yourself. I will provide references of where to start looking when you want
+yourself and I will provide references of where to start looking when you want
 to do this.
 
 ## Object Oriented Programming (OOP)
 
 Sometimes I think there is a misconception that if you use classes in your code
 then you are doing OOP. This is not the case, OOP is an approach to modelling
-which involves grouping related data and behaviour (methods) in your code as
-classes and then defining how they interact with each other.
+which involves grouping your business model down into objects, then grouping
+the related data and behaviours (methods) in your code as classes, and then
+defining how they interact with each other.
 
-OOP style of programming can be even be done in languages which have no
-concepts of classes and classes can be used ways which really doesn't represent
+The OO style of programming can even be done in languages which have no
+concepts of classes, also classes can be used ways which really don't represent
 good OO code.
 
 This is not a book on OO design but we will be using it extensively and I will
-be explaining my choices for doing the things I do. As a result coming in cold
-you will probably get a good feel for OOP but if this is the case you should
-go and learn more on the subject. If you have some experience of OOP but are
-not an expert then I hope you will really have a lot to gain from this book.
+be explaining my choices for doing the things I do. As a result, coming in cold
+to the subject you will probably get a good feel for OOP, but if this is the
+case you should really go and learn more on the subject. If you do already have
+some experience of OOP but you're not an expert then I hope you will really
+have a lot to gain from this book.
 
 Before moving on I just want to quickly cover a couple of OO topics.
 
 ### Encapsulation
 
-Objects consist of state (it's properties) and it's public interface (all
-public methods and properties).  Generally there are rules as to what are the
-valid values for the state. Encapsulation is making that state private so that
-it can only be changed via the public interface methods.
+Objects consist of *state* (it's properties) and it's *public interface* (all
+public methods and properties). Generally there are rules as to what are the
+valid values for any object's state. Encapsulation is making sure that that
+state is private so that it can only be changed via the public interface's
+methods.
 
 The point I want to make here is you should design your public methods so that
-there is not way that the object can be put into an invalid state.
+there is no way that the object can be put into an invalid state.
 
 Let's look at a couple of examples:
 
 An object to represent an email address should not contain strings which could
 not be valid email addresses. In this case it would make sense to throw an
-exception if the email address provided does not look like an email address:
+exception if the email address provided does not look like a valid email
+address:
 
 {title="Well defined value object example", lang=php}
 ~~~~~~~~
@@ -73,15 +77,15 @@ class EmailAddress
 
 In the example above we chose the simple rule that *anything with an `@` symbol
 in it could be an email address* (obviously in production code this needs to be
-more strict). If you study the code above you will find that there is no way
-that you can create an instance with an email address which does not contain an
-`@` symbol. This is good design.
+more well defined). If you study the code above you will find that there is no
+way that you can create an instance of `EmailAddress` with an email address
+which does not contain an `@` symbol. This is good design.
 
-In another example consider implementing a collection words which maintains a
-count of how many words it contains. This collection calls will have 2
-properties, the list of words and the count. In order to add word to the
-collection we add the word to the list and increment the count, firstly lets do
-this with 2 seperate methods:
+In another example consider implementing a collection of words which maintains
+a count of how many words it contains. This collection class will have 2
+properties; the list of words and the count. In order to add words to the
+collection we must add the word to the list and increment the count. firstly
+let's do this with 2 seperate methods:
 
 {title="Bad state consistency example", lang=php}
 ~~~~~~~~
@@ -133,8 +137,8 @@ $collection->addWord('hello');
 $collection->incrementCounter();
 ~~~~~~~~
 
-It looks OK and `$collection` is left in a valid state right, but is it always in a
-valid state? Look again:
+It looks OK and `$collection` is left in a valid state right? But is it always
+in a valid state? Look again:
 
 {lang=php}
 ~~~~~~~~
@@ -157,11 +161,11 @@ $collection->incrementCounter();
 // counter = 1
 ~~~~~~~~
 
-So there's a point in the middle whether the state of the object is invalid, we
+So there's a point in the middle where the state of the object is invalid, we
 do fix it in the next line of code but what if a developer forgot to increment
 the counter? It could lead to a nasty bug!
 
-The solution is simple, design the class so it can never be put into an invalid
+The solution is simple; design the class so it can never be put into an invalid
 state:
 
 {title="Good state consistency example", lang=php}
@@ -207,7 +211,7 @@ Inheritance is a very useful and powerful tool in OOP but it is often misused,
 the most common misuse of inheritance is using it to bring common functionality
 into 2 unrelated classes.
 
-An example could be a bird and a aeroplane both have wings so it might seem
+An example could be: A bird and a aeroplane both fly so it might seem
 reasonable to inherit both a `Bird` class and an `Aeroplane` class from a
 `FlyingThing` superclass:
 
@@ -234,28 +238,31 @@ class Aeroplane extends FlyingThing
 }
 ~~~~~~~~
 
-There are a few reasons why this is a problem, firstly we have single
-inheritance in PHP which means we can't extend from more than one super class.
-Birds can communicate with each other and aeroplanes (well the pilots) can
-communicate with each other, if we wanted to add a `CommunicatingThing` class
-then we couldn't inherit from it as well as `FlyingThing` without creating a
-horrible `CommunicatingFlyingThing` class instead.
+There are a few reasons why this is a problem:
+
+Firstly we only have single inheritance in PHP which means we can't extend from
+more than one super class.  Birds can communicate with each other and
+aeroplanes (well the pilots) can communicate with each other; if we wanted to
+add a `CommunicatingThing` class then we couldn't inherit from it as well as
+`FlyingThing` without creating a horrible `CommunicatingFlyingThing` class
+instead.
 
 Next up birds start flying by *flapping their wings* whereas an aeroplane is
 propelled be its engines, so now we have 2 different types of `FlyingThing`.
-The same goes for communicating, birds do it by *tweeting* and aeroplanes do it
+The same goes for communicating; birds do it by *tweeting* and aeroplanes do it
 by *radio*.
 
-Finally, we've categorised birds and aeroplanes, which are 2 very different things,
-together as *flying things* and *communicating things* which we have had to make
-up. A much more sensible category for an aeroplane might be a *vehical*, and
-for a bird maybe an *animal*.
+Finally, we've categorised birds and aeroplanes, which are 2 very different
+things, together as *flying things* and *communicating things* which we've
+had to make up. A much more sensible category for an aeroplane might be a
+*vehical*, and for a bird maybe an *animal*.
 
-So have to fix it? Well so far we've been talking about *is a*; *a bird **is a**
+So how to fix it? Well so far we've been talking about *is a*; *a bird **is a**
 flying thing*. Inheritance is all about *is a*, but we also have *has a*. What
 might be better is if we say *a bird **has a** flight system* or *an aeroplane
 **has a** communication system*. When talking about **has a** we are talking
-about composition so let's take a look at a better example of how to model this:
+about composition so let's take a look at a better example of how to model
+this:
 
 {title="Using composition", lang=php}
 ~~~~~~~~
@@ -336,7 +343,7 @@ class Aeroplane
 }
 ~~~~~~~~
 
-What's more once we start to realise that a bird's flight system is very
+What's more, once we start to realise that a bird's flight system is very
 different from an aeroplane's then we can start have different flight systems
 which can still but be instructed to start flying in the same way:
 
@@ -390,42 +397,42 @@ class Aeroplane
 }
 ~~~~~~~~
 
-The general rule here is first of all determine if you are really modelling an
+The general rule here is, first of all determine if you are really modelling an
 **is a** relationship or a **has a** relationship. Don't bend your model to fit
 your code, rather make your code fit the model. When done properly you should
 find you use inheritance pretty rarely.
 
 ## Design Patterns
 
-Design Patterns are tried and testing solutions to various problems programmers
-often face. There are several common design patterns which are very well known
-and these are called things like the *visitor pattern* and the *strategy
-pattern*.
+Design Patterns are tried and tested solutions to various problems programmers
+often face. There are several common design patterns which are very well known,
+these are called things like the *visitor pattern* and the *strategy pattern*.
 
 The de facto resource on this subject is the book titled *Design Patterns:
 Elements of Reusable Object-Oriented Software* by the Gang of
-Four[^the-gang-of-four], Robert C. Martin says this book is *"probably the most
+Four[^the-gang-of-four]. Robert C. Martin says this book is *"probably the most
 important book in software engineering written in the last 30 years"*. This
-book is definitely a *must read* resource, however you can now find all the
+book is definitely a *must read* resource, however, you can now find all the
 common design patterns listed and explained on
 [Wikipedia](http://en.wikipedia.org/wiki/Software_design_pattern#Classification_and_list).
 
 If you'd prefer to learn about Design Patterns from a PHP point of view then
-Brandon Savage has writting a book on the subject called
+Brandon Savage has written a book on the subject called
 [Practical Design Patterns in PHP](http://practicaldesignpatternsinphp.com/).
 
-I'm not going to go into any more details on design patterns here, I just wanted
-you to know what they are for now. As we work though the book we will be using
-various design patterns and as we do I shall point out which one we are using
-and the reason for the choice in doing so.
+I'm not going to go into any more details on design patterns here, I just
+wanted you to know what they are for now. As we work though the book we will be
+using various design patterns and as we do I shall point out which one we are
+using and the reason for the choice to doing so.
 
 [^gang-of-four]: Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides.
 
 ## Value Objects & Immutability
 
 When we say something is immutable we mean that its value is fixed and can not
-be changed. This means our classes are either *mutable* or *immutable* depending
-on whether its public interface allows methods for changing its internal state.
+be changed. This means our classes are either *mutable* or *immutable*
+depending on whether its public interface contains methods for changing its
+internal state.
 
 {title="Mutable email address class", lang=php}
 ~~~~~~~~
@@ -477,24 +484,24 @@ class ImmutableEmailAddress
 }
 ~~~~~~~~
 
-These *immutable* classes we call *value objects*, that is an instance of that
-class represents a value and only that value. In the same way that we can say 5
-will always be 5, we can say that an `ImmutableEmailAddress` object containing
-the email address `bill@microsoft.com` will always contain the email address
-`bill@microsoft.com`, there for this object represents the *value* of that
-email address.
+These *immutable* classes we call *value objects*.This is because an instance
+of that class represents a value and only that value; in the same way that we
+can say 5 will always be 5, we can say that an `ImmutableEmailAddress` object
+containing the email address `bill@microsoft.com` will always contain the email
+address `bill@microsoft.com`, therefore this object represents the *value* of
+that email address.
 
 Value objects should be used to classify anything which is a specific thing.
 
 ### An Example
 
 Instead of using a *float* for temperate use a `Temperature` value object, even
-if it simple contains a single *float* value. You might also want to store the
-unit (Fahrenheit or Celsius) in the `Temperate` object so a value object can
-contain more than 1 scalar value. Also, the unit of temperature is a specific
-thing so make that a value object too. Your value object should also only be
-able to be created with valid values, we don't want anyone to be able to create
-a temperature of *"30 degrees **hotness**"*!
+if it simplely contains a single *float* value. You might also want to store
+the unit (Fahrenheit or Celsius) in the `Temperate` object, so a value object
+can contain more than 1 scalar value. Also, the unit of temperature is a
+specific thing in itself, so make that a value object too. Your value objects
+should also only be able to be created with valid values, we don't want anyone
+to be able to create a temperature of *"30 degrees **hotness**"*!
 
 For completeness let's look a good implementation of what we've just discussed:
 
@@ -593,17 +600,18 @@ sendEmail($address);    // send email to bill@microsoft.com
 logEmailSent($address); // but logs "A message was sent to steve@apple.com"
 ~~~~~~~~
 
-So looking at just the last 3 lines of code you would expect the message would
-get sent to Bill and the log message would reflect that, but it doesn't.
+Looking at just the last 3 lines of code in the previous example, you would
+expect the message would get sent to Bill and the log message would reflect
+that, but it doesn't!
 
-If we used an `ImmutableEmailAddress` object instead the
-`$address->setValue('steve@apple.com');` line of code would not have been allowed
-and would have caused an error. Therefore, we can be certain that our last 3
-lines of code would work as expected.
+If we had used an `ImmutableEmailAddress` object instead then the
+`$address->setValue('steve@apple.com');` line of code would not have been
+allowed and would have caused an error. Therefore, we could be certain that our
+last 3 lines of code would work as expected.
 
 #### Consistency
 
-If we create a function that that takes a `Temperate` as an argument we can be
+If we create a function that takes a `Temperate` as an argument we can be
 sure that the value we get is a valid `Temperate`. We don't need to write any
 defensive code to check if that unit is valid or that degrees are specified as
 a floating point value because all that was taken care of in the class
@@ -614,11 +622,11 @@ definitions of our value objects.
 When you open a file and look at the code it's much easier to know the type of
 a variable that was typehinted in the method argument list. This is a benefit
 of typehints rather than value objects, however, by using value objects
-abundantly you will have more types to typehint.
+abundantly you will have more types to typehint with.
 
 ## Dependency Injection (DI) & Inversion of Control (IoC)
 
-Dependency Injection simply means that if you have a class that relies one
+Dependency Injection simply means that if you have a class that relies on
 another class, rather than letting it create that other class internally, you
 have to *inject* the dependency into it:
 
@@ -684,10 +692,10 @@ That's it, *Dependency Injection* is as easy as that, but why do it?
 
 ### Substituting Behaviour
 
-Well first up by injecting dependencies you're promoting the development of
+Well first, up by injecting dependencies you're promoting the development of
 flexible & reusable code, because not only can you inject the dependant type
-but also any subtype making it possible to extend your code without actually
-modifying it just by changing what is injected in.
+but also any subtype. This makes it possible to extend your code without
+actually modifying it by just changing what is injected in.
 
 #### Example
 
@@ -756,10 +764,10 @@ $printer->print($address);
 This works great but then we are told we need to print out the email on a
 webpage as a `mailto` link. Well because we've injected our
 `EmailAddressRenderer` into the printer rather than letting the printer create
-it we can inject anything which implements the `EmailAddressRenderer`
+it, we can now inject anything which implements the `EmailAddressRenderer`
 interface.
 
-So let's create add the HTMLRenderer:
+So let's add the HTMLRenderer:
 
 {title="HTML email address renderer", lang=php}
 ~~~~~~~~
@@ -774,7 +782,7 @@ class HTMLRenderer implements EmailAddressRenderer
 }
 ~~~~~~~~
 
-Our code to make use of this would look now look like this:
+Our code to make use of this would now look like this:
 
 {title="HTML email printer example use", lang=php}
 ~~~~~~~~
@@ -788,10 +796,10 @@ $printer->print($address);
 ~~~~~~~~
 
 Simples! Notice how in order to change the way it behaves we have not altered
-the original code in any way, we've simply extended it. Here's we've written our
-code in such a way that even though our printer uses a renderer it does not
-have control over how that renderer is created, it is just given the renderer
-to be used. This is known as *inversion of control*.
+the original code in any way, instead we've simply extended it. Here we've
+written our code in such a way that even though our printer uses a renderer, it
+does not have control over how that renderer is created, it is just uses the
+given renderer. This is known as *inversion of control*.
 
 ### Inversion Of Control
 
@@ -800,40 +808,40 @@ again what is it useful for?
 
 * Firstly it creates extendible code
 * Secondly it removes the need for your business code to know about
-implementation details such as how things are display or how messages are sent,
-it allows those details to be plugged in. This is often done using the
+implementation details, such as how things are display or how messages are sent,
+instead it allows those details to be plugged in. This is often done using the
 [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern) design pattern.
 * Thirdly it allows your code to be easily tested as small, independent units. 
 This is possible through the use of *test doubles*.
 
 ### Testing
 
-As your codebase goes and you have more and more classes which each depend on
-other classes then in order to test anything you're going to have to create all
-the dependencies of the class you are trying to create, and each of these
-dependencies will have dependencies.
+As your codebase grows and you have more and more classes which each depend on
+other classes, then in order to test anything you're going to have to create all
+the dependencies of the class you are trying to test. Also, each of these
+dependencies will have dependencies which will need to be created..
 
-In this situation tests would get very complex and also fragile, if you were
-to change anything all your tests could break and take ages to get them passing
-again.
+In this situation tests would get very complex and also fragile. If you were
+to change anything, all your tests could break and it would take ages to get
+them passing again.
 
 By using *dependency injection*, *inversion of control* and *interfaces* you
-get code which does depend on fixed dependencies but rather an abstraction
-(this interface) of the dependency. When your code is written like this your
+get code which doesn't depend on fixed dependencies but rather on abstractions
+(the interface) of the dependency. When your code is written like this your
 dependencies are considered to be *loosely coupled*. 
 
 When you code is *loosely coupled* you can create *test doubles*. These are
-very simple & predictable versions of a class's dependencies which can be
-injected into the class instead of the real dependencies allowing the class to
+very simple & predictable versions of a class's dependencies, they can be
+injected into the class instead of the real dependencies, allowing the class to
 be tested in isolation. We'll look at this in more detail in the next chapter.
 
 ### Dependency Inject Containers (DIC) & Service Managers
 
 These are tools which can manage the creation of objects and ensure that the
-required dependencies get injected into the upon creation. I'm not going to
+required dependencies get injected into them on creation. I'm not going to
 talk about them here but will cover them in more detail when we need one.
 
-All I will add is that there are many DICs and Service Manager libraries
+All I will add now is that there are many DICs and Service Manager libraries
 available should you ever decide you need one.
 
 ## The SOLID Principles
@@ -851,7 +859,7 @@ a lot of different things.
 Open Closed Principle (OCP)
 
 : You application should be open for extension but closed for modification. We
-looked at an example of this in action in the Dependency Injection section.
+saw an example of this in action in the Dependency Injection section.
 
 Liskov Substitution Principle (LSP)
 
@@ -862,9 +870,9 @@ possible to use your class in place of its parent anywhere in the program.
 
 Interface Segregation Principle (ISP)
 
-: This principle states that if some has a dependency but only uses a subset of
-that dependency's public interface, then that subset should be made into a
-separate interface and that interface should become the dependency.
+: This principle states that if something has a dependency but only uses a
+subset of that dependency's public interface, then that subset should be made
+into a separate interface and that interface should become the dependency.
 
 Dependency Inversion Principle (DIP)
 
@@ -875,8 +883,8 @@ this earlier on in the email printer example.
 More in-depth details can be found on
 [Wikipedia](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)).
 
-If you stick to these principles you we create fantastically module, extendible
-and testable applications.
+If you stick to these principles you we create fantastically modular,
+extendible and testable applications.
 
 ## Command Query Separation (CQS)
 
