@@ -177,7 +177,7 @@ return value can only ever be the type it is defined to contain. If another
 type is assigned it will either be an error or it will get converted. Here's
 a C++ version of the last example:
 
-{title="Static typing example", lang=c++}
+{title="Static typing example (in C++)", lang=c++}
 ~~~~~~~~
 int fn(int p) {
     return p;
@@ -309,7 +309,9 @@ And the second one we'll call `page2.php`
 Next open a terminal and `cd` into the directory containing these files and use
 the following command to start up PHP's built in webserver:
 
-`$ php -S localhost:8080`
+```
+$ php -S localhost:8080
+```
 
 Now if you open your browser and go to `http://localhost:8080/page1.php` then
 you will see `You are viewing page 1`. If you then go to
@@ -332,7 +334,9 @@ Then in the terminal again `cd` to this new directory. This time start the PHP
 built in webserver with the name of the file we want to use as the application
 entry point like so:
 
-`$ php -S localhost:8080 index.php`
+```
+$ php -S localhost:8080 index.php
+```
 
 Again open your browser and visit `http://localhost:8080/page1` and you will
 see `You are looking at: /page1`, and again go to`http://localhost:8080/page2`
@@ -608,12 +612,16 @@ The various installation options for Composer can be found on the
 You can either install a copy locally to your project which means your call it
 by running:
 
-`$ ./composer.phar`
+```
+$ ./composer.phar
+```
 
 Or you can install it globally on your system and rename it to `composer`. I
 have done it this way so on my system I run Composer by simply typing:
 
-`$ composer`
+```
+$ composer
+```
 
 If you have installed it differently to me you will need to adjust my
 instructions accordingly.
@@ -642,7 +650,9 @@ a directory inside our project directory called `src`.
 Now tell Composer to apply these settings with the following command (remember
 you will need to adjust it if you have installed Composer locally):
 
-`$ composer install`
+```
+$ composer install
+```
 
 Once it has finished you will notice it has created a folder called `vendor`
 and another file called `composer.lock`. If you're are using a Source Control
@@ -652,7 +662,9 @@ should be added to the repository though.
 
 Next up create a directory structure for our PSR-0 classes to go:
 
-`$ mkdir -p src/ComposerExample`
+```
+$ mkdir -p src/ComposerExample
+```
 
 Then create a file called `src/ComposerExample/HelloApplication.php` with the
 following content:
@@ -665,7 +677,9 @@ And finally create a class called `run.php` containing:
 
 Now to see it work run:
 
-`$ php run.php`
+```
+$ php run.php
+```
 
 Ta da!
 
@@ -694,7 +708,9 @@ First up lets add it to the project as a dependency by updating our
 
 Next we tell Composer to download it new dependency by running:
 
-`$ composer update`
+```
+$ composer update
+```
 
 It should download the ConsoleKit package which will now be ready to use. Let's
 update our `ComposerExample\HelloApplication` class to look like this:
@@ -707,7 +723,9 @@ And let's add a new class called `ComposerExample\HelloCommand` like so:
 
 Now to try to run it:
 
-`$ php run.php hello`
+```
+$ php run.php hello
+```
 
 And there we have it, we have simply added a dependency to our app and used it
 leaving Composer to do all the hard work of downloading it and setting up the
@@ -728,13 +746,17 @@ Update the `composer.json` file to include the CodeSniffer dev dependency:
 
 Once again tell Composer to update its dependencies by running:
 
-`$ composer update`
+```
+$ composer update
+```
 
 After it has finished CodeSniffer is ready to be used. When Composer installs
 tool it will install the executable files in a local directory, by default this
 directory is `vendor/bin`. We can run CodeSniffer by running:
 
-`$ vendor/bin/phpcs --standard=psr2 src`
+```
+$ vendor/bin/phpcs --standard=psr2 src
+```
 
 If all the code in our `src` directory conforms to the PSR-2 coding style then
 CodeSniffer should have complete without and errors.
