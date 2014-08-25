@@ -684,9 +684,148 @@ That's it, *Dependency Injection* is as easy as that, but why do it?
 
 ### Substituting Behaviour
 
+Well first up by injecting dependencies you're promoting the development of
+flexible & reusable code, because not only can you inject the dependant type
+but also any subtype making it possible to extend your code without actually
+modifying it just by changing what is injected in.
+
+#### Example
+
+Take this simple email address printer class:
+
+{title="Email printer using dependency injection", lang=php}
+~~~~~~~~
+<?php
+
+class EmailAddress
+{
+    /** @var string */
+    private $address;
+
+    /** @param string $address */
+    public function __construct($address)
+    {
+        $this->address = (string) $address;
+    }
+
+    public function __toString()
+    {
+        return $this->address;
+    }
+}
+
+interface EmailAddressRenderer
+{
+    /** @return string */
+    public function render(EmailAddress $email);
+}
+
+class PlainTextRenderer implements EmailAddressRenderer
+{
+    public function render(EmailAddress $email)
+    {
+        return (string) $email;
+    }
+}
+
+class EmailAddressPrinter
+{
+    /** @var EmailAddressRenderer */
+    private $renderer;
+
+    public function print(EmailAddress $address)
+    {
+        echo $this->renderer->render($address) . "\n";
+    }
+}
+~~~~~~~~
+
+To use our class we'd simply write something like this:
+
+{title="Email printer example use", lang=php}
+~~~~~~~~
+<?php
+
+$address = 'bill@microsoft.com';
+
+$printer = new EmailAddressPrinter(new PlainTextRenderer());
+
+$printer->print($address);
+~~~~~~~~
+
+This works great but then we are told we need to print out the email on a
+webpage as a `mailto` link. Well because we've injected our
+`EmailAddressRenderer` into the printer rather than letting the printer create
+it we can inject anything which implements the `EmailAddressRenderer`
+interface.
+
+So let's create add the HTMLRenderer:
+
+{title="HTML email address renderer", lang=php}
+~~~~~~~~
+<?php
+
+class HTMLRenderer implements EmailAddressRenderer
+{
+    public function render(EmailAddress $email)
+    {
+        return sprintf('<a href="mailto:%1$s">%1$s</a>', htmlentities($email);
+    }
+}
+~~~~~~~~
+
+Our code to make use of this would look now look like this:
+
+{title="HTML email printer example use", lang=php}
+~~~~~~~~
+<?php
+
+$address = 'bill@microsoft.com';
+
+$printer = new EmailAddressPrinter(new HTMLRenderer());
+
+$printer->print($address);
+~~~~~~~~
+
+Simples! Notice how in order to change the way it behaves we have not altered
+the original code in any way, we've simply extended it. Here's we've written our
+code in such a way that even though our printer uses a renderer it does not
+have control over how that renderer is created, it is just given the renderer
+to be used. This is known as *inversion of control*.
+
 ### Inversion Of Control
 
+We've just seen an example of *inversion of control* so we know what it is, but
+again what is it useful for?
+
+* Firstly it creates extendible code
+* Secondly it removes the need for your business code to know about
+implementation details such as how things are display or how messages are sent,
+it allows those details to be plugged in. This is often done using the
+[Adapter](http://en.wikipedia.org/wiki/Adapter_pattern) design pattern.
+* Thirdly it allows your code to be easily tested as small, independent units. 
+This is possible through the use of *test doubles*.
+
 ### Testing
+
+As your codebase goes and you have more and more classes which each depend on
+other classes then in order to test anything you're going to have to create all
+the dependencies of the class you are trying to create, and each of these
+dependencies will have dependencies.
+
+In this situation tests would get very complex and also fragile, if you were
+to change anything all your tests could break and take ages to get them passing
+again.
+
+By using *dependency injection*, *inversion of control* and *interfaces* you
+get code which does depend on fixed dependencies but rather an abstraction
+(this interface) of the dependency. When your code is written like this your
+dependencies are considered to be *loosely coupled*. 
+
+When you code is *loosely coupled* you can create *test doubles*. These are
+very simple & predictable versions of a class's dependencies which can be
+injected into the class instead of the real dependencies allowing the class to
+be tested in isolation. We'll look at this in more detail in the next chapter.
 
 ### Dependency Inject Containers (DIC) & Service Managers
 
@@ -697,9 +836,79 @@ talk about them here but will cover them in more detail when we need one.
 All I will add is that there are many DICs and Service Manager libraries
 available should you ever decide you need one.
 
-## The SOLID Principals
+## The SOLID Principles
+
+The SOLID Principles are the first 5 of the *Principles of Object Oriented
+Design* which were compiled by Robert C. Martin.
+
+The Principles are:
+
+Single Responsibility Principle (SRP)
+
+: A class should only have a single responsibility, don't make classes which do
+a lot of different things.
+
+Open Closed Principle (OCP)
+
+: You application should be open for extension but closed for modification. We
+looked at an example of this in action in the Dependency Injection section.
+
+Liskov Substitution Principle (LSP)
+
+: This states objects can be replaced by subtypes of themselves and the program
+should still work. What this means is that when you extend a class you should
+make sure its public interface still behaves in the expected way, making it
+possible to use your class in place of its parent anywhere in the program.
+
+Interface Segregation Principle (ISP)
+
+: This principle states that if some has a dependency but only uses a subset of
+that dependency's public interface, then that subset should be made into a
+separate interface and that interface should become the dependency.
+
+Dependency Inversion Principle (DIP)
+
+: Class's should not depend on other concrete classes, but rather on
+abstractions (i.e. *abstract classes* and *interfaces*). Again we looked at
+this earlier on in the email printer example.
+
+More in-depth details can be found on
+[Wikipedia](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)).
+
+If you stick to these principles you we create fantastically module, extendible
+and testable applications.
 
 ## Command Query Separation (CQS)
+
+???
+
+## Names
+
+When writing code you have to decide on the names of many things. These include
+*variables*, *classes* and *methods*. Choosing the names of these makes the
+difference between code which is easily understandable and completely
+indecipherable code.
+
+When choosing names make them descriptive and so that the intent of your code
+is clear. If your code is written well and the names are well chosen there
+should be no need for any comments in your code. Robert C. Martin goes as far
+as saying that choosing to adding a comment to your code is you accepting that
+you have failed as a programmer to solve the problem. That does sound a bit
+harsh but the under lying message is that your code should be self descriptive,
+it's OK to use comments when something cannot be make clear in code but those
+situations should be very, very rare!
+
+A very simple rule for naming is *use nouns for variable and class names and
+use verbs for method names*. It's not quite a black and white as that but it's
+a very good place to start.
+
+For some more interest talk on naming I thoroughly recommend having a read of
+Mathias Verraes' [blog](http://verraes.net/).
+
+### Make Method Names Describe Intent
+
+When using creating methods make the intent and the method's purpose clear in
+terms of the business rules.  --- todo fix vs new version ---
 
 ## Refactoring
 
@@ -712,8 +921,6 @@ available should you ever decide you need one.
 ## Behaviour Driven Development (BDD)
 
 ## Uncle Bob's Clean Code
-
-## Method Names
 
 ## Domain Driven Design (DDD)
 
