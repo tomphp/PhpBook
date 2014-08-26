@@ -886,6 +886,14 @@ More in-depth details can be found on
 If you stick to these principles you we create fantastically modular,
 extendible and testable applications.
 
+## Functional Programming (FP)
+
+--- todo minimal information to provide exceptions for CQS ---
+
+### Pure Functions
+
+### Functional Objects
+
 ## Command Query Separation (CQS)
 
 ???
