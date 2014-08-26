@@ -649,6 +649,9 @@ class Bar
 
     public function __construct()
     {
+        // Bar is in control of creating a Fooer.
+        // As a result bar can only ever use a Fooer and never a subtype of Fooer.
+        // This is known as "tight coupling"
         $this->fooer = new Fooer();
     }
 
@@ -676,9 +679,13 @@ class Bar
     /** @var Fooer */
     private $fooer;
 
-    public function __construct()
+    /**
+     * The Fooer must be injected into the instances of Bar.
+     * It is also possible to inject and subtype of Fooer.
+     */
+    public function __construct(Fooer $fooer)
     {
-        $this->fooer = new Fooer();
+        $this->fooer = $fooer
     }
 
     public function doBar()
