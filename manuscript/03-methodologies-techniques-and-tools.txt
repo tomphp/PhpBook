@@ -1069,10 +1069,10 @@ functionality without modifying the existing code, therefore, we are obeying
 the [Open Closed Principle](#ocp).
 
 [^why-decorator]: The reason I chose to use the *Decorator pattern* here
-instead of just extending `Customer` was just to introduce the pattern. The
-actual reason why you would choose to use this pattern would be if you wanted
-to extend the `Customer` class when extensions which could be stacked on top of
-each other.
+    instead of just extending `Customer` was just to introduce the pattern. The
+    actual reason why you would choose to use this pattern would be if you
+    wanted to extend the `Customer` class when extensions which could be
+    stacked on top of each other.
 
 ## Refactoring {#refactoring}
 
