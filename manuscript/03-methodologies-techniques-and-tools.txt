@@ -8,7 +8,7 @@ book. As always I do encourage you dig deeper into each of the subjects
 yourself and I will provide references of where to start looking when you want
 to do this.
 
-## Object Oriented Programming (OOP)
+## Object Oriented Programming (OOP){#oop}
 
 Sometimes I think there is a misconception that if you use classes in your code
 then you are doing OOP. This is not the case, OOP is an approach to modelling
@@ -31,7 +31,7 @@ Before moving on I just want to quickly cover a couple of OO topics.
 
 ### Encapsulation
 
-Objects consist of *state* (it's properties) and it's *public interface* (all
+Objects consist of *state* (its properties) and its *public interface* (all
 public methods and properties). Generally there are rules as to what are the
 valid values for any object's state. Encapsulation is making sure that that
 state is private so that it can only be changed via the public interface's
@@ -84,7 +84,7 @@ which does not contain an `@` symbol. This is good design.
 In another example consider implementing a collection of words which maintains
 a count of how many words it contains. This collection class will have 2
 properties; the list of words and the count. In order to add words to the
-collection we must add the word to the list and increment the count. firstly
+collection we must add the word to the list and increment the count. Firstly
 let's do this with 2 seperate methods:
 
 {title="Bad state consistency example", lang=php}
@@ -211,7 +211,7 @@ Inheritance is a very useful and powerful tool in OOP but it is often misused,
 the most common misuse of inheritance is using it to bring common functionality
 into 2 unrelated classes.
 
-An example could be: A bird and a aeroplane both fly so it might seem
+An example could be: A bird and an aeroplane both fly so it might seem
 reasonable to inherit both a `Bird` class and an `Aeroplane` class from a
 `FlyingThing` superclass:
 
@@ -402,7 +402,7 @@ The general rule here is, first of all determine if you are really modelling an
 your code, rather make your code fit the model. When done properly you should
 find you use inheritance pretty rarely.
 
-## Design Patterns
+## Design Patterns{#design-patterns}
 
 Design Patterns are tried and tested solutions to various problems programmers
 often face. There are several common design patterns which are very well known,
@@ -484,7 +484,7 @@ class ImmutableEmailAddress
 }
 ~~~~~~~~
 
-These *immutable* classes we call *value objects*.This is because an instance
+These *immutable* classes we call *value objects*. This is because an instance
 of that class represents a value and only that value; in the same way that we
 can say 5 will always be 5, we can say that an `ImmutableEmailAddress` object
 containing the email address `bill@microsoft.com` will always contain the email
@@ -826,7 +826,7 @@ This is possible through the use of *test doubles*.
 As your codebase grows and you have more and more classes which each depend on
 other classes, then in order to test anything you're going to have to create all
 the dependencies of the class you are trying to test. Also, each of these
-dependencies will have dependencies which will need to be created..
+dependencies will have dependencies which will need to be created.
 
 In this situation tests would get very complex and also fragile. If you were
 to change anything, all your tests could break and it would take ages to get
@@ -851,37 +851,37 @@ talk about them here but will cover them in more detail when we need one.
 All I will add now is that there are many DICs and Service Manager libraries
 available should you ever decide you need one.
 
-## The SOLID Principles
+## The SOLID Principles{#the-solid-principles}
 
 The SOLID Principles are the first 5 of the *Principles of Object Oriented
 Design* which were compiled by Robert C. Martin.
 
 The Principles are:
 
-Single Responsibility Principle (SRP)
+Single Responsibility Principle (SRP){#srp}
 
 : A class should only have a single responsibility, don't make classes which do
 a lot of different things.
 
-Open Closed Principle (OCP)
+Open Closed Principle (OCP){#ocp}
 
 : You application should be open for extension but closed for modification. We
 saw an example of this in action in the Dependency Injection section.
 
-Liskov Substitution Principle (LSP)
+Liskov Substitution Principle (LSP){#lsp}
 
 : This states objects can be replaced by subtypes of themselves and the program
 should still work. What this means is that when you extend a class you should
 make sure its public interface still behaves in the expected way, making it
 possible to use your class in place of its parent anywhere in the program.
 
-Interface Segregation Principle (ISP)
+Interface Segregation Principle (ISP){#isp}
 
 : This principle states that if something has a dependency but only uses a
 subset of that dependency's public interface, then that subset should be made
 into a separate interface and that interface should become the dependency.
 
-Dependency Inversion Principle (DIP)
+Dependency Inversion Principle (DIP){#dip}
 
 : Class's should not depend on other concrete classes, but rather on
 abstractions (i.e. *abstract classes* and *interfaces*). Again we looked at
@@ -899,7 +899,7 @@ extendible and testable applications.
 
 ### Pure Functions
 
-### Functional Objects
+### Method Objects
 
 ## Command Query Separation (CQS)
 
@@ -931,21 +931,157 @@ Mathias Verraes' [blog](http://verraes.net/).
 ### Make Method Names Describe Intent
 
 When using creating methods make the intent and the method's purpose clear in
-terms of the business rules.  --- todo fix vs new version ---
+terms of the business rules.
 
-## Refactoring
+Say for example, a customer moves house and needs to have their address updated
+in the system. What might seem like an obvious approach would be to add a
+`setAddress` method to the `Customer` class, this works be it's not as
+informative as it could be, maybe a better method might be 'moveHouse'.
+
+So far so good, but what if the customer's address was entered into the system
+wrong and it just needs to be amended, does it make sense to call `moveHouse`
+to update it? Of course not, so we add `amendPostalAddress` also:
+
+{title="Good method names", lang=php}
+~~~~~~~~
+<?php
+
+class Customer
+{
+    /** @var string */
+    private $name;
+
+    /** @var EmailAddress */
+    private $emailAddress;
+
+    /** @var PostalAddress */
+    private $postalAddress;
+
+    /** @param string $name */
+    public function __construct($name, EmailAddress $emailAddress PostalAddress $postalAddress)
+    {
+        $this->name          = $name;
+        $this->emailAddress  = $emailAddress;
+        $this->postalAddress = $postalAddress;
+    }
+
+    public function moveHouse(PostalAddress $newAddress)
+    {
+        $this->postalAddress = $newAddress;
+    }
+
+    public function amendPostalAddress(PostalAddress $amendedAddress)
+    {
+        $this->postalAddress = $amendedAddress;
+    }
+
+    /** @return string */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /** @return EmailAddress */
+    public function getEmailAddress()
+    {
+        return $this->emailAddress;
+    }
+}
+~~~~~~~~
+
+This is definitely mode descriptive but it's essentially 2 methods which do the
+same thing, surely there's not point in that you might think? But there is, the
+2 action are actually 2 separate tasks and by separating them we make it very
+clear to anyone reading the code that there are 2 different events which result
+in the change of a customer's address record.
+
+This also makes it possible to easily extend the system. Say its all working
+well but now we are told that emails should be sent to the customer when their
+address changes; when they move house we need to send them a email
+congratulating them on moving into a new home, when amending the address we
+just want to notify them that their details have been updated.
+
+Because we've separated the 2 actions this is very easy to add on, for this
+example let's use the
+[Decorator pattern](http://en.wikipedia.org/wiki/Decorator_pattern)[^why-decorator]:
+
+{title="Emailing decorator", lang=php}
+~~~~~~~~
+<?php
+
+class NotifyingCustomerDecorator extends Customer
+{
+    /** @var Customer */
+    private $customer;
+
+    /** @var Mailer */
+    private $mailer;
+
+    public function __construct(Customer $customer, Mailer $mailer)
+    {
+        $this->customer = $customer;
+        $this->mailer   = $mailer;
+    }
+
+    public function moveHouse(PostalAddress $newAddress)
+    {
+        $this->customer->moveHouse($newAddress);
+
+        $this->mailer->send(
+            $this->customer,
+            'Congratulations on moving into your new house!',
+            '...'
+        );
+    }
+
+    public function amendPostalAddress(PostalAddress $newAddress)
+    {
+        $this->customer->amendPostalAddress($newAddress);
+
+        $this->mailer->send(
+            $this->customer,
+            'We have updated your details on our system',
+            '...'
+        );
+    }
+
+    /** @return string */
+    public function getName()
+    {
+        return $this->customer->getName();
+    }
+
+    /** @return EmailAddress */
+    public function getEmailAddress()
+    {
+        return $this->customer->getEmailAddress();
+    }
+}
+~~~~~~~~
+
+Pretty neat huh? Once again we have easily extended the system to add new
+functionality without modifying the existing code, therefore, we are obeying
+the [Open Closed Principle](#ocp).
+
+[^why-decorator]: The reason I chose to use the *Decorator pattern* here
+instead of just extending `Customer` was just to introduce the pattern. The
+actual reason why you would choose to use this pattern would be if you wanted
+to extend the `Customer` class when extensions which could be stacked on top of
+each other.
+
+## Refactoring{#refactoring}
 
 ## Code Callisthenics
 
 ## Automated Testing
 
-## Test Driven Development (TDD)
+## Test Driven Development (TDD){#tdd}
 
-## Behaviour Driven Development (BDD)
+## Behaviour Driven Development (BDD){#bdd}
 
 ## Uncle Bob's Clean Code
 
-## Domain Driven Design (DDD)
+## Domain Driven Design (DDD){#ddd}
 
 ## Agile
 

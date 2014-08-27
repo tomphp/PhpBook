@@ -20,18 +20,19 @@ well designed PHP application.  Some of these concepts, techniques and tools
 have been developed in recent years and many of them have been developed over
 the last 1 or 2 decades.
 
-I will be covering Object Oriented Programming, Design Patterns, elements from
-Domain Driven Design, Refactoring, The SOLID Principals, Test Driven
-Development and Behaviour Driven Development. None of these are brand new to
-PHP, in fact any serious PHP development company will be using at least some,
-if not all of these tools and techniques already. However, if they are all new
-to you this will be quite a ride. I do not intend on covering any of these
-topics extensively, there are already many great books and resources covering
-all of them already and written by far cleverer people than myself. Therefore,
-I encourage you to read and learn more about all these subjects further. This
-book should however, hopefully be a great introduction to many of these
-techniques, concepts and tools and show you how to quickly get started using
-them with PHP.
+I will be covering [Object Oriented Programming](#oop), [Design
+Patterns](#design-patterns), elements from [Domain Driven Design](#ddd),
+[Refactoring](#refactoring), [The SOLID Principals](#the-solid-principles),
+[Test Driven Development](#tdd) and [Behaviour Driven Development](#bdd).  None
+of these are brand new to PHP, in fact any serious PHP development company will
+be using at least some, if not all of these tools and techniques already.
+However, if they are all new to you this will be quite a ride. I do not intend
+on covering any of these topics extensively, there are already many great books
+and resources covering all of them already and written by far cleverer people
+than myself.  Therefore, I encourage you to read and learn more about all these
+subjects further. This book should however, hopefully be a great introduction
+to many of these techniques, concepts and tools and show you how to quickly get
+started using them with PHP.
 
 This book aims to show you what you need to start building a well designed,
 manageable and extendible, medium size PHP application. The approach and process
@@ -47,7 +48,7 @@ very useful tools, in my mind this is how modern frameworks should be used.
 This architecture and approach to PHP application design is one we often use at
 the company I work for and is a tried and tested approach.
 
-So finally who is this book for? Firstly this is not an introduction to PHP, I
+So finally, who is this book for? Firstly this is not an introduction to PHP, I
 assume you are already familiar with the language, you should be familiar with
 and able to use classes and at least understand what an interface is. You
 probably have built at least one medium scale application but don't really know
