@@ -1076,7 +1076,51 @@ the [Open Closed Principle](#ocp).
 
 ## Refactoring {#refactoring}
 
-## Code Callisthenics
+Refactoring is the process of restructuring your code with out changing its
+external behaviour. The purpose of refactoring is to try and make the code
+easier to understand, manage and extend. As programmers we should be refactoring
+all the time as we write our code.
+
+While you can get quite a long way refactoring your code by just using common
+sense, all the common refactorings have been named and catalogued. To learn
+more about refactoring I don't think there's any better recommendation than
+to read Martin Fowler's book titled *Refactoring*.
+
+Also, much like with design patterns, lots of information can be found about
+the different refactorings online. In fact Martin Fowler has website called
+http://refactoring.com/ and it has a [catalog or
+refactorings](http://refactoring.com/catalog/) on it.
+
+As I write this book I'll be refactoring all the example code as I go along,
+sadly you'll often not get to see it as the book will just contain the finished
+output. That said you will see the code evolve thoughout the book and that will
+include some refactoring. I'll also cover it a bit more in the next chapter.
+
+## Object Callisthenics
+
+*Object Callisthenics* is a idea suggested by Jeff Bay in *The ThoughtWorks
+Anthology*, it consists of 9 rules to help write better *Object Oriented* code.
+These rules are:
+
+1. Only One Level Of Indentation Per Method
+2. Don't Use The ELSE Keyword
+3. Wrap All Primitives And Strings
+4. First Class Collections
+5. One Dot Per Line
+6. Don't Abbreviate
+7. Keep All Entities Small
+8. No Classes With More Than Two Instance Variables
+9. No Getters/Setters/Properties
+
+By trying to follow these rules you will right much cleaner and managable
+*Object Oriented* code.
+
+For more details on the rules take a look at William Durand's blog post titled
+[Object Callisthenics](http://williamdurand.fr/2013/06/03/object-calisthenics/).
+
+Also Guilherme Blanco's [slides on the
+subject](http://www.slideshare.net/guilhermeblanco/object-calisthenics-applied-to-php)
+are worth a look if you want to see them applied in PHP.
 
 ## Automated Testing
 
