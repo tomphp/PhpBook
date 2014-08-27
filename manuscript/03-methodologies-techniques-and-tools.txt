@@ -8,7 +8,7 @@ book. As always I do encourage you dig deeper into each of the subjects
 yourself and I will provide references of where to start looking when you want
 to do this.
 
-## Object Oriented Programming (OOP){#oop}
+## Object Oriented Programming (OOP) {#oop}
 
 Sometimes I think there is a misconception that if you use classes in your code
 then you are doing OOP. This is not the case, OOP is an approach to modelling
@@ -402,7 +402,7 @@ The general rule here is, first of all determine if you are really modelling an
 your code, rather make your code fit the model. When done properly you should
 find you use inheritance pretty rarely.
 
-## Design Patterns{#design-patterns}
+## Design Patterns {#design-patterns}
 
 Design Patterns are tried and tested solutions to various problems programmers
 often face. There are several common design patterns which are very well known,
@@ -851,37 +851,42 @@ talk about them here but will cover them in more detail when we need one.
 All I will add now is that there are many DICs and Service Manager libraries
 available should you ever decide you need one.
 
-## The SOLID Principles{#the-solid-principles}
+## The SOLID Principles {#the-solid-principles}
 
 The SOLID Principles are the first 5 of the *Principles of Object Oriented
 Design* which were compiled by Robert C. Martin.
 
 The Principles are:
 
-Single Responsibility Principle (SRP){#srp}
+{#srp}
+Single Responsibility Principle (SRP)
 
 : A class should only have a single responsibility, don't make classes which do
 a lot of different things.
 
-Open Closed Principle (OCP){#ocp}
+{#ocp}
+Open Closed Principle (OCP)
 
 : You application should be open for extension but closed for modification. We
 saw an example of this in action in the Dependency Injection section.
 
-Liskov Substitution Principle (LSP){#lsp}
+{#lsp}
+Liskov Substitution Principle (LSP)
 
 : This states objects can be replaced by subtypes of themselves and the program
 should still work. What this means is that when you extend a class you should
 make sure its public interface still behaves in the expected way, making it
 possible to use your class in place of its parent anywhere in the program.
 
-Interface Segregation Principle (ISP){#isp}
+{#isp}
+Interface Segregation Principle (ISP)
 
 : This principle states that if something has a dependency but only uses a
 subset of that dependency's public interface, then that subset should be made
 into a separate interface and that interface should become the dependency.
 
-Dependency Inversion Principle (DIP){#dip}
+{#dip}
+Dependency Inversion Principle (DIP)
 
 : Class's should not depend on other concrete classes, but rather on
 abstractions (i.e. *abstract classes* and *interfaces*). Again we looked at
@@ -1069,19 +1074,19 @@ actual reason why you would choose to use this pattern would be if you wanted
 to extend the `Customer` class when extensions which could be stacked on top of
 each other.
 
-## Refactoring{#refactoring}
+## Refactoring {#refactoring}
 
 ## Code Callisthenics
 
 ## Automated Testing
 
-## Test Driven Development (TDD){#tdd}
+## Test Driven Development (TDD) {#tdd}
 
-## Behaviour Driven Development (BDD){#bdd}
+## Behaviour Driven Development (BDD) {#bdd}
 
 ## Uncle Bob's Clean Code
 
-## Domain Driven Design (DDD){#ddd}
+## Domain Driven Design (DDD) {#ddd}
 
 ## Agile
 
