@@ -649,9 +649,14 @@ class Bar
 
     public function __construct()
     {
-        // Bar is in control of creating a Fooer.
-        // As a result bar can only ever use a Fooer and never a subtype of Fooer.
-        // This is known as "tight coupling"
+        /*
+         * Bar is in control of creating a Fooer.
+         *
+         * As a result bar can only ever use a Fooer and never a subtype of
+         * Fooer.
+         *
+         * This is known as "tight coupling"
+         */
         $this->fooer = new Fooer();
     }
 
@@ -824,8 +829,8 @@ This is possible through the use of *test doubles*.
 ### Testing
 
 As your codebase grows and you have more and more classes which each depend on
-other classes, then in order to test anything you're going to have to create all
-the dependencies of the class you are trying to test. Also, each of these
+other classes, then in order to test anything you're going to have to create
+all the dependencies of the class you are trying to test. Also, each of these
 dependencies will have dependencies which will need to be created.
 
 In this situation tests would get very complex and also fragile. If you were
@@ -858,19 +863,16 @@ Design* which were compiled by Robert C. Martin.
 
 The Principles are:
 
-{#srp}
 Single Responsibility Principle (SRP)
 
 : A class should only have a single responsibility, don't make classes which do
 a lot of different things.
 
-{#ocp}
 Open Closed Principle (OCP)
 
 : You application should be open for extension but closed for modification. We
 saw an example of this in action in the Dependency Injection section.
 
-{#lsp}
 Liskov Substitution Principle (LSP)
 
 : This states objects can be replaced by subtypes of themselves and the program
@@ -878,14 +880,12 @@ should still work. What this means is that when you extend a class you should
 make sure its public interface still behaves in the expected way, making it
 possible to use your class in place of its parent anywhere in the program.
 
-{#isp}
 Interface Segregation Principle (ISP)
 
 : This principle states that if something has a dependency but only uses a
 subset of that dependency's public interface, then that subset should be made
 into a separate interface and that interface should become the dependency.
 
-{#dip}
 Dependency Inversion Principle (DIP)
 
 : Class's should not depend on other concrete classes, but rather on
@@ -963,8 +963,11 @@ class Customer
     private $postalAddress;
 
     /** @param string $name */
-    public function __construct($name, EmailAddress $emailAddress PostalAddress $postalAddress)
-    {
+    public function __construct(
+        $name,
+        EmailAddress $emailAddress
+        PostalAddress $postalAddress
+    ) {
         $this->name          = $name;
         $this->emailAddress  = $emailAddress;
         $this->postalAddress = $postalAddress;
@@ -1066,7 +1069,7 @@ class NotifyingCustomerDecorator extends Customer
 
 Pretty neat huh? Once again we have easily extended the system to add new
 functionality without modifying the existing code, therefore, we are obeying
-the [Open Closed Principle](#ocp).
+the [Open Closed Principle](#the-solid-principles).
 
 [^why-decorator]: The reason I chose to use the *Decorator pattern* here
     instead of just extending `Customer` was just to introduce the pattern. The
@@ -1078,8 +1081,8 @@ the [Open Closed Principle](#ocp).
 
 Refactoring is the process of restructuring your code with out changing its
 external behaviour. The purpose of refactoring is to try and make the code
-easier to understand, manage and extend. As programmers we should be refactoring
-all the time as we write our code.
+easier to understand, manage and extend. As programmers we should be
+refactoring all the time as we write our code.
 
 While you can get quite a long way refactoring your code by just using common
 sense, all the common refactorings have been named and catalogued. To learn
