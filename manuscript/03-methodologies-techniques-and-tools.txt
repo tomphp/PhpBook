@@ -1,12 +1,14 @@
 # Methodologies, Techniques and Tools
 
 In this chapter I want to introduce the paradigms, methodologies and techniques
-incorporated in this book. Like the previous chapter I don't want to go into
-any real depth with any of these topics, rather I just want to give a primer on
-the each subject which should provide enough to understand the content of this
-book. As always I do encourage you dig deeper into each of the subjects
-yourself and I will provide references of where to start looking when you want
-to do this.
+incorporated in this book, none of these methods are exclusive to PHP and are
+worth learning about whatever languages your are developing in.
+
+Like the previous chapter I don't want to go into any real depth with any of
+these topics, rather I just want to give a primer on the each subject which
+should provide enough to understand the content of this book. As always I do
+encourage you dig deeper into each of the subjects yourself and I will provide
+references of where to start looking when you want to do this.
 
 ## Object Oriented Programming (OOP) {#oop}
 
@@ -431,7 +433,7 @@ using and the reason for the choice to doing so.
 
 When we say something is immutable we mean that its value is fixed and can not
 be changed. This means our classes are either *mutable* or *immutable*
-depending on whether its public interface contains methods for changing its
+depending on whether its public interface contains methods which change its
 internal state.
 
 {title="Mutable email address class", lang=php}
@@ -484,24 +486,26 @@ class ImmutableEmailAddress
 }
 ~~~~~~~~
 
-These *immutable* classes we call *value objects*. This is because an instance
+We call these  *immutable* classes *value objects*. This is because an instance
 of that class represents a value and only that value; in the same way that we
 can say 5 will always be 5, we can say that an `ImmutableEmailAddress` object
 containing the email address `bill@microsoft.com` will always contain the email
 address `bill@microsoft.com`, therefore this object represents the *value* of
 that email address.
 
-Value objects should be used to classify anything which is a specific thing.
+Value objects should be used to classify anything which is a specific thing:
 
 ### An Example
 
 Instead of using a *float* for temperate use a `Temperature` value object, even
-if it simplely contains a single *float* value. You might also want to store
-the unit (Fahrenheit or Celsius) in the `Temperate` object, so a value object
-can contain more than 1 scalar value. Also, the unit of temperature is a
-specific thing in itself, so make that a value object too. Your value objects
-should also only be able to be created with valid values, we don't want anyone
-to be able to create a temperature of *"30 degrees **hotness**"*!
+if it simply contains a single *float* value. You might however also want to
+store the unit (Fahrenheit or Celsius) in the `Temperate` object; so a value
+object can contain more than 1 scalar value. Also, the unit of temperature is a
+specific thing in itself, so make that a value object too.
+
+Your value objects should also only be able to be created with valid values, we
+don't want anyone to be able to create a temperature of *"30 degrees
+**hotness**"*. This should be enforced in the class definition!
 
 For completeness let's look a good implementation of what we've just discussed:
 
@@ -576,7 +580,7 @@ There are several benefits to using value objects:
 
 #### Confidence
 
-With a value object you know that it can't change unexpectedly, using our
+With a value object you know that it can't change unexpectedly; using our
 `MutableEmailAddress` class from earlier consider the following code:
 
 {title="Unexpected change of value", lang=php}
@@ -622,11 +626,11 @@ definitions of our value objects.
 When you open a file and look at the code it's much easier to know the type of
 a variable that was typehinted in the method argument list. This is a benefit
 of typehints rather than value objects, however, by using value objects
-abundantly you will have more types to typehint with.
+abundantly you will have more types to typehint for.
 
-## Dependency Injection (DI) & Inversion of Control (IoC)
+## Dependency Injection (DI) & Inversion of Control (IoC) {#dependency-injection}
 
-Dependency Injection simply means that if you have a class that relies on
+*Dependency injection* simply means that if you have a class that relies on
 another class, rather than letting it create that other class internally, you
 have to *inject* the dependency into it:
 
@@ -634,7 +638,7 @@ have to *inject* the dependency into it:
 ~~~~~~~~
 <?php
 
-class Fooer
+class Foo
 {
     public function doFoo()
     {
@@ -644,20 +648,21 @@ class Fooer
 
 class Bar
 {
-    /** @var Fooer */
+    /** @var Foo */
     private $fooer;
 
     public function __construct()
     {
         /*
-         * Bar is in control of creating a Fooer.
+         * Bar is in control of creating a Foo.
          *
-         * As a result bar can only ever use a Fooer and never a subtype of
-         * Fooer.
+         * As a result bar can only ever use a Foo and never a subtype of
+         * Foo.
          *
-         * This is known as "tight coupling"
+         * This is known as "tight coupling" because Bar can not exist without
+         * Foo
          */
-        $this->fooer = new Fooer();
+        $this->fooer = new Foo();
     }
 
     public function doBar()
@@ -671,7 +676,7 @@ class Bar
 ~~~~~~~~
 <?php
 
-class Fooer
+class Foo
 {
     public function doFoo()
     {
@@ -681,14 +686,15 @@ class Fooer
 
 class Bar
 {
-    /** @var Fooer */
+    /** @var Foo */
     private $fooer;
 
     /**
-     * The Fooer must be injected into the instances of Bar.
-     * It is also possible to inject and subtype of Fooer.
+     * The Foo must be injected into the instances of Bar.
+     *
+     * It is also possible to inject and subtype of Foo.
      */
-    public function __construct(Fooer $fooer)
+    public function __construct(Foo $fooer)
     {
         $this->fooer = $fooer
     }
@@ -704,11 +710,12 @@ That's it, *Dependency Injection* is as easy as that, but why do it?
 
 ### Substituting Behaviour
 
-Well first, up by injecting dependencies you're promoting the development of
-flexible & reusable code, because not only can you inject the dependant type
+Well first up, by injecting dependencies you're promoting the development of
+flexible & reusable code because, not only can you inject the dependant type
 but also any subtype. This makes it possible to extend your code without
 actually modifying it by just changing what is injected in.
 
+{#email-printer-example}
 #### Example
 
 Take this simple email address printer class:
@@ -774,10 +781,9 @@ $printer->print($address);
 ~~~~~~~~
 
 This works great but then we are told we need to print out the email on a
-webpage as a `mailto` link. Well because we've injected our
-`EmailAddressRenderer` into the printer rather than letting the printer create
-it, we can now inject anything which implements the `EmailAddressRenderer`
-interface.
+webpage as a `mailto` link. Because we've injected our `EmailAddressRenderer`
+into the printer rather than letting the printer create it, we can now inject
+anything which implements the `EmailAddressRenderer` interface.
 
 So let's add the HTMLRenderer:
 
@@ -811,7 +817,7 @@ Simples! Notice how in order to change the way it behaves we have not altered
 the original code in any way, instead we've simply extended it. Here we've
 written our code in such a way that even though our printer uses a renderer, it
 does not have control over how that renderer is created, it is just uses the
-given renderer. This is known as *inversion of control*.
+one given. This is known as *inversion of control*.
 
 ### Inversion Of Control
 
@@ -820,8 +826,9 @@ again what is it useful for?
 
 * Firstly it creates extendible code
 * Secondly it removes the need for your business code to know about
-implementation details, such as how things are display or how messages are sent,
-instead it allows those details to be plugged in. This is often done using the
+implementation details such as, how things are displayed or how messages are
+sent.  Instead it allows those details to be plugged in. This is often done
+using the
 [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern) design pattern.
 * Thirdly it allows your code to be easily tested as small, independent units. 
 This is possible through the use of *test doubles*.
@@ -829,11 +836,11 @@ This is possible through the use of *test doubles*.
 ### Testing
 
 As your codebase grows and you have more and more classes which each depend on
-other classes, then in order to test anything you're going to have to create
-all the dependencies of the class you are trying to test. Also, each of these
-dependencies will have dependencies which will need to be created.
+other classes. In order to test anything you need create all the dependencies
+of the class you are trying to test. Also, each of these dependencies will have
+dependencies which will need to be created.
 
-In this situation tests would get very complex and also fragile. If you were
+In this situation tests get very complex and also fragile. If you were
 to change anything, all your tests could break and it would take ages to get
 them passing again.
 
@@ -843,7 +850,7 @@ get code which doesn't depend on fixed dependencies but rather on abstractions
 dependencies are considered to be *loosely coupled*. 
 
 When you code is *loosely coupled* you can create *test doubles*. These are
-very simple & predictable versions of a class's dependencies, they can be
+very simple & predictable versions of a class's dependencies which can be
 injected into the class instead of the real dependencies, allowing the class to
 be tested in isolation. We'll look at this in more detail in the next chapter.
 
@@ -871,7 +878,8 @@ a lot of different things.
 Open Closed Principle (OCP)
 
 : You application should be open for extension but closed for modification. We
-saw an example of this in action in the Dependency Injection section.
+saw [an example](#email-printer-example) of this in action in the
+[Dependency Injection](#dependency-injection) section.
 
 Liskov Substitution Principle (LSP)
 
@@ -890,12 +898,12 @@ Dependency Inversion Principle (DIP)
 
 : Class's should not depend on other concrete classes, but rather on
 abstractions (i.e. *abstract classes* and *interfaces*). Again we looked at
-this earlier on in the email printer example.
+this earlier on in the [email printer example](#email-printer-example).
 
 More in-depth details can be found on
 [Wikipedia](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)).
 
-If you stick to these principles you we create fantastically modular,
+If you stick to these principles you will create fantastically modular,
 extendible and testable applications.
 
 ## Functional Programming (FP)
@@ -912,18 +920,18 @@ extendible and testable applications.
 
 ## Names
 
-When writing code you have to decide on the names of many things. These include
-*variables*, *classes* and *methods*. Choosing the names of these makes the
-difference between code which is easily understandable and completely
+When writing code you have to decide on the names of many things, these include
+*variables*, *classes* and *methods*. Choosing the names of these carefully
+makes the difference between code which is easily understandable and completely
 indecipherable code.
 
-When choosing names make them descriptive and so that the intent of your code
-is clear. If your code is written well and the names are well chosen there
-should be no need for any comments in your code. Robert C. Martin goes as far
-as saying that choosing to adding a comment to your code is you accepting that
-you have failed as a programmer to solve the problem. That does sound a bit
-harsh but the under lying message is that your code should be self descriptive,
-it's OK to use comments when something cannot be make clear in code but those
+When choosing names make them descriptive so that the intent of your code is
+clear. If your code is written well and the names are chosen well there should
+be no need for any comments in your code. Robert C. Martin goes as far as
+saying that choosing to adding a comment to your code is you accepting that you
+have failed as a programmer to solve the problem clearly. That does sound a bit
+harsh but the underlying message is that your code should be self descriptive.
+It's OK to use comments when something cannot be make clear in code but those
 situations should be very, very rare!
 
 A very simple rule for naming is *use nouns for variable and class names and
@@ -935,17 +943,18 @@ Mathias Verraes' [blog](http://verraes.net/).
 
 ### Make Method Names Describe Intent
 
-When using creating methods make the intent and the method's purpose clear in
-terms of the business rules.
+When creating methods make the intent of the method's purpose clear in terms of
+the business rules.
 
 Say for example, a customer moves house and needs to have their address updated
 in the system. What might seem like an obvious approach would be to add a
 `setAddress` method to the `Customer` class, this works be it's not as
-informative as it could be, maybe a better method might be 'moveHouse'.
+informative as it could be, a better method name might be 'moveHouse'.
 
 So far so good, but what if the customer's address was entered into the system
-wrong and it just needs to be amended, does it make sense to call `moveHouse`
-to update it? Of course not, so we add `amendPostalAddress` also:
+incorrectly and it just needs to be amended, does it make sense to call
+`moveHouse` to update it? Of course not, so we add a `amendPostalAddress`
+method also:
 
 {title="Good method names", lang=php}
 ~~~~~~~~
@@ -997,17 +1006,20 @@ class Customer
 }
 ~~~~~~~~
 
-This is definitely mode descriptive but it's essentially 2 methods which do the
-same thing, surely there's not point in that you might think? But there is, the
+This is definitely more descriptive but it's essentially 2 methods which do the
+same thing, surely there's no point in that you might think? But there is, the
 2 action are actually 2 separate tasks and by separating them we make it very
 clear to anyone reading the code that there are 2 different events which result
 in the change of a customer's address record.
 
 This also makes it possible to easily extend the system. Say its all working
 well but now we are told that emails should be sent to the customer when their
-address changes; when they move house we need to send them a email
-congratulating them on moving into a new home, when amending the address we
-just want to notify them that their details have been updated.
+address changes:
+
+* when they move house we need to send them a email congratulating them on
+moving into a new home
+* when amending the address we just want to notify them that their details have
+been updated
 
 Because we've separated the 2 actions this is very easy to add on, for this
 example let's use the
@@ -1074,7 +1086,7 @@ the [Open Closed Principle](#the-solid-principles).
 [^why-decorator]: The reason I chose to use the *Decorator pattern* here
     instead of just extending `Customer` was just to introduce the pattern. The
     actual reason why you would choose to use this pattern would be if you
-    wanted to extend the `Customer` class when extensions which could be
+    wanted to wrap the `Customer` class when extensions which could be
     stacked on top of each other.
 
 ## Refactoring {#refactoring}
@@ -1090,19 +1102,21 @@ more about refactoring I don't think there's any better recommendation than
 to read Martin Fowler's book titled *Refactoring*.
 
 Also, much like with design patterns, lots of information can be found about
-the different refactorings online. In fact Martin Fowler has website called
-http://refactoring.com/ and it has a [catalog or
+the different refactorings online. In fact Martin Fowler also has website
+called http://refactoring.com/ and it has a [catalogue of
 refactorings](http://refactoring.com/catalog/) on it.
 
 As I write this book I'll be refactoring all the example code as I go along,
-sadly you'll often not get to see it as the book will just contain the finished
-output. That said you will see the code evolve thoughout the book and that will
-include some refactoring. I'll also cover it a bit more in the next chapter.
+sadly you'll often not get to see it as the book will just contain the
+finished, refactored output. That said you will see the code evolve throughout
+the book as functionality is added and that will include some refactoring. I'll
+also cover it a bit more in the next chapter.
 
 ## Object Callisthenics
 
 *Object Callisthenics* is a idea suggested by Jeff Bay in *The ThoughtWorks
 Anthology*, it consists of 9 rules to help write better *Object Oriented* code.
+
 These rules are:
 
 1. Only One Level Of Indentation Per Method
@@ -1115,7 +1129,8 @@ These rules are:
 8. No Classes With More Than Two Instance Variables
 9. No Getters/Setters/Properties
 
-By trying to follow these rules you will right much cleaner and managable
+I can't say I stick to all of these rules 100% of the time but by trying to
+follow them as much as possible you will write much cleaner and more manageable
 *Object Oriented* code.
 
 For more details on the rules take a look at William Durand's blog post titled
@@ -1123,7 +1138,7 @@ For more details on the rules take a look at William Durand's blog post titled
 
 Also Guilherme Blanco's [slides on the
 subject](http://www.slideshare.net/guilhermeblanco/object-calisthenics-applied-to-php)
-are worth a look if you want to see them applied in PHP.
+are worth a look if you want to see the rules applied in PHP.
 
 ## Automated Testing
 
