@@ -1,8 +1,12 @@
 # Methodologies, Techniques and Tools
 
-In this chapter I want to introduce the paradigms, methodologies and techniques
-incorporated in this book, none of these methods are exclusive to PHP and are
-worth learning about whatever languages your are developing in.
+In this chapter I want to introduce the paradigms, methodologies, techniques
+and tools incorporated in this book. None of these are exclusive to PHP and
+they are worth learning about regardless of which language you're developing
+in. Also, none of these are brand new to PHP, in fact any serious PHP
+development company will be using at least some, if not all of these already.
+While, some of these have been developed in recent years but many of them have
+been developed over the last 1 or 2 decades.
 
 Like the previous chapter I don't want to go into any real depth with any of
 these topics, rather I just want to give a primer on the each subject which
