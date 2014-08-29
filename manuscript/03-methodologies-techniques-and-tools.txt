@@ -1474,13 +1474,74 @@ are worth a look if you want to see the rules applied in PHP.
 
 ## Automated Testing
 
+Automated tests are simply tests which can be run to confirm the logic in your
+program is behaving as expected.
+
+Automated test can be:
+
+* Test code which executes the code being tested
+* Scripts written in a test language which executes your code via a framework
+* Code which automates interaction with your user interface or API
+* Scripts written in a test language which automates interaction with your user
+interface or API via a framework
+
+There are different types of test which are categorised depending on what they
+are testing, for example you have:
+
+| Name              | Purpose                                                                                 |
+|-------------------|-----------------------------------------------------------------------------------------|
+| Unit Tests        | Test small, isolated units of code.                                                     |
+| Integration Tests | Test the way that several units of code work together.                                  |
+| Acceptance Tests  | Tests which prove to the customer that the required functionality has been implemented. |
+
+Tests provide confidence in your codebase and confidence in the ability to
+add to and modify your codebase. When [refactoring](#refactoring) tests let you
+know that you haven't made a mistake and broken the logic. When adding new or
+modifying existing functionality tests give you confidence that you haven't
+broken a different feature in the process.
+
+Tests are great, you should have them! One often cited argument for not writing
+tests is the extra time is takes to write them, what people who say this don't
+know about is all the time it saves debugging. Also if you use [TDD](#tdd) then
+the process of creating the tests is not separate from the writing of the code.
+
 ## Test Driven Development (TDD) {#tdd}
+
+I'm going to be very brief here as the next chapter is going to go into it in
+much more depth.
+
+Simply put *Test Driven Development* is a discipline which involves using the
+tests to guide what production code is actually written rather than writing the
+code then working out how to test it. Through this process TDD encourages you
+to write much cleaner and modular code that you might do without it. It also
+gives you much higher confidence in the coverage of your test suite.
 
 ## Behaviour Driven Development (BDD) {#bdd}
 
+*Behaviour Driven Development* is an extension to [TDD](#tdd), it uses testing
+tools which encourage the testing to be written more from a business
+perspective. Throughout this book we will be using BDD extensively.
+
 ## Uncle Bob's Clean Code
 
+Robert C. Martin aka *Uncle Bob* is a very outspoken and published programmer
+who has strong ideals about how high quality code should be written. His books
+include:
+
+* Clean Code: A Handbook of Agile Software Craftsmanship
+* The Clean Coder: A Code of Conduct for Professional Programmers
+* Agile Software Development, Principles, Patterns, and Practices
+
+He also had a fanstatic video series called [Clean
+Code](http://cleancoders.com/).
+
+Through is books and videos he covers all the topics we've looked at in this
+chapter in a lot more depth. If you really want to improve the way your work
+he is definitely someone who you should be paying attention to.
+
 ## Domain Driven Design (DDD) {#ddd}
+
+*Domain Driven Design* is...
 
 ## Agile
 
