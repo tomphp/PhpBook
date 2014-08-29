@@ -912,15 +912,343 @@ extendible and testable applications.
 
 ## Functional Programming (FP)
 
---- todo minimal information to provide exceptions for CQS ---
+### History
+
+PHP is naturally, heavily biased towards the
+*[imperative programming](http://en.wikipedia.org/wiki/Imperative_programming)*
+paradigm. Imperative programs are basically sequences of statements which are
+executed in order, changing the program state they run. The imperative style of
+programming has been the most popular style for several decades now.
+
+There are however other paradigms, one of which is *[functional
+programming](http://en.wikipedia.org/wiki/Functional_programming)*. Functional
+Programming pre-dates Imperative Programming but Imperative Programming still
+won the popularity race up until recently. Once it stopped being possible for
+computer CPUs to get any faster the manufacturers decided instead to start
+adding more cores instead; so rather than trying to have a single thread of
+instructions executing faster and faster, we have multiple threads executing
+simultaneously.
+
+Now the imperative style of programming is very well suited towards single
+threads of execution because statements always run in the correct order. With
+multiple threads however, one thread might run faster than another and if they
+are both trying to read & change the same state there's not guarantee that it
+will happen in the right order. To make this work using imperative programming
+you need to introduces locks to keep track and synchronise how the threads are
+interactive with the shared state, this is tricky and not fun to do.
+
+The functional style of programming however, makes this a whole lot simpler.
+You can tell the computer to execute 2 different functions on 2 different
+threads and be sure that they will behave and expected and on conflict with
+each other, for this reason functional programming and functional programming
+languages are gaining a lot of popularity at the moment. Also, many imperative
+languages are adding more and more functional style features.
+
+### So What is Functional Programming?
+
+Functional programming has its roots in lambda calculus, and is based on the
+idea that whenever you call a given function with the same set of arguments you
+will always get the same result. Some other aspects of functional programming are:
+
+* Functions have no side effects, they never modify or read global/persistent
+state. These are considered *pure functions*.
+* There is no assignment, once a variable has been initialised with a value it
+will always be that value.
+* Functions can accept other functions as arguments or return new functions.
+These are know as *higher order functions*.
+
+I'm not going to go much deeper into functional programming in this book, I
+only real want to show how what *pure functions* are. In this book I will be
+applying some functional programming knowledge but I'm not really going to
+highlight it too much.
 
 ### Pure Functions
 
-### Method Objects
+As previously mentioned, *pure functions* are functions which have no side
+effects. Let's look at some examples of pure functions, all these functions
+will always return the same value when given the same arguments and they never
+alter persistent state:
+
+{title="Pure functions", lang="php"}
+~~~~~~~~
+<?php
+function add($a, $b)
+{
+    return $a + $b;
+}
+
+function fahrenheitToCelsius($fahrenheit)
+{
+    return ($fahrenheit - 32) / 1.8;
+}
+
+function applyTwiceAndAdd(callable $fn, $value)
+{
+    return $fn($value) + $fn($value);
+}
+~~~~~~~~
+
+These functions are not pure, if called twice with the same arguments the
+result may not be the same:
+
+{title="Impure functions", lang="php"}
+~~~~~~~~
+<?php
+$counter = 0;
+
+function incrementCounter()
+{
+    global $counter;
+
+    $counter++;
+}
+
+function getCount()
+{
+    global $counter;
+
+    return $counter;
+}
+
+function getCountAndIncrement()
+{
+    global $counter;
+
+    return $counter++;
+}
+
+function threeTimesRand($max)
+{
+    return 3 * rand(0, $max);
+}
+
+function readFile($filename)
+{
+    return file_get_contents($filename);
+}
+~~~~~~~~
+
+Now functional programming does not have assignment allowing the changing of
+the value of a variable but PHP does. Therefore we can make use of this inside
+a function while still providing a functionally pure interface to the function:
+
+{title="Pure function with local state", lang="php"}
+~~~~~~~~
+<?php
+
+function applyNTimesAndAdd(callable $fn, $n, $value)
+{
+    $total = 0;
+
+    for ($count = 0; $count < $n; $count++) {
+        $total += $fn($value);
+    }
+
+    return $total;
+}
+~~~~~~~~
+
+So while `applyNTimesAndAdd` does have internal state, it is never persisted
+beyond each execution of the function so this can still be considered a
+functional function even though the implementation uses imperative code.
+
+Now lets move this theory inside objects. Obviously we can have methods which
+are pure functions:
+
+{title="Methods as pure functions", lang="php"}
+~~~~~~~~
+<?php
+
+class RandomFunctions
+{
+    public function add($a, $b)
+    {
+        return $a + $b;
+    }
+
+    public function fahrenheitToCelsius($fahrenheit)
+    {
+        return ($fahrenheit - 32) / 1.8;
+    }
+
+    public function applyTwiceAndAdd(callable $fn, $value)
+    {
+        return $fn($value) + $fn($value);
+    }
+}
+~~~~~~~~
+
+Of course this hasn't really achieved much other than grouping some functions
+together.
+
+However, as soon as methods start to make use of properties then they can not
+be considered as pure functions:
+
+{title="Impure methods", lang="php"}
+~~~~~~~~
+<?php
+
+class Counter
+{
+    private $counter = 0;
+
+    public function incrementCounter()
+    {
+        $this->counter++;
+    }
+
+    public function getCount()
+    {
+        return $this->counter;
+    }
+
+    public function getCountAndIncrement()
+    {
+        return $this->counter++;
+    }
+}
+~~~~~~~~
+
+Since the behaviour of the methods in the `Counter` class now depends on the
+`$counter` property none of the methods in the class could be considerer
+pure.
+
+Now thinking back to the `applyNTimesAndAdd` function, is there something
+similar in the context of an object? Take a look at this example and consider
+whether you think it consider to behave in a functional way:
+
+{#method-object-example}
+{title="Method object", lang="php"}
+~~~~~~~~
+<?php
+
+class ResultAdder
+{
+    private $fn;
+
+    private $total;
+
+    private $value;
+
+    public function applyNTimesAndAdd(callable $fn, $n, $value)
+    {
+        $this->fn = $fn
+        $this->total = 0;
+        $this->value $value;
+        
+        for ($count = 0; $count < $n; $count++) {
+            $this->applyFunction();
+        }
+
+        return $this->total;
+    }
+
+    private function applyFunction()
+    {
+        $fn = $this->fn;
+
+        $fn($this->value);
+    }
+}
+~~~~~~~~
+
+What did you think? If you study it carefully you will notice that even though
+properties are being used inside the class, every time a method in the public
+interface is invoked the properties are being reset. This means that the
+`applyNTimesAndAdd` method does indeed appear to be working in a functional
+way.
+
+Classes like this one are often created by the use of the [Replace Method with
+Method
+Object](http://refactoring.com/catalog/replaceMethodWithMethodObject.html)
+refactoring.
+
+### Learn More About FP
+
+Learning a functional programming is not only fascinating but it also gives you
+a whole new set of tools you can apply in any language. It's also going to
+become more and more important over the next few years. So if you're not already
+familiar with functional programming I really recommend taking a look at it in
+the not so distant future, it will be a very rewarding experience!
+
+There are many resources on functional programming which can be easily found
+2 notable ones are:
+
+[Structure and Interpretation of Computer Programs
+(SICP)](http://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs)
+
+: This is one of the most recommended text books covering function programming.
+It was written by MIT professors Harold Abelson & Gerald Jay Sussman with Julie
+Sussman and was formerly used as a text book there.  It can also be read
+[online](http://mitpress.mit.edu/sicp/).
+
+[Functional Programming in PHP](http://www.functionalphp.com/)
+
+: Is a much easier to read book, written by Simon Holywell, which introduces
+functional programming to PHP programmers.
 
 ## Command Query Separation (CQS)
 
-???
+Command Query Separation is more or less exactly what is say on the tin; you
+classify you methods as either a *command* or a *query* but not both. A
+*command* is a method which changes the state of the object, a command must not
+return a value. A *query* is a method which returns a value from the object, a
+query must not change the object's state.
+
+Let's take another quick look at that `Counter` class we made earlier:
+
+{title="Command Query Separation Example", lang="php"}
+~~~~~~~~
+<?php
+
+class Counter
+{
+    /** @var int */
+    private $counter = 0;
+
+    /**
+     * This method is a COMMAND since it updates the state
+     * and doesn't return a value.
+     */
+    public function incrementCounter()
+    {
+        $this->counter++;
+    }
+
+    /**
+     * This method is a QUERY since it returns a value
+     * but does not alter the object's state.
+     *
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->counter;
+    }
+
+    /**
+     * This method alerts the state and returns a value so it
+     * is not a separate COMMAND or QUERY.
+     *
+     * Such methods should be avoided.
+     *
+     * @return int
+     */
+    public function getCountAndIncrement()
+    {
+        return $this->counter++;
+    }
+}
+~~~~~~~~
+
+CQS means we can repeatedly query our object for assertions, display, or what
+ever other reason and be confident we are not inadvertently making changes
+to the state. Generally with objects inside your model this is a good approach
+to try and adhere to.
+
+The exceptions to this rule are methods which behave in a functional way as the
+state they modify is temporary local state, and service objects which are used
+to interact with the storage system or other services.
 
 ## Names
 
