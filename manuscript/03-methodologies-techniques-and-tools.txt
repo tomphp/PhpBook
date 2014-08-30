@@ -433,7 +433,7 @@ using and the reason for the choice to doing so.
 
 [^gang-of-four]: Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides.
 
-## Value Objects & Immutability
+## Value Objects & Immutability {#value-objects-and-immutability}
 
 When we say something is immutable we mean that its value is fixed and can not
 be changed. This means our classes are either *mutable* or *immutable*
@@ -1541,7 +1541,36 @@ he is definitely someone who you should be paying attention to.
 
 ## Domain Driven Design (DDD) {#ddd}
 
-*Domain Driven Design* is...
+*Domain Driven Design* is much more that just how to write code. It includes
+the full process from understanding the business (domain), to translating that
+into software. As the name implies, DDD driving factor is the domain and as
+developers we have to accept the fact that no one understands the domain
+(business we are modelling) as much as the *domain experts*. When doing DDD
+we do not try to squeeze the domain we are modelling into our software development
+world but rather we aim to transfer the domain language into our software.
+
+The first stage of DDD is sitting down with the *domain experts* and starting
+to learn about their business. During this time we start to build a *ubiquitous
+language* which is the words and phrase that we can use to discuss the domain
+in the *domain expert's* terms. This *ubiquitous language* should the be used
+and in all discussions as well as being transferred into the actual source code
+of the application.
+
+While DDD is about the full process from analysing and understanding the domain
+through to actually modelling it, there is a certain style of code and set of
+[design patterns](#design-patterns) which it makes use of. These include use of
+[value objects](#value-objects-and-immutability), entities, aggregates,
+the repository pattern and more.
+
+Since DDD a far broader scope than just the writing of the code this book
+doesn't really cover it in any depth. However, the code produced in this book
+is heavily influence by this style of design.
+
+If you really want to understand DDD you want to start by reading Eric Evans'
+book *Domain-Driven Design*.
+
+Another person to keep an eye on regarding this subject is the PHP's
+community's DDD man [Mathias Verraes](http://verraes.net/).
 
 ## Agile
 
