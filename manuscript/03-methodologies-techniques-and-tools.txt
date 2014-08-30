@@ -1174,8 +1174,7 @@ the not so distant future, it will be a very rewarding experience!
 There are many resources on functional programming which can be easily found
 2 notable ones are:
 
-[Structure and Interpretation of Computer Programs
-(SICP)](http://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs)
+Structure and Interpretation of Computer Programs (SICP)
 
 : This is one of the most recommended text books covering function programming.
 It was written by MIT professors Harold Abelson & Gerald Jay Sussman with Julie
@@ -1574,4 +1573,47 @@ community's DDD man [Mathias Verraes](http://verraes.net/).
 
 ## Agile
 
+Agile is an approach to software development which is embodied in techniques
+such as *[Extreme Programming
+(XP)](http://en.wikipedia.org/wiki/Extreme_programming)* and
+*[SCRUM](http://en.wikipedia.org/wiki/Scrum_(software_development))*. It
+accepts the fact that getting from the customer's idea to the final product is
+not something that can be set as a rigid path from the beginning; as the
+project progresses the customers ideas evolve and technical challenges might
+cause effect the way the project progresses.
+
+With *agile* development the customer is heavily involved with the development
+process and the project is broken down in to manageable sized tasks. The
+customer then prioritises the tasks and the development team works in small
+burst of time to get the tasks completed and delivered to the customer in order
+of priority. In XP these bursts of time are called *iterations* whereas in
+SCRUM they're know as *sprints*. After each *iteration* the customer and
+development team can review what has been done and can decide what to tackle
+next.
+
+Agile is about the approach to work and the idea that things can change as they
+develop. In this book I won't be discussing this any further but will be
+presenting the code as if we're working in an Agile environment, what this
+means is that code I present in an earlier chapter may well change, be replaced
+or even be deleted in a later chapter. The reason for this is I don't just want
+to present an application architecture as an end product, rather I want to go
+through the process of how we get to that point.
+
+A good book to check out on Agile style development is Kent Beck's *Extreme
+Programming Explained*.
+
 ## User Stories
+
+A user story is a short description of one of this tasks that a user will do
+with the system:
+
+> A customer can view their previous orders.
+
+These are created as part of the planning an analysis process and are often
+written on small cards called *story cards*. *Acceptance tests* are then
+decided on for this story, at which point that feature can be implemented.
+
+For this book I will provide the *user story* and *acceptance tests* for each
+part of the application we implement. The creating of of the stories is not
+something I will cover, but I will recommend Mike Cohn's rather fantastic book:
+*User Stories Applied*.
