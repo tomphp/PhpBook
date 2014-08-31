@@ -1,59 +1,59 @@
 # Methodologies, Techniques and Tools
 
-In this chapter I want to introduce the paradigms, methodologies, techniques
-and tools incorporated in this book. None of these are exclusive to PHP and
+In this chapter I want to introduce the methodologies, techniques and tools
+incorporated in this book. None of these are exclusive to PHP and therefore
 they are worth learning about regardless of which language you're developing
 in. Also, none of these are brand new to PHP, in fact any serious PHP
 development company will be using at least some, if not all of these already.
-While, some of these have been developed in recent years but many of them have
-been developed over the last 1 or 2 decades.
+While some of these are new and have been developed in recent years, many of
+them have been developed over the last 1, 2 or more decades.
 
 Like the previous chapter I don't want to go into any real depth with any of
-these topics, rather I just want to give a primer on the each subject which
-should provide enough to understand the content of this book. As always I do
-encourage you dig deeper into each of the subjects yourself and I will provide
-references of where to start looking when you want to do this.
+these topics, I just want to give a short introduction or primer on each
+subject. These should provide enough of an understanding to work through this
+book. As always I do encourage you dig deeper into each of the subjects
+yourself, I will provide references for each topic of which are good places to
+start looking when you want to do this.
 
 ## Object Oriented Programming (OOP) {#oop}
 
 Sometimes I think there is a misconception that if you use classes in your code
 then you are doing OOP. This is not the case, OOP is an approach to modelling
 which involves grouping your business model down into objects, then grouping
-the related data and behaviours (methods) in your code as classes, and then
-defining how they interact with each other.
-
-The OO style of programming can even be done in languages which have no
+the related data and behaviours (methods) of these objects in your code as
+*classes*. This style of programming can even be done in languages which have no
 concepts of classes, also classes can be used ways which really don't represent
 good OO code.
 
 This is not a book on OO design but we will be using it extensively and I will
 be explaining my choices for doing the things I do. As a result, coming in cold
-to the subject you will probably get a good feel for OOP, but if this is the
-case you should really go and learn more on the subject. If you do already have
-some experience of OOP but you're not an expert then I hope you will really
-have a lot to gain from this book.
+to the subject you will probably get a good feel for OOP from this book alone,
+but even so I think this is a subject which you should study in more detail.
+If you do already have some experience of OOP but you're not an expert then I
+hope you will really have a lot to gain from this book.
 
-Before moving on I just want to quickly cover a couple of OO topics.
+Before moving on I just want to quickly cover a couple of OO topics:
 
 ### Encapsulation
 
-Objects consist of *state* (its properties) and its *public interface* (all
-public methods and properties). Generally there are rules as to what are the
-valid values for any object's state. Encapsulation is making sure that that
-state is private so that it can only be changed via the public interface's
-methods.
+Objects consist of *state* (their *properties*) and a *public interface* (all
+**public** *methods* and *properties*). Generally there are rules as to what
+are the valid values for any object's state. Encapsulation is making state
+private so that it can only be changed via the public interface's methods.
 
-The point I want to make here is you should design your public methods so that
-there is no way that the object can be put into an invalid state.
+The point I want to make here is that you should design your public methods so
+that there is no way that the object can be put into an invalid state.
 
 Let's look at a couple of examples:
 
-An object to represent an email address should not contain strings which could
-not be valid email addresses. In this case it would make sense to throw an
-exception if the email address provided does not look like a valid email
-address:
+#### Example 1
 
-{title="Well defined value object example", lang=php}
+An object to represent an email address should not be able to contain a value
+which could not be a valid email address. In this case it would make sense to
+throw an exception if the email address provided does not look like a valid
+email address:
+
+{title="Well defined email address object example", lang=php}
 ~~~~~~~~
 <?php
 
@@ -82,16 +82,20 @@ class EmailAddress
 ~~~~~~~~
 
 In the example above we chose the simple rule that *anything with an `@` symbol
-in it could be an email address* (obviously in production code this needs to be
-more well defined). If you study the code above you will find that there is no
-way that you can create an instance of `EmailAddress` with an email address
-which does not contain an `@` symbol. This is good design.
+in it could be an email address*, obviously in production code this would need
+to be to be more well defined.
 
-In another example consider implementing a collection of words which maintains
-a count of how many words it contains. This collection class will have 2
-properties; the list of words and the count. In order to add words to the
-collection we must add the word to the list and increment the count. Firstly
-let's do this with 2 seperate methods:
+If you study the code above you will find that there is no way that you can
+create an instance of `EmailAddress` with an email address which does not
+contain an `@` symbol. This is good design!
+
+#### Example 2
+
+Now consider implementing a collection of words which maintains a count of how
+many words it contains. This collection class will have 2 properties; *the list
+of words* and *the count*. In order to add words to the collection we must add
+the word to the list and increment the count. Firstly let's do this with 2
+separate methods:
 
 {title="Bad state consistency example", lang=php}
 ~~~~~~~~
@@ -167,7 +171,7 @@ $collection->incrementCounter();
 // counter = 1
 ~~~~~~~~
 
-So there's a point in the middle where the state of the object is invalid, we
+there's a point in the middle where the state of the object is invalid, we
 do fix it in the next line of code but what if a developer forgot to increment
 the counter? It could lead to a nasty bug!
 
@@ -213,11 +217,13 @@ SORTED!
 
 ### Inheritance vs. Composition
 
-Inheritance is a very useful and powerful tool in OOP but it is often misused,
-the most common misuse of inheritance is using it to bring common functionality
+Inheritance is a very useful and powerful tool in OOP but it is often misused.
+The most common misuse of inheritance is using it to bring common functionality
 into 2 unrelated classes.
 
-An example could be: A bird and an aeroplane both fly so it might seem
+An example could be:
+
+A bird and an aeroplane both fly so it might seem
 reasonable to inherit both a `Bird` class and an `Aeroplane` class from a
 `FlyingThing` superclass:
 
@@ -247,28 +253,29 @@ class Aeroplane extends FlyingThing
 There are a few reasons why this is a problem:
 
 Firstly we only have single inheritance in PHP which means we can't extend from
-more than one super class.  Birds can communicate with each other and
-aeroplanes (well the pilots) can communicate with each other; if we wanted to
+more than one super class. Birds can communicate with each other and
+aeroplanes (well the pilots) can communicate with each other. If we wanted to
 add a `CommunicatingThing` class then we couldn't inherit from it as well as
 `FlyingThing` without creating a horrible `CommunicatingFlyingThing` class
 instead.
 
-Next up birds start flying by *flapping their wings* whereas an aeroplane is
-propelled be its engines, so now we have 2 different types of `FlyingThing`.
+Next up, birds start flying by *flapping their wings* whereas an aeroplane is
+propelled be its engines. Now we have 2 different types of `FlyingThing`.
 The same goes for communicating; birds do it by *tweeting* and aeroplanes do it
 by *radio*.
 
-Finally, we've categorised birds and aeroplanes, which are 2 very different
+Finally we've categorised birds and aeroplanes, which are 2 very different
 things, together as *flying things* and *communicating things* which we've
 had to make up. A much more sensible category for an aeroplane might be a
 *vehical*, and for a bird maybe an *animal*.
 
-So how to fix it? Well so far we've been talking about *is a*; *a bird **is a**
-flying thing*. Inheritance is all about *is a*, but we also have *has a*. What
-might be better is if we say *a bird **has a** flight system* or *an aeroplane
-**has a** communication system*. When talking about **has a** we are talking
-about composition so let's take a look at a better example of how to model
-this:
+So how to fix it? So far we've been talking about *is a* relationships; *a bird
+**is a** flying thing*. Inheritance is all about *is a* relationships, but we
+also have *has a* relationships. What might be better would be if we said *"a
+bird **has a** flight system"* or *"an aeroplane **has a** communication
+system"*. When talking about **has a** relationships we are talking about
+composition. With this in mind Let's take a look at a better example of how to
+model this:
 
 {title="Using composition", lang=php}
 ~~~~~~~~
@@ -351,7 +358,8 @@ class Aeroplane
 
 What's more, once we start to realise that a bird's flight system is very
 different from an aeroplane's then we can start have different flight systems
-which can still but be instructed to start flying in the same way:
+which can still be instructed to start flying in the same way by making use
+of an *interface*:
 
 {title="Flexible flight systems", lang=php}
 ~~~~~~~~
@@ -403,23 +411,25 @@ class Aeroplane
 }
 ~~~~~~~~
 
-The general rule here is, first of all determine if you are really modelling an
-**is a** relationship or a **has a** relationship. Don't bend your model to fit
-your code, rather make your code fit the model. When done properly you should
-find you use inheritance pretty rarely.
+The general rule here is:
+
+First of all determine if you are really modelling an **is a** relationship or
+a **has a** relationship. Don't bend your model to fit your code, rather make
+your code fit the model. When done properly you should find you use inheritance
+pretty rarely.
 
 ## Design Patterns {#design-patterns}
 
 Design Patterns are tried and tested solutions to various problems programmers
-often face. There are several common design patterns which are very well known,
+often face. There's several common design patterns which are very well known,
 these are called things like the *visitor pattern* and the *strategy pattern*.
 
 The de facto resource on this subject is the book titled *Design Patterns:
 Elements of Reusable Object-Oriented Software* by the Gang of
 Four[^the-gang-of-four]. Robert C. Martin says this book is *"probably the most
 important book in software engineering written in the last 30 years"*. This
-book is definitely a *must read* resource, however, you can now find all the
-common design patterns listed and explained on
+book is definitely a *must read* for all programmers, however, you can also
+find all the common design patterns listed and explained on
 [Wikipedia](http://en.wikipedia.org/wiki/Software_design_pattern#Classification_and_list).
 
 If you'd prefer to learn about Design Patterns from a PHP point of view then
@@ -427,18 +437,19 @@ Brandon Savage has written a book on the subject called
 [Practical Design Patterns in PHP](http://practicaldesignpatternsinphp.com/).
 
 I'm not going to go into any more details on design patterns here, I just
-wanted you to know what they are for now. As we work though the book we will be
-using various design patterns and as we do I shall point out which one we are
-using and the reason for the choice to doing so.
+wanted you to know what they are for now. As we work though this book we will
+be using various design patterns. As they come up I shall point out which one we
+are using and explain the choice to do so.
 
 [^gang-of-four]: Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides.
 
 ## Value Objects & Immutability {#value-objects-and-immutability}
 
 When we say something is immutable we mean that its value is fixed and can not
-be changed. This means our classes are either *mutable* or *immutable*
-depending on whether its public interface contains methods which change its
-internal state.
+be changed. This means a class is either *mutable* or *immutable* depending on
+whether its public interface contains methods which change its internal state.
+
+Let's see an example of each:
 
 {title="Mutable email address class", lang=php}
 ~~~~~~~~
@@ -490,22 +501,22 @@ class ImmutableEmailAddress
 }
 ~~~~~~~~
 
-We call these  *immutable* classes *value objects*. This is because an instance
-of that class represents a value and only that value; in the same way that we
+We call *immutable* classes *value objects*. This is because an instance
+of a given class represents a value and only that value. In the same way that we
 can say 5 will always be 5, we can say that an `ImmutableEmailAddress` object
 containing the email address `bill@microsoft.com` will always contain the email
 address `bill@microsoft.com`, therefore this object represents the *value* of
 that email address.
 
-Value objects should be used to classify anything which is a specific thing:
+Value objects should be used to classify anything which can be classified:
 
 ### An Example
 
 Instead of using a *float* for temperate use a `Temperature` value object, even
 if it simply contains a single *float* value. You might however also want to
-store the unit (Fahrenheit or Celsius) in the `Temperate` object; so a value
-object can contain more than 1 scalar value. Also, the unit of temperature is a
-specific thing in itself, so make that a value object too.
+store the unit (Fahrenheit or Celsius) in the `Temperature` object - a value
+object can contain more than 1 scalar value. Also, the unit of temperature is 
+classifiable itself - therefore, make that a value object too.
 
 Your value objects should also only be able to be created with valid values, we
 don't want anyone to be able to create a temperature of *"30 degrees
@@ -608,9 +619,9 @@ sendEmail($address);    // send email to bill@microsoft.com
 logEmailSent($address); // but logs "A message was sent to steve@apple.com"
 ~~~~~~~~
 
-Looking at just the last 3 lines of code in the previous example, you would
-expect the message would get sent to Bill and the log message would reflect
-that, but it doesn't!
+Looking at just the last 3 lines of code in the example, you would expect the
+message would get sent to Bill and the log message would reflect that, but it
+doesn't!
 
 If we had used an `ImmutableEmailAddress` object instead then the
 `$address->setValue('steve@apple.com');` line of code would not have been
@@ -619,24 +630,26 @@ last 3 lines of code would work as expected.
 
 #### Consistency
 
-If we create a function that takes a `Temperate` as an argument we can be
-sure that the value we get is a valid `Temperate`. We don't need to write any
-defensive code to check if that unit is valid or that degrees are specified as
+If we create a function that takes a `Temperature` as an argument we can be
+sure that the value we get is a valid `Temperature`. We don't need to write any
+defensive code to check that the unit is valid or that degrees are specified as
 a floating point value because all that was taken care of in the class
 definitions of our value objects.
 
 #### Documentation 
 
 When you open a file and look at the code it's much easier to know the type of
-a variable that was typehinted in the method argument list. This is a benefit
-of typehints rather than value objects, however, by using value objects
-abundantly you will have more types to typehint for.
+a variable that was typehinted in the method argument list. This is really a
+benefit of typehints rather than of value objects however, by using value
+objects abundantly you will have more types to typehint for.
 
 ## Dependency Injection (DI) & Inversion of Control (IoC) {#dependency-injection}
 
-*Dependency injection* simply means that if you have a class that relies on
-another class, rather than letting it create that other class internally, you
-have to *inject* the dependency into it:
+*Dependency injection* is simply explained by saying; if you have a class that
+relies on another class, rather than letting it create that other class
+internally, *inject* the dependency into it.
+
+Example **without** dependency injection:
 
 {title="No dependency injection example", lang=php}
 ~~~~~~~~
@@ -675,6 +688,8 @@ class Bar
     }
 }
 ~~~~~~~~
+
+Example **with** dependency injection:
 
 {title="Dependency injection example", lang=php}
 ~~~~~~~~
@@ -717,12 +732,12 @@ That's it, *Dependency Injection* is as easy as that, but why do it?
 Well first up, by injecting dependencies you're promoting the development of
 flexible & reusable code because, not only can you inject the dependant type
 but also any subtype. This makes it possible to extend your code without
-actually modifying it by just changing what is injected in.
+actually modifying it by simply injecting a different subtype of a dependency.
 
 {#email-printer-example}
 #### Example
 
-Take this simple email address printer class:
+Take this simple email address printer:
 
 {title="Email printer using dependency injection", lang=php}
 ~~~~~~~~
@@ -784,12 +799,12 @@ $printer = new EmailAddressPrinter(new PlainTextRenderer());
 $printer->print($address);
 ~~~~~~~~
 
-This works great but then we are told we need to print out the email on a
-webpage as a `mailto` link. Because we've injected our `EmailAddressRenderer`
+This works great! But then we're told we need to print out the email address on
+a webpage as a `mailto` link. Since we've injected our `EmailAddressRenderer`
 into the printer rather than letting the printer create it, we can now inject
 anything which implements the `EmailAddressRenderer` interface.
 
-So let's add the HTMLRenderer:
+Let's add the HTMLRenderer:
 
 {title="HTML email address renderer", lang=php}
 ~~~~~~~~
@@ -819,33 +834,34 @@ $printer->print($address);
 
 Simples! Notice how in order to change the way it behaves we have not altered
 the original code in any way, instead we've simply extended it. Here we've
-written our code in such a way that even though our printer uses a renderer, it
-does not have control over how that renderer is created, it is just uses the
+written our code in such a way that even though the printer uses a renderer, it
+does not have control over how that renderer is created. Instead it is uses the
 one given. This is known as *inversion of control*.
 
 ### Inversion Of Control
 
 We've just seen an example of *inversion of control* so we know what it is, but
-again what is it useful for?
+again, what is it useful for?
 
-* Firstly it creates extendible code
-* Secondly it removes the need for your business code to know about
-implementation details such as, how things are displayed or how messages are
-sent.  Instead it allows those details to be plugged in. This is often done
-using the
+Well...
+
+* Using it creates extendible code
+* It removes the need for your business model to know about implementation
+details such as; how things are displayed or how messages are sent. Instead, it
+allows those details to be plugged in. This is often done using the
 [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern) design pattern.
-* Thirdly it allows your code to be easily tested as small, independent units. 
-This is possible through the use of *test doubles*.
+* It allows your code to be easily tested as small, independent units.  This is
+possible through the use of *test doubles*.
 
 ### Testing
 
 As your codebase grows and you have more and more classes which each depend on
-other classes. In order to test anything you need create all the dependencies
-of the class you are trying to test. Also, each of these dependencies will have
-dependencies which will need to be created.
+other classes. Testing anything you becomes quite hard as you  need create all
+the dependencies of the class you are trying to test. Also, each of these
+dependencies will have dependencies which will also need to be created.
 
-In this situation tests get very complex and also fragile. If you were
-to change anything, all your tests could break and it would take ages to get
+In this situation tests get very complex and also fragile; if you were to
+change anything, lots of your tests could break and it would take ages to get
 them passing again.
 
 By using *dependency injection*, *inversion of control* and *interfaces* you
@@ -853,18 +869,19 @@ get code which doesn't depend on fixed dependencies but rather on abstractions
 (the interface) of the dependency. When your code is written like this your
 dependencies are considered to be *loosely coupled*. 
 
-When you code is *loosely coupled* you can create *test doubles*. These are
-very simple & predictable versions of a class's dependencies which can be
-injected into the class instead of the real dependencies, allowing the class to
-be tested in isolation. We'll look at this in more detail in the next chapter.
+When your dependencies are *loosely coupled* you can create *test doubles*.
+These are very simple & predictable versions of a class's dependencies which
+can be injected into the class instead of the real dependencies. This allows
+the class to be tested in isolation. We'll look at this in more detail in the
+next chapter.
 
 ### Dependency Inject Containers (DIC) & Service Managers
 
 These are tools which can manage the creation of objects and ensure that the
-required dependencies get injected into them on creation. I'm not going to
-talk about them here but will cover them in more detail when we need one.
+required dependencies get injected into them on creation. I'm not going to talk
+about these here but will cover them in more detail when we need to use one.
 
-All I will add now is that there are many DICs and Service Manager libraries
+All I will add now is that there are many DIC and Service Manager libraries
 available should you ever decide you need one.
 
 ## The SOLID Principles {#the-solid-principles}
@@ -872,25 +889,25 @@ available should you ever decide you need one.
 The SOLID Principles are the first 5 of the *Principles of Object Oriented
 Design* which were compiled by Robert C. Martin.
 
-The Principles are:
+These 5 principles are:
 
 Single Responsibility Principle (SRP)
 
-: A class should only have a single responsibility, don't make classes which do
-a lot of different things.
+: A class should only have a single responsibility; don't create classes which
+do a lot of different things.
 
 Open Closed Principle (OCP)
 
-: You application should be open for extension but closed for modification. We
-saw [an example](#email-printer-example) of this in action in the
-[Dependency Injection](#dependency-injection) section.
+: Your application should be *open for extension* but *closed for
+modification*. We saw [an example](#email-printer-example) of this in action in
+the [Dependency Injection](#dependency-injection) section.
 
 Liskov Substitution Principle (LSP)
 
 : This states objects can be replaced by subtypes of themselves and the program
 should still work. What this means is that when you extend a class you should
 make sure its public interface still behaves in the expected way, making it
-possible to use your class in place of its parent anywhere in the program.
+possible to use the class in place of its parent anywhere in the program.
 
 Interface Segregation Principle (ISP)
 
@@ -923,49 +940,50 @@ programming has been the most popular style for several decades now.
 There are however other paradigms, one of which is *[functional
 programming](http://en.wikipedia.org/wiki/Functional_programming)*. Functional
 Programming pre-dates Imperative Programming but Imperative Programming still
-won the popularity race up until recently. Once it stopped being possible for
-computer CPUs to get any faster the manufacturers decided instead to start
-adding more cores instead; so rather than trying to have a single thread of
+won the popularity race up until recently: Once it stopped being possible for
+computer CPUs to get any faster the manufacturers decided instead, to start
+adding more cores. So rather than trying to have a single thread of
 instructions executing faster and faster, we have multiple threads executing
 simultaneously.
 
-Now the imperative style of programming is very well suited towards single
-threads of execution because statements always run in the correct order. With
-multiple threads however, one thread might run faster than another and if they
-are both trying to read & change the same state there's not guarantee that it
-will happen in the right order. To make this work using imperative programming
-you need to introduces locks to keep track and synchronise how the threads are
-interactive with the shared state, this is tricky and not fun to do.
+The imperative style of programming is very well suited towards single threads
+of execution because statements always run in the correct order. With multiple
+threads however, one thread might run faster than another, and if they are both
+trying to read & change the same state there's no guarantee that it will
+happen in the right order. To make this work using imperative programming you
+need to introduces *locks* to keep track and synchronise how the threads are
+interacting with the shared state. This is tricky and is not fun to do!
 
-The functional style of programming however, makes this a whole lot simpler.
-You can tell the computer to execute 2 different functions on 2 different
-threads and be sure that they will behave and expected and on conflict with
-each other, for this reason functional programming and functional programming
-languages are gaining a lot of popularity at the moment. Also, many imperative
-languages are adding more and more functional style features.
+The functional style of programming however, makes this a lot simpler. You can
+tell the computer to execute 2 different functions in 2 different threads and
+be sure that they will behave and expected and on conflict with each other. For
+this reason functional programming and functional programming languages are
+gaining a lot of popularity at the moment. Also, many imperative languages are
+adding more and more functional style features.
 
 ### So What is Functional Programming?
 
 Functional programming has its roots in lambda calculus, and is based on the
 idea that whenever you call a given function with the same set of arguments you
-will always get the same result. Some other aspects of functional programming are:
+will always get the same result. Some other aspects of functional programming
+are:
 
 * Functions have no side effects, they never modify or read global/persistent
 state. These are considered *pure functions*.
 * There is no assignment, once a variable has been initialised with a value it
 will always be that value.
 * Functions can accept other functions as arguments or return new functions.
-These are know as *higher order functions*.
+These are known as *higher order functions*.
 
 I'm not going to go much deeper into functional programming in this book, I
-only real want to show how what *pure functions* are. In this book I will be
-applying some functional programming knowledge but I'm not really going to
-highlight it too much.
+only real want to show what *pure functions* are. I will be applying some
+functional programming knowledge during the building of our application but I'm
+not really going to highlight it too much.
 
 ### Pure Functions
 
 As previously mentioned, *pure functions* are functions which have no side
-effects. Let's look at some examples of pure functions, all these functions
+effects. Let's look at some examples of pure functions; all these functions
 will always return the same value when given the same arguments and they never
 alter persistent state:
 
@@ -1028,9 +1046,10 @@ function readFile($filename)
 }
 ~~~~~~~~
 
-Now functional programming does not have assignment allowing the changing of
-the value of a variable but PHP does. Therefore we can make use of this inside
-a function while still providing a functionally pure interface to the function:
+Now functional programming does not have assignment to allow the changing of
+the value of a variable, but PHP does! Therefore, we can make use of this
+inside a function while still providing a functionally pure interface to the
+function:
 
 {title="Pure function with local state", lang="php"}
 ~~~~~~~~
@@ -1050,7 +1069,7 @@ function applyNTimesAndAdd(callable $fn, $n, $value)
 
 So while `applyNTimesAndAdd` does have internal state, it is never persisted
 beyond each execution of the function so this can still be considered a
-functional function even though the implementation uses imperative code.
+functional function, even though the implementation uses imperative code.
 
 Now lets move this theory inside objects. Obviously we can have methods which
 are pure functions:
@@ -1081,8 +1100,9 @@ class RandomFunctions
 Of course this hasn't really achieved much other than grouping some functions
 together.
 
-However, as soon as methods start to make use of properties then they can not
-be considered as pure functions:
+However, as soon as methods start to make use of properties, they can not
+be considered as pure functions because the properties persist beyond method 
+calls:
 
 {title="Impure methods", lang="php"}
 ~~~~~~~~
@@ -1110,12 +1130,12 @@ class Counter
 ~~~~~~~~
 
 Since the behaviour of the methods in the `Counter` class now depends on the
-`$counter` property none of the methods in the class could be considerer
+`$counter` property, none of the methods in the class could be considerer
 pure.
 
 Now thinking back to the `applyNTimesAndAdd` function, is there something
 similar in the context of an object? Take a look at this example and consider
-whether you think it consider to behave in a functional way:
+whether you think it behaves in a functional way:
 
 {#method-object-example}
 {title="Method object", lang="php"}
@@ -1152,7 +1172,7 @@ class ResultAdder
 }
 ~~~~~~~~
 
-What did you think? If you study it carefully you will notice that even though
+What do you think? If you study it carefully you will notice that even though
 properties are being used inside the class, every time a method in the public
 interface is invoked the properties are being reset. This means that the
 `applyNTimesAndAdd` method does indeed appear to be working in a functional
@@ -1165,31 +1185,33 @@ refactoring.
 
 ### Learn More About FP
 
-Learning a functional programming is not only fascinating but it also gives you
-a whole new set of tools you can apply in any language. It's also going to
-become more and more important over the next few years. So if you're not already
-familiar with functional programming I really recommend taking a look at it in
-the not so distant future, it will be a very rewarding experience!
+Learning a functional programming language is not only fascinating but it also
+gives you a whole new set of tools which you can apply in any language. Also,
+as we get more and more cores it's going to become more important over the next
+few years! So, if you're not already familiar with functional programming I
+really recommend taking a look at it in the not so distant future - it will be a
+very rewarding experience!
 
 There are many resources on functional programming which can be easily found
-2 notable ones are:
+but 2 notable ones are:
 
 Structure and Interpretation of Computer Programs (SICP)
 
 : This is one of the most recommended text books covering function programming.
 It was written by MIT professors Harold Abelson & Gerald Jay Sussman with Julie
-Sussman and was formerly used as a text book there.  It can also be read
+Sussman and was formerly used as a text book used there.  It can also be read
 [online](http://mitpress.mit.edu/sicp/).
 
 [Functional Programming in PHP](http://www.functionalphp.com/)
 
-: Is a much easier to read book, written by Simon Holywell, which introduces
-functional programming to PHP programmers.
+: This is a much easier to read book, written by Simon Holywell. It introduces
+functional programming to PHP programmers along with some use functional
+libraries which are available for PHP.
 
 ## Command Query Separation (CQS)
 
-Command Query Separation is more or less exactly what is say on the tin; you
-classify you methods as either a *command* or a *query* but not both. A
+Command Query Separation is more or less exactly what is say on the tin; 
+methods are classified as either *commands* or a *queries* but not both. A
 *command* is a method which changes the state of the object, a command must not
 return a value. A *query* is a method which returns a value from the object, a
 query must not change the object's state.
@@ -1241,13 +1263,13 @@ class Counter
 ~~~~~~~~
 
 CQS means we can repeatedly query our object for assertions, display, or what
-ever other reason and be confident we are not inadvertently making changes
-to the state. Generally with objects inside your model this is a good approach
-to try and adhere to.
+ever other reason, and be confident we are not inadvertently making changes to
+the state in the process. Generally with the objects inside your model this is
+a good approach to try to adhere to.
 
-The exceptions to this rule are methods which behave in a functional way as the
-state they modify is temporary local state, and service objects which are used
-to interact with the storage system or other services.
+What might seem an exception to this rule is methods working in a functional
+way. However, since the state they modify is is not used again it does not
+actually break this rule.
 
 ## Names
 
@@ -1259,28 +1281,28 @@ indecipherable code.
 When choosing names make them descriptive so that the intent of your code is
 clear. If your code is written well and the names are chosen well there should
 be no need for any comments in your code. Robert C. Martin goes as far as
-saying that choosing to adding a comment to your code is you accepting that you
+saying; choosing to adding a comment to your code is accepting that you
 have failed as a programmer to solve the problem clearly. That does sound a bit
 harsh but the underlying message is that your code should be self descriptive.
 It's OK to use comments when something cannot be make clear in code but those
 situations should be very, very rare!
 
 A very simple rule for naming is *use nouns for variable and class names and
-use verbs for method names*. It's not quite a black and white as that but it's
-a very good place to start.
+use verbs for method names*. It's not quite as[ black and white as that but
+it's a very good place to start.
 
-For some more interest talk on naming I thoroughly recommend having a read of
-Mathias Verraes' [blog](http://verraes.net/).
+For some more interesting talk on naming I thoroughly recommend having a read
+of Mathias Verraes' [blog](http://verraes.net/).
 
 ### Make Method Names Describe Intent
 
 When creating methods make the intent of the method's purpose clear in terms of
-the business rules.
+the business language.
 
 Say for example, a customer moves house and needs to have their address updated
 in the system. What might seem like an obvious approach would be to add a
-`setAddress` method to the `Customer` class, this works be it's not as
-informative as it could be, a better method name might be 'moveHouse'.
+`setAddress` method to the `Customer` class, this works but it's not as
+informative as it could be. A better method name might be 'moveHouse'.
 
 So far so good, but what if the customer's address was entered into the system
 incorrectly and it just needs to be amended, does it make sense to call
@@ -1338,16 +1360,15 @@ class Customer
 ~~~~~~~~
 
 This is definitely more descriptive but it's essentially 2 methods which do the
-same thing, surely there's no point in that you might think? But there is, the
-2 action are actually 2 separate tasks and by separating them we make it very
+same thing, surely there's no point in that you might think. But there is; the
+2 action are actually 2 separate tasks, by separating them we make it very
 clear to anyone reading the code that there are 2 different events which result
-in the change of a customer's address record.
+in the change of a customer's address data.
 
-This also makes it possible to easily extend the system. Say its all working
-well but now we are told that emails should be sent to the customer when their
-address changes:
+This also makes it possible to easily extend the system. Say for example, we
+are told that emails should be sent to the customer when their address changes:
 
-* when they move house we need to send them a email congratulating them on
+* when they move house we need to send them an email congratulating them on
 moving into a new home
 * when amending the address we just want to notify them that their details have
 been updated
@@ -1422,10 +1443,10 @@ the [Open Closed Principle](#the-solid-principles).
 
 ## Refactoring {#refactoring}
 
-Refactoring is the process of restructuring your code with out changing its
-external behaviour. The purpose of refactoring is to try and make the code
+Refactoring is the process of restructuring your code without changing its
+external behaviour. The purpose of refactoring is to try to make the code
 easier to understand, manage and extend. As programmers we should be
-refactoring all the time as we write our code.
+refactoring all the time while we write our code.
 
 While you can get quite a long way refactoring your code by just using common
 sense, all the common refactorings have been named and catalogued. To learn
@@ -1433,19 +1454,19 @@ more about refactoring I don't think there's any better recommendation than
 to read Martin Fowler's book titled *Refactoring*.
 
 Also, much like with design patterns, lots of information can be found about
-the different refactorings online. In fact Martin Fowler also has website
+the different refactorings online. In fact, Martin Fowler also has website
 called http://refactoring.com/ and it has a [catalogue of
 refactorings](http://refactoring.com/catalog/) on it.
 
-As I write this book I'll be refactoring all the example code as I go along,
-sadly you'll often not get to see it as the book will just contain the
+As I write this book I'll be refactoring all the example code as I go, sadly
+you'll often not get to see this process as the book will just contain the
 finished, refactored output. That said you will see the code evolve throughout
 the book as functionality is added and that will include some refactoring. I'll
 also cover it a bit more in the next chapter.
 
 ## Object Callisthenics
 
-*Object Callisthenics* is a idea suggested by Jeff Bay in *The ThoughtWorks
+*Object Callisthenics* is an idea suggested by Jeff Bay in *The ThoughtWorks
 Anthology*, it consists of 9 rules to help write better *Object Oriented* code.
 
 These rules are:
@@ -1461,13 +1482,13 @@ These rules are:
 9. No Getters/Setters/Properties
 
 I can't say I stick to all of these rules 100% of the time but by trying to
-follow them as much as possible you will write much cleaner and more manageable
-*Object Oriented* code.
+follow them as much as possible you will write much cleaner and more
+manageable, *Object Oriented* code.
 
 For more details on the rules take a look at William Durand's blog post titled
 [Object Callisthenics](http://williamdurand.fr/2013/06/03/object-calisthenics/).
 
-Also Guilherme Blanco's [slides on the
+Also, Guilherme Blanco's [slides on the
 subject](http://www.slideshare.net/guilhermeblanco/object-calisthenics-applied-to-php)
 are worth a look if you want to see the rules applied in PHP.
 
@@ -1481,7 +1502,7 @@ Automated test can be:
 * Test code which executes the code being tested
 * Scripts written in a test language which executes your code via a framework
 * Code which automates interaction with your user interface or API
-* Scripts written in a test language which automates interaction with your user
+* Scripts written in a test language which automate interaction with your user
 interface or API via a framework
 
 There are different types of test which are categorised depending on what they
@@ -1494,15 +1515,16 @@ are testing, for example you have:
 | Acceptance Tests  | Tests which prove to the customer that the required functionality has been implemented. |
 
 Tests provide confidence in your codebase and confidence in the ability to
-add to and modify your codebase. When [refactoring](#refactoring) tests let you
+add to and modify your code. When [refactoring](#refactoring) tests let you
 know that you haven't made a mistake and broken the logic. When adding new or
 modifying existing functionality tests give you confidence that you haven't
 broken a different feature in the process.
 
 Tests are great, you should have them! One often cited argument for not writing
 tests is the extra time is takes to write them, what people who say this don't
-know about is all the time it saves debugging. Also if you use [TDD](#tdd) then
-the process of creating the tests is not separate from the writing of the code.
+know about is all the time it saves debugging. Also, if you use [TDD](#tdd)
+then the process of creating the tests is not separate from the writing of the
+code.
 
 ## Test Driven Development (TDD) {#tdd}
 
@@ -1510,16 +1532,16 @@ I'm going to be very brief here as the next chapter is going to go into it in
 much more depth.
 
 Simply put *Test Driven Development* is a discipline which involves using the
-tests to guide what production code is actually written rather than writing the
-code then working out how to test it. Through this process TDD encourages you
-to write much cleaner and modular code that you might do without it. It also
-gives you much higher confidence in the coverage of your test suite.
+tests to guide what production code is actually written, rather than writing
+the code then working out how to test it. Through this process, TDD encourages
+you to write much cleaner and more modular code that you might do without it.
+It also gives you much higher confidence in the coverage of your test suite.
 
 ## Behaviour Driven Development (BDD) {#bdd}
 
 *Behaviour Driven Development* is an extension to [TDD](#tdd), it uses testing
-tools which encourage the testing to be written more from a business
-perspective. Throughout this book we will be using BDD extensively.
+tools which encourage the tests to be written more from a business perspective.
+Throughout this book we will be using BDD extensively.
 
 ## Uncle Bob's Clean Code
 
@@ -1531,29 +1553,30 @@ include:
 * The Clean Coder: A Code of Conduct for Professional Programmers
 * Agile Software Development, Principles, Patterns, and Practices
 
-He also had a fanstatic video series called [Clean
-Code](http://cleancoders.com/).
+He also had a fantastic video series called
+[Clean Code](http://cleancoders.com/).
 
-Through is books and videos he covers all the topics we've looked at in this
+Through his books and videos he covers all the topics we've looked at in this
 chapter in a lot more depth. If you really want to improve the way your work
 he is definitely someone who you should be paying attention to.
 
 ## Domain Driven Design (DDD) {#ddd}
 
 *Domain Driven Design* is much more that just how to write code. It includes
-the full process from understanding the business (domain), to translating that
-into software. As the name implies, DDD driving factor is the domain and as
-developers we have to accept the fact that no one understands the domain
-(business we are modelling) as much as the *domain experts*. When doing DDD
-we do not try to squeeze the domain we are modelling into our software development
-world but rather we aim to transfer the domain language into our software.
+the full process from understanding the business (*domain*), to translating
+that into software. As the name implies, DDD's driving factor is the *domain*
+(business we are modelling) and as developers we have to accept the fact that
+no one understands the *domain* as much as the *domain experts*. When doing DDD
+we do not try to squeeze the domain we are modelling into our software
+development world's terms, rather we aim to transfer the domain language into
+our software.
 
 The first stage of DDD is sitting down with the *domain experts* and starting
 to learn about their business. During this time we start to build a *ubiquitous
 language* which is the words and phrase that we can use to discuss the domain
-in the *domain expert's* terms. This *ubiquitous language* should the be used
-and in all discussions as well as being transferred into the actual source code
-of the application.
+in the *domain expert's* terms. This *ubiquitous language* should be used in
+all following discussions, as well as being transferred into the actual source
+code of the application.
 
 While DDD is about the full process from analysing and understanding the domain
 through to actually modelling it, there is a certain style of code and set of
@@ -1565,8 +1588,8 @@ Since DDD a far broader scope than just the writing of the code this book
 doesn't really cover it in any depth. However, the code produced in this book
 is heavily influence by this style of design.
 
-If you really want to understand DDD you want to start by reading Eric Evans'
-book *Domain-Driven Design*.
+If you really want to understand DDD you want to start off by reading Eric
+Evans' book *Domain-Driven Design*.
 
 Another person to keep an eye on regarding this subject is the PHP's
 community's DDD man [Mathias Verraes](http://verraes.net/).
@@ -1578,22 +1601,22 @@ such as *[Extreme Programming
 (XP)](http://en.wikipedia.org/wiki/Extreme_programming)* and
 *[SCRUM](http://en.wikipedia.org/wiki/Scrum_(software_development))*. It
 accepts the fact that getting from the customer's idea to the final product is
-not something that can be set as a rigid path from the beginning; as the
+not something that can be set as a rigid path from the beginning. As the
 project progresses the customers ideas evolve and technical challenges might
 cause effect the way the project progresses.
 
 With *agile* development the customer is heavily involved with the development
 process and the project is broken down in to manageable sized tasks. The
-customer then prioritises the tasks and the development team works in small
-burst of time to get the tasks completed and delivered to the customer in order
-of priority. In XP these bursts of time are called *iterations* whereas in
-SCRUM they're know as *sprints*. After each *iteration* the customer and
-development team can review what has been done and can decide what to tackle
-next.
+customer then prioritises the tasks, then the development team works in small
+burst of time to get the tasks completed and delivered to the customer - in
+order of priority. In XP these bursts of time are called *iterations* whereas
+in SCRUM they're know as *sprints*. After each *iteration*/*sprint* the
+customer and development team review what has been done and decide what to
+tackle next.
 
 Agile is about the approach to work and the idea that things can change as they
 develop. In this book I won't be discussing this any further but will be
-presenting the code as if we're working in an Agile environment, what this
+presenting the code as if we're working in an Agile environment. What this
 means is that code I present in an earlier chapter may well change, be replaced
 or even be deleted in a later chapter. The reason for this is I don't just want
 to present an application architecture as an end product, rather I want to go
@@ -1604,16 +1627,16 @@ Programming Explained*.
 
 ## User Stories
 
-A user story is a short description of one of this tasks that a user will do
-with the system:
+A user story is a short description of one of the tasks that a user will do
+when interacting with the system:
 
 > A customer can view their previous orders.
 
 These are created as part of the planning an analysis process and are often
 written on small cards called *story cards*. *Acceptance tests* are then
-decided on for this story, at which point that feature can be implemented.
+decided on for this story, then that feature can be implemented.
 
 For this book I will provide the *user story* and *acceptance tests* for each
-part of the application we implement. The creating of of the stories is not
-something I will cover, but I will recommend Mike Cohn's rather fantastic book:
-*User Stories Applied*.
+part of the application we implement. The creating of the stories is not
+something I will cover, but I really recommend Mike Cohn's rather fantastic
+book; *User Stories Applied*.
