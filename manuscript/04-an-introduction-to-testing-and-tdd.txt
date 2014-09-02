@@ -1,9 +1,9 @@
 # An Introduction to Testing and TDD
 
 Here's I'm going to quickly cover some of the testing tools we will be using
-and give a brief introduction to TDD. This is an optional chapter if you are
-familiar with these tools and TDD, but if you are new to it or feel you would
-like to understand it better then it's worth a read.
+and give a brief introduction to TDD. This is an optional chapter so if you are
+familiar with these tools and TDD feel free to skip it. However, if you are new
+to it or feel you would like to understand it better then it's worth a read.
 
 Like most of the things I've covered so far, this chapter is just here to serve
 as a brief introduction to give you what you will need to work through the rest
@@ -12,14 +12,199 @@ resources out there.
 
 ## Types of Test
 
+The 2 main types of testing I will be using the process of building our
+application are *acceptance tests* and *unit tests*.
+
+### Acceptance Tests
+
+*Acceptance tests* are high level tests which confirm to the customer that the
+features they've asked for are implemented and are working properly. Since
+these tests are about producing the feature that the customer requests, they
+are ideally produced with the customer's presence and input, in a form which
+they can understand.
+
+A typical example might be to write something down like:
+
+> Listing customers when there are none will return an empty list
+>
+> Given there are no customers
+> When I ask to list customers
+> Then I should get an empty list
+
+These could then be simply implemented in any assert based test framework like
+so:
+
+{title="xUnit style acceptance test example:", lang="php"}
+~~~~~~~~
+function test_listing_customers_where_there_a_none_will_return_an_empty_list()
+{
+    // Given there are no customers
+    $customerRepository = new CustomerRepository();
+    $customerRepository->removeAll();
+
+    // When I ask to list customers
+    $lister = new CustomerLister($customerRepository);
+    $customers = $lister->listCustomers();
+
+    // Then I should get an empty list
+    $this->assertEquals([], $customers);
+}
+~~~~~~~~
+
+This works, the comments are there to explain the test in terms the customer can
+understand and the code checks the conditions are met. That said it does mix up
+the 2 customers language with the programmers and it relies on comments being
+present and correct. Therefore, if you are working the customer on producing
+acceptance tests then there is a better tool for the job, it's called
+*cucumber* and it PHP it's implemented by a tool called
+[Behat](http://behat.org/).
+
+*Cucumber* scripts are tests written in a language that the customer can read
+and write and are grouped as *features*. They look very much like the original
+test rules we started with:
+
+{title="Behat acceptance test example", lang="cucumber"}
+~~~~~~~~
+Feature: List customers
+    In order to view a list of customers on the system
+    As an administrator
+    I need to be able to see lists of the customers information
+
+    Scenario: Listing customers when there are none will return an empty list
+        Given there are no customers
+        When I ask to list customers
+        Then I should get an empty list
+~~~~~~~~
+
+The language which is used in the Behat features can include any phrases that
+you want to include. The meanings of these phases (called *snippets*) are then
+implemented in PHP in *context* classes like so:
+
+{title="Behat context example", lang="php"}
+~~~~~~~~
+<?php
+
+use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+
+/**
+ * Behat context class.
+ */
+class FeatureContext implements SnippetAcceptingContext
+{
+    /** @var CustomerRepository */
+    private $customerRepository;
+
+    /** @var mixed */
+    private $result;
+
+    /**
+     * Initializes context.
+     *
+     * Every scenario gets its own context object.
+     * You can also pass arbitrary arguments to the context constructor through behat.yml.
+     */
+    public function __construct()
+    {
+        $this->customerRepository = new CustomerRepository();
+    }
+
+    /**
+     * @Given there are no customers
+     */
+    public function thereAreNoCustomers()
+    {
+        $this->customerRepository->removeAll();
+    }
+
+    /**
+     * @When I ask to list customers
+     */
+    public function iAskToListCustomers()
+    {
+        $lister = new CustomerLister($this->customerRepository);
+        $this->result = $lister->listCustomers();
+    }
+
+    /**
+     * @Then I should get an empty list
+     */
+    public function iShouldGetAnEmptyList()
+    {
+        if ([] !== $this->result) {
+            throw new Exception('Result was not an empty array.');
+        }
+    }
+}
+~~~~~~~~
+
+The different *snippets* can then reused in other *scenarios* and *features*.
+
+In this I will be providing the *features* for each new bit of functionality
+that we add and well use Behat to test them.
+
+### Unit Tests
+
+*Unit tests* are for the development teams benefit, they are not written with
+the customer's help, in fact the customer may not even know they exist. Instead,
+they are create by the developer as the code is written to test little bits
+of code as isolated *units*. A unit is a small piece of code which performs a
+specific task, often we treat each class as a unit but in reality a multiple
+classes or a subsection of a class could be considered a unit. Saying that
+PHPSpec, the main tool we will be using for unit testing, does treat each 
+individual class as a *unit*.
+
+When doing [TDD](#tdd) the tests are actually written before each new bit of 
+code is written. This process when used properly actually influences what code
+is written, sometimes producing surprisingly elegant solutions.
+
+There are 2 main types of *unit testing* tools, these are *xUnit* style tools
+and *BDD* style tools.
+
+#### xUnit Frameworks
+
+*xUnit* test tools are call so because each language has a least one of these
+tools available and they are generally named *SomethingUnit* (e.g. JUnit for
+Java, CppUnit for C++). The origin of these names comes from *Smalltalk's*
+*SUnit* which was created by Kent Beck and was the first testing framework of
+this kind. Of course, PHP has such a framework and as expected it is called
+*PHPUnit*. *PHPUnit* is probably PHP's most well used unit testing framework
+and was created by Sebastian Bergmann.
+
+*xUnit* frameworks are based on assertions, each framework provides a set of
+available assertion functions, these are used to check the results our code
+produces are what we expect. Some examples of the assertions functions
+available in *PHPUnit* are:
+
+{title="PHPUnit assertions example", lang="php"}
+~~~~~~~~
+// todo ...
+~~~~~~~~
+
+While I will not be using PHPUnit as the main *unit testing* framework in this
+book we will be making use of it at some point for certain tests. We will
+also make use if its assertion library in our *Behat Contexts* for simplicity.
+
+#### BDD Frameworks
+
+...
+
+## Given, When, Then
+
 ## Tools
 
 ## Acceptance Testing with Behat
 
-## Mink & Selinium
+## Mink & Selenium
 
 ## PHPSpec vs PHPUnit
 
 ## Unit Testing with PHPSpec
+
+### Test Doubles
+
+## The Double Feedback Loop
 
 ## Resources
