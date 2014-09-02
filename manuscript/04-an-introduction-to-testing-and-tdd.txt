@@ -25,10 +25,12 @@ they can understand.
 
 A typical example might be to write something down like:
 
-> Listing customers when there are none will return an empty list
+> # Listing customers when there are none will return an empty list
 >
 > Given there are no customers
+>
 > When I ask to list customers
+>
 > Then I should get an empty list
 
 These could then be simply implemented in any assert based test framework like
