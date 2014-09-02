@@ -643,6 +643,10 @@ a variable that was typehinted in the method argument list. This is really a
 benefit of typehints rather than of value objects however, by using value
 objects abundantly you will have more types to typehint for.
 
+## Entities
+
+todo ...
+
 ## Dependency Injection (DI) & Inversion of Control (IoC) {#dependency-injection}
 
 *Dependency injection* is simply explained by saying; if you have a class that
