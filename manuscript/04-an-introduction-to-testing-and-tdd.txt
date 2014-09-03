@@ -25,7 +25,7 @@ they can understand.
 
 A typical example might be to write something down like:
 
-> # Listing customers when there are none will return an empty list
+> #### Listing customers when there are none will return an empty list
 >
 > Given there are no customers
 >
