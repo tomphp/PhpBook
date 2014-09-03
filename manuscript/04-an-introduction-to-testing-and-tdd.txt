@@ -338,15 +338,65 @@ function it_can_calculate_the_age_of_a_customer()
 I think that looks pretty neat and is very easy to read and understand what is
 supposed to happen.
 
-## Tools
-
 ## Acceptance Testing with Behat
 
-## Mink & Selenium
+We've already seen *Behat* and seen what *Cucumber* tests look like so lets
+have a go at setting up a project using them. To start off create a new folder
+for the project and `cd` into it:
+
+```
+$ mkdir behat-example
+$ cd behat-example
+```
+
+Next up let's add Behat to the project. We've already seen how to set up the
+`composer.json` file but there is a simpler way; we can create it, add 
+the `composer.json`, add Behat to it and run `composer update` all in one
+command like so:
+
+```
+$ composer require behat/behat:3.* --dev
+```
+
+Once it has run let Behat will be installed in the project and the `behat`
+command is not available to us. Now we need to tell Behat to initialise the project,
+to do this simple run:
+
+```
+$ behat --init
+```
+
+This command creates a directory called `features`, these is where we'll put
+the tests. It also creates directory called `features/bootstrap` which contains
+a file called `FeatureContext.php`, this is the default context where we can
+add our *snippets*.
+
+Now let's add a feature:
+
+{title="Example feature", lang="cucumber"}
+~~~~~~~~
+Feature: 
+    In order to
+    As a
+    I must
+
+    Scenario:
+        Given
+        When
+        Then
+~~~~~~~~
+
+# Mink & Selenium
+
+### The Mink Context
+
+### Which Language to use in Interface Tests
 
 ## Unit Testing with PHPSpec {#unit-testing-with-phpspec}
 
-### Test Doubles
+## Test Doubles
+
+### Testing Dependencies Which Don't Exist Yet
 
 ## The Double Feedback Loop
 
