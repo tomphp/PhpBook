@@ -726,10 +726,10 @@ Feature: List books
     As a reader
     I must be able to view a list of all books stored on the system
 
-  Scenario: Display an empty list   # features/list-books.feature:6
-    Given there are no books        # FeatureContext::thereAreNoBooks()
-    When I list all books           # FeatureContext::iListAllBooks()
-    Then I should see an empty list # FeatureContext::iShouldSeeAnEmptyList()
+  Scenario: Display an empty list
+    Given there are no books
+    When I list all books
+    Then I should see an empty list
 
   Scenario: Books are listed in alphabetical order
     Given there is a book called "Domain Driven Design" by "Eric Evans" 
