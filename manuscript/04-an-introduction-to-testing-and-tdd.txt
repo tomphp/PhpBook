@@ -544,6 +544,7 @@ class BookList
     {
     }
 }
+~~~~~~~~
 
 Running Behat now will show the first *snippet* passing and inform that the
 second snippet needs to up implemented. Let's implement the last 2 *snippets*
