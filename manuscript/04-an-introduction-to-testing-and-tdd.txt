@@ -1,9 +1,9 @@
 # An Introduction to Testing and TDD
 
-Here's I'm going to quickly cover some of the testing tools we will be using
-and give a brief introduction to TDD. This is an optional chapter so if you are
-familiar with these tools and TDD feel free to skip it. However, if you are new
-to it or feel you would like to understand it better then it's worth a read.
+Here I'm going to quickly cover some testing tools which we will be using as
+well as give a brief introduction to TDD. This is an optional chapter so if you
+are familiar with these tools and TDD feel free to skip it. However, if you are
+new to it or have not been doing it for long then it should be worth reading.
 
 Like most of the things I've covered so far, this chapter is just here to serve
 as a brief introduction to give you what you will need to work through the rest
@@ -156,8 +156,8 @@ that we add and well use Behat to test them.
 
 *Unit tests* are for the development teams benefit, they are not written with
 the customer's help, in fact the customer may not even know they exist.
-Instead, they are create by the developer as the code is written to test little
-bits of code as isolated *units*. A unit is a small piece of code which
+Instead, they are created by the developer as the code is written to test
+little bits of code as isolated *units*. A unit is a small piece of code which
 performs a specific task, often we treat each class as a unit but in reality a
 multiple classes or a subsection of a class could be considered a unit. Saying
 that PHPSpec, the main tool we will be using for unit testing, does treat each
@@ -212,7 +212,7 @@ described using the work *should*. I will be using
 [PHPSpec](http://www.phpspec.net/) which is a great but *highly opinionated*
 BDD unit testing tool for PHP.
 
-Using PHPSpec the assertions we looked at for PHPUnit would written like this
+Using PHPSpec, the assertions we looked at for PHPUnit would written like this
 instead:
 
 {title="PHPSpec tests example", lang="php"}
@@ -285,7 +285,7 @@ language. Now lets take a look an example in a *PHPUnit* & a *PHPSpec* test:
 // Inside AgeCalcuatorTest
 function test_calculate_the_age_of_a_customer()
 {
-    // Given there is a customer who's date of birth is 1982-03-15
+    // Given there is a customer whose date of birth is 1982-03-15
     // And today is 2014-09-03
     $customer = new Customer('customer name', Date::fromDate('1982-03-15'));
     $today = Date::fromDate('2014-09-03');
@@ -304,7 +304,7 @@ function test_calculate_the_age_of_a_customer()
 // Inside AgeCalcuatorSpec
 function it_can_calculate_the_age_of_a_customer()
 {
-    // Given there is a customer who's date of birth is 1982-03-15
+    // Given there is a customer whose date of birth is 1982-03-15
     // And today is 2014-09-03
     $customer = new Customer('customer name', Date::fromDate('1982-03-15'));
     $this->beConstructedWith(Date::fromDate('2014-09-03'));
@@ -340,7 +340,7 @@ supposed to happen.
 
 ## Acceptance Testing with Behat
 
-We've already seen *Behat* and seen what *Cucumber* tests look like so lets
+We've already seen *Behat* and seen what *Cucumber* tests look like so let's
 have a go at setting up a project using them. To start off create a new folder
 for the project and `cd` into it:
 
@@ -436,7 +436,7 @@ Feature: List books
     }
 ```
 
-This is Behat saying that I doesn't understand the *snippets* which we have
+This is Behat saying that it doesn't understand the *snippets* which we have
 used in the test. It also gives some template code which can be copied and
 pasted into our feature context to implement these *snippets*, We could do that
 but we can actually get Behat to do this for use by running:
@@ -613,7 +613,7 @@ class FeatureContext implements SnippetAcceptingContext
 }
 ~~~~~~~~
 
-Again we've not implemented `BookList::getBooks()` so lets quickly do that now:
+Again we've not implemented `BookList::getBooks()` so let's quickly do that now:
 
 {title="src/BehatExample/BookList.php", lang="php"}
 ~~~~~~~~
@@ -659,8 +659,8 @@ Feature: List books
 0m0.01s (9.10Mb)
 ```
 
-Finally let's quickly add another test to the feature by appending the
-following to `features/list-books.feature`:
+Before we move on, let's quickly add another test to the feature by appending
+the following to `features/list-books.feature`:
 
 {title="features/list-books.feature", lang="cucumber"}
 ~~~~~~~~
@@ -709,7 +709,7 @@ methods to look like this:
     }
 ~~~~~~~~
 
-Finally update `BehatExample\BookList` to contain a working implementation:
+Finally, update `BehatExample\BookList` to contain a working implementation:
 
 <<[src/BehatExample/BookList.php](examples/chapter-04/behat-example/src/BehatExample/BookList.php)
 
@@ -748,7 +748,7 @@ Feature: List books
 0m0.02s (9.15Mb)
 ```
 
-# Mink & Selenium
+## Mink & Selenium
 
 ### The Mink Context
 
