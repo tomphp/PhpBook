@@ -645,17 +645,17 @@ objects abundantly you will have more types to typehint for.
 
 ## Entities
 
-*Entities* make up an important part of the business model of most applications.
-Unlike [value objects](#value-objects-and-immutability) they are *mutable*. They
-are also the objects which are often persisted and make up the ongoing state
-of the application.
+*Entities* make up an important part of the business model of most
+applications. Unlike [value objects](#value-objects-and-immutability) they are
+*mutable*. They are also the objects which are often persisted and make up the
+ongoing state of the application.
 
 *Entities* have *identities*, they can have all their properties changed but
-they maintain the same identity through out their lifetime. A simple analogy of
-an entity object is a person, they can change their name but they are still the
-same person. This means that the equality of entities determined by the equality
-of their *identities*; unlike *value objects* the equality of their other
-properties are not important when determining equality.
+they continue to maintain the same identity through out their lifetime. A
+simple analogy of an entity object is a person, they can change their name but
+they are still the same person. This means that the equality of entities
+determined by the equality of their *identities*. Unlike *value objects* the
+equality of their other properties are not important when determining equality.
 
 Here's a simple example of what a simple entity class make look like:
 
@@ -1608,6 +1608,13 @@ the code then working out how to test it. Through this process, TDD encourages
 you to write much cleaner and more modular code that you might do without it.
 It also gives you much higher confidence in the coverage of your test suite.
 
+If you're new to TDD and want to start learning how to apply it in PHP someone
+to check out is *Chris Hartjes* aka *The Grumpy Programmer*. He preaches TDD to
+PHP programmers and has also written a great book called [The Grumpy
+Programmer's Guide to Building Testable Applications to
+PHP](https://leanpub.com/grumpy-testing) and has some videos available from
+http://grumpy-learning.com/
+
 ## Behaviour Driven Development (BDD) {#bdd}
 
 *Behaviour Driven Development* is an extension to [TDD](#tdd), it uses testing
@@ -1667,7 +1674,65 @@ community's DDD man [Mathias Verraes](http://verraes.net/).
 
 ## Command Query Responsibility Segregation (CQRS)
 
-todo ...
+A lot of the techniques I have talked about have about so far have been about
+building a rock solid *domain model* which cannot be broken from creating
+objects in invalid states. Now all these careful checks are very important when
+state is being changed and manipulated. However, often we just one to view the
+state. In this circumstance the construction a complex domain model be
+considered unnecessarily computationally expensive. For this reason we could
+consider a bomb proof domain model to be *optimised for change*.
+
+Now consider this: most web applications have far more hits where state is just
+viewed than they do when state is being updated. Take a basic web shop, you
+view tens of pages of search results, lists, products and reviews before adding
+the product you want to the cart then checking out. Here the adding to the cart
+and checkout processes are the parts which actually update state, all the
+browsing actions are read only. Here we could say that maybe only 1 in 5 hits
+change state and we've already established that building a complex model for
+reading only is overly expensive. This is where CQRS comes in.
+
+Before I explain CQRS let me introduce one more point about application
+architecture. I've already introduced how a robust domain model is the key,
+central part to an application. However, I've not said how it is interacted
+with. On top of the domain layer you might typically build a layer of
+*application service*, *use case* or *transaction* classes which talk to the
+domain model to perform a specific action.
+
+As an example, you might have a `ChangeCustomersEmail` transaction which loads
+up a `Customer` entity from the storage, changes the email address, then stores
+it. You might also might have a `ListCustomers` transaction which returns a
+list of customers on the system.
+
+Now let's say the site is getting busy and growing and it's getting slower and
+slower. It needs to scale but how? Well since it's running on a domain model
+which is *optimised for changing* and we also know that most hits are *read
+only* it would make sense to make those actions *optimised for reading*. To do
+this you could separate out all *transactions* which are read only and instead
+of building a complicated model from a complex data store for them, you could
+create a thin read layer which reads it's information from a version of the
+data store which is optimised for the required queries. The result of this is
+you would have some *transactions* which modify state by talking to the complex
+domain model and update the master data store, we call these *commands*. Then
+you have another set of *transactions* which read from a *denormalised* version
+of the data store to display the information quickly for reading only, we call
+these *queries*.
+
+That's it, CQRS is all about splitting your application in half. One half is
+optimised for updating, the other for reading. There is more to this regarding
+scaling across multiple service but that the main gist from the software
+architecture point of view.
+
+Now in this book we will not be building a full CQRS implementation (maybe that
+could be the sequel). However, I do feel that it is worthwhile making the
+distinction between the  *command* and *query* transactions in our application.
+My reason for this is that without the extra cost of building a full CQRS
+solution we still make it clear which *transactions* change state. Then should
+the day come that the application needs to be scaled in a big way and the
+decision to implement CQRS is decided on, this will make it just that little
+bit easier.
+
+If you want to learn more about CQRS there's a few great articles by Greg Young
+in the documents section of http://cqrs.wordpress.com/
 
 ## Agile
 

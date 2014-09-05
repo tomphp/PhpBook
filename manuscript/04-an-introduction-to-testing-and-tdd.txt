@@ -371,20 +371,380 @@ the tests. It also creates directory called `features/bootstrap` which contains
 a file called `FeatureContext.php`, this is the default context where we can
 add our *snippets*.
 
-Now let's add a feature:
+Now let's add a feature by create a file called `features/list-books.feature`:
 
-{title="Example feature", lang="cucumber"}
+{title="features/list-books.feature", lang="cucumber"}
 ~~~~~~~~
-Feature: 
-    In order to
-    As a
-    I must
+Feature: List books
+    In order to list books
+    As a reader
+    I must be able to view a list of all books stored on the system
 
-    Scenario:
-        Given
-        When
-        Then
+    Scenario: Display an empty list
+        Given there are no books
+        When I list all books
+        Then I should see an empty list
 ~~~~~~~~
+
+Next run Behat:
+
+```
+$ behat
+```
+
+And you should see this:
+
+```
+Feature: List books
+    In order to list books
+    As a reader
+    I must be able to view a list of all books stored on the system
+
+  Scenario: Display an empty list   # features/list-books.feature:6
+    Given there are no books
+    When I list all books
+    Then I should see an empty list
+
+1 scenario (1 undefined)
+3 steps (3 undefined)
+0m0.03s (9.00Mb)
+
+--- FeatureContext has missing steps. Define them with these snippets:
+
+    /**
+     * @Given there are no books
+     */
+    public function thereAreNoBooks()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @When I list all books
+     */
+    public function iListAllBooks()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see an empty list
+     */
+    public function iShouldSeeAnEmptyList()
+    {
+        throw new PendingException();
+    }
+```
+
+This is Behat saying that I doesn't understand the *snippets* which we have
+used in the test. It also gives some template code which can be copied and
+pasted into our feature context to implement these *snippets*, We could do that
+but we can actually get Behat to do this for use by running:
+
+```
+$ behat --append-snippets
+```
+
+After this command is run if you look in `features/bootstrap/FeatureContext.php`
+you will see the template code has been added for the 3 *snippets*. At this point
+if we run Behat again:
+
+```
+$ behat
+```
+
+It informs use that the first *snippet* has needs to be implemented (the others
+have been skipped). Let's do this now.
+
+Inside `features/bootstrap/FeatureContext.php` update it to look like this:
+
+{title="features/bootstrap/FeatureContext.php", lang="php"}
+~~~~~~~~
+<?php
+
+use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+
+use BehatExample\BookList;
+
+/**
+ * Behat context class.
+ */
+class FeatureContext implements SnippetAcceptingContext
+{
+    /**
+     * @var BookList
+     */
+    private $bookList;
+
+    /**
+     * Initializes context.
+     *
+     * Every scenario gets its own context object.
+     * You can also pass arbitrary arguments to the context constructor through
+     * behat.yml.
+     */
+    public function __construct()
+    {
+        $this->bookList = new BookList();
+    }
+
+    /**
+     * @Given there are no books
+     */
+    public function thereAreNoBooks()
+    {
+        $this->bookList->clear();
+    }
+
+    /**
+     * @When I list all books
+     */
+    public function iListAllBooks()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see an empty list
+     */
+    public function iShouldSeeAnEmptyList()
+    {
+        throw new PendingException();
+    }
+}
+~~~~~~~~
+
+You can try running Behat again now but it will fail since there is no
+`BookList` class. To create this quickly set up the autoloader by updating the 
+`composer.json` to look like this:
+
+<<[composer.json](examples/chapter-04/behat-example/composer.json)
+
+Then create the directory for the source code and update Composer:
+
+```
+$ mkdir -p src/BehatExample
+$ composer update
+```
+
+Now we can create the `BookList` class:
+
+{title="src/BehatExample/BookList.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace BehatExample;
+
+class BookList
+{
+    public function clear()
+    {
+    }
+}
+
+Running Behat now will show the first *snippet* passing and inform that the
+second snippet needs to up implemented. Let's implement the last 2 *snippets*
+together, update the `features/bootstrap/FeatureContext.php` to contain the
+following:
+
+{title="features/bootstrap/FeatureContext.php", lang="php"}
+~~~~~~~~
+<?php
+
+use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+
+use BehatExample\BookList;
+
+/**
+ * Behat context class.
+ */
+class FeatureContext implements SnippetAcceptingContext
+{
+    /** @var BookList */
+    private $bookList;
+
+    /** @var mixed */
+    private $result;
+
+    /**
+     * Initializes context.
+     *
+     * Every scenario gets its own context object.
+     * You can also pass arbitrary arguments to the context constructor through behat.yml.
+     */
+    public function __construct()
+    {
+        $this->bookList = new BookList();
+    }
+
+    /**
+     * @Given there are no books
+     */
+    public function thereAreNoBooks()
+    {
+        $this->bookList->clear();
+    }
+
+    /**
+     * @When I list all books
+     */
+    public function iListAllBooks()
+    {
+        $this->result = $this->bookList->getBooks();
+    }
+
+    /**
+     * @Then I should see an empty list
+     */
+    public function iShouldSeeAnEmptyList()
+    {
+        if ([] !== $this->result) {
+            throw new Exception('Result was incorrect.');
+        }
+    }
+}
+~~~~~~~~
+
+Again we've not implemented `BookList::getBooks()` so lets quickly do that now:
+
+{title="src/BehatExample/BookList.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace BehatExample;
+
+class BookList
+{
+    public function clear()
+    {
+    }
+
+    /** @return array */
+    public function getBooks()
+    {
+        return [];
+    }
+}
+~~~~~~~~
+
+Now run Behat:
+
+```
+$ behat
+```
+
+And you will see the test pass:
+
+```
+Feature: List books
+    In order to list books
+    As a reader
+    I must be able to view a list of all books stored on the system
+
+  Scenario: Display an empty list
+    Given there are no books
+    When I list all books
+    Then I should see an empty list
+
+1 scenario (1 passed)
+3 steps (3 passed)
+0m0.01s (9.10Mb)
+```
+
+Finally let's quickly add another test to the feature by appending the
+following to `features/list-books.feature`:
+
+{title="features/list-books.feature", lang="cucumber"}
+~~~~~~~~
+
+    Scenario: Books are listed in alphabetical order
+        Given there is a book called "Domain Driven Design" by "Eric Evans"
+        And there is a book called "Refactoring" by "Martin Fowler"
+        And there is a book called "Design Patterns" by "The Gang of Four"
+        When I list all books
+        Then I should see:
+            | title                | author           |
+            | Design Patterns      | The Gang of Four |
+            | Domain Driven Design | Eric Evans       |
+            | Refactoring          | Martin Fowler    |
+~~~~~~~~
+
+Again, if you run Behat it will say that there are new, unknown *snippets*. As
+before add these by running:
+
+```
+$ behat --append-snippets
+```
+
+Open up `features/bootstrap/FeatureContext.php` again and update the 2 appended
+methods to look like this:
+
+{title="features/bootstrap/FeatureContext.php", lang="php"}
+~~~~~~~~
+
+    /**
+     * @Given there is a book called :title by :author
+     */
+    public function thereIsABookCalledBy($title, $author)
+    {
+        $this->bookList->add($title, $author);
+    }
+
+    /**
+     * @Then I should see:
+     */
+    public function iShouldSee(TableNode $table)
+    {
+        if ($table->getHash() !== $this->result) {
+            throw new Exception('Result was incorrect.');
+        }
+    }
+~~~~~~~~
+
+Finally update `BehatExample\BookList` to contain a working implementation:
+
+<<[src/BehatExample/BookList.php](examples/chapter-04/src/BehatExample/BookList.php)
+
+Now run Behat to see the tests pass:
+
+```
+$ behat
+```
+
+The result:
+
+```
+Feature: List books
+    In order to list books
+    As a reader
+    I must be able to view a list of all books stored on the system
+
+  Scenario: Display an empty list   # features/list-books.feature:6
+    Given there are no books        # FeatureContext::thereAreNoBooks()
+    When I list all books           # FeatureContext::iListAllBooks()
+    Then I should see an empty list # FeatureContext::iShouldSeeAnEmptyList()
+
+  Scenario: Books are listed in alphabetical order
+    Given there is a book called "Domain Driven Design" by "Eric Evans" 
+    And there is a book called "Refactoring" by "Martin Fowler"
+    And there is a book called "Design Patterns" by "The Gang of Four" 
+    When I list all books                                               
+    Then I should see:                                                  
+      | title                | author           |
+      | Design Patterns      | The Gang of Four |
+      | Domain Driven Design | Eric Evans       |
+      | Refactoring          | Martin Fowler    |
+
+2 scenarios (2 passed)
+8 steps (8 passed)
+0m0.02s (9.15Mb)
+```
 
 # Mink & Selenium
 

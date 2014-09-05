@@ -1,5 +1,10 @@
 {
     "require-dev": {
         "behat/behat": "3.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "BehatExample\\": "src/"
+        }
     }
 }
