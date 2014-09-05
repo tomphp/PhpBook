@@ -576,7 +576,8 @@ class FeatureContext implements SnippetAcceptingContext
      * Initializes context.
      *
      * Every scenario gets its own context object.
-     * You can also pass arbitrary arguments to the context constructor through behat.yml.
+     * You can also pass arbitrary arguments to the context constructor through
+     * behat.yml.
      */
     public function __construct()
     {
@@ -709,7 +710,7 @@ methods to look like this:
 
 Finally update `BehatExample\BookList` to contain a working implementation:
 
-<<[src/BehatExample/BookList.php](examples/chapter-04/src/BehatExample/BookList.php)
+<<[src/BehatExample/BookList.php](examples/chapter-04/behat-example/src/BehatExample/BookList.php)
 
 Now run Behat to see the tests pass:
 
