@@ -268,6 +268,17 @@ failing test. This process is repeated until the solution is complete.
 I will run though a demonstration of this process shortly in the [Unit Testing
 With PHPSpec](#unit-testing-with-phpspec) section.
 
+## The Double Feedback Loop
+
+*Acceptance tests* and *unit tests* support the development process in a *double
+feedback loop*. *Acceptance tests* come from the *customer* in order of priority,
+the *developers* then develop implement the features to using the *red, green,
+refactor cycle* until the *acceptance tests* pass. At this point the feature
+can be delivered to the *customer* and the next set of *acceptance tests* will 
+be produced.
+
+![The Double Feedback Loop](images/04-double-feedback-loop.png)
+
 ## Given, When, Then
 
 We've already seen the use of these 3 words earlier in the [Acceptance
@@ -1371,10 +1382,9 @@ And here it is:
 <<[src/PhpspecExample/GreatestCommonDivisorFinder.php](examples/chapter-04/phpspec-example/src/PhpspecExample/GreatestCommonDivisorFinder.php)
 
 A complete solution to our original problem, achived by TDD.
+
 ## Test Doubles
 
 ### Testing Dependencies Which Don't Exist Yet
-
-## The Double Feedback Loop
 
 ## Resources
