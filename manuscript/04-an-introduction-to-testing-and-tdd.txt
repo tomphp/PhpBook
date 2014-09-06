@@ -1368,7 +1368,7 @@ information.
 
 And here it is:
 
-<<[src/PhpspecExample/GreatestCommonDivisorFinder.php](examples/chapter-04/phpspec/example/src/PhpspecExample/GreatestCommonDivisorFinder.php)
+<<[src/PhpspecExample/GreatestCommonDivisorFinder.php](examples/chapter-04/phpspec-example/src/PhpspecExample/GreatestCommonDivisorFinder.php)
 
 A complete solution to our original problem, achived by TDD.
 ## Test Doubles
