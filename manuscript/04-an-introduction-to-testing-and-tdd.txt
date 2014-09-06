@@ -467,17 +467,21 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 
+// leanpub-start-insert
 use BehatExample\BookList;
+// leanpub-end-insert
 
 /**
  * Behat context class.
  */
 class FeatureContext implements SnippetAcceptingContext
 {
+    // leanpub-start-insert
     /**
      * @var BookList
      */
     private $bookList;
+    // leanpub-end-insert
 
     /**
      * Initializes context.
@@ -488,7 +492,9 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function __construct()
     {
+        // leanpub-start-insert
         $this->bookList = new BookList();
+        // leanpub-end-insert
     }
 
     /**
@@ -496,7 +502,9 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function thereAreNoBooks()
     {
+        // leanpub-start-insert
         $this->bookList->clear();
+        // leanpub-end-insert
     }
 
     /**
@@ -567,11 +575,17 @@ use BehatExample\BookList;
  */
 class FeatureContext implements SnippetAcceptingContext
 {
-    /** @var BookList */
+    /**
+     * @var BookList
+     */
     private $bookList;
 
-    /** @var mixed */
+    // leanpub-start-insert
+    /**
+     * @var mixed
+     */
     private $result;
+    // leanpub-end-insert
 
     /**
      * Initializes context.
@@ -598,7 +612,9 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function iListAllBooks()
     {
+        // leanpub-start-insert
         $this->result = $this->bookList->getBooks();
+        // leanpub-end-insert
     }
 
     /**
@@ -606,14 +622,17 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function iShouldSeeAnEmptyList()
     {
+        // leanpub-start-insert
         if ([] !== $this->result) {
             throw new Exception('Result was incorrect.');
         }
+        // leanpub-end-insert
     }
 }
 ~~~~~~~~
 
-Again we've not implemented `BookList::getBooks()` so let's quickly do that now:
+Again we've not implemented `BookList::getBooks()` so let's quickly do that
+now:
 
 {title="src/BehatExample/BookList.php", lang="php"}
 ~~~~~~~~
@@ -627,11 +646,13 @@ class BookList
     {
     }
 
+    // leanpub-start-insert
     /** @return array */
     public function getBooks()
     {
         return [];
     }
+    // leanpub-end-insert
 }
 ~~~~~~~~
 
@@ -799,7 +820,7 @@ And configure Composer for the project:
 $ composer install
 ```
 
-#### The TDD Cycle
+Now we can start the TDD Cycle:
 
 First of all we'll tell PHPSpec to create a new Spec file. To do this run:
 
@@ -818,10 +839,10 @@ PHPSpec will say it can't find the `PhpspecExample\GreatestCommonDivisorFinder`
 class and offer to create it. Say **Yes** and run `phpspec run --format=pretty`
 again. Now the test should pass.
 
-I> ## --format=pretty
+I> ## Output Formatting
 I>
-I> This option is not necessary, I have added it because it produces nice
-I> output which I can paste into this book.
+I> The `--format=pretty` option is not necessary, I have added it because it
+I> produces nice output which I can paste into this book.
 I>
 I> There are other formats available, these are: **progress** (the default),
 I> **html**, **pretty**, **junit** and **dot**.
@@ -862,7 +883,7 @@ class GreatestCommonDivisorFinder
 The `it_is_initializable` test has served it's purpose now so remove that from
 `spec\PhpspecExample\GreatestCommonDivisorFinderSpec`.
 
-##### Red
+#### Red
 
 Now we need to think what is the simplest condition we can test to make
 progress towards the final goal. Let's start with if both numbers are the same
@@ -912,7 +933,7 @@ Now run `phpspec run --format=pretty` again and you should see some red:
 This tells us that the test was expecting the value `5` to be returned but
 got `null` instead. Time to make make this test go green...
 
-##### Green
+#### Green
 
 Remember that in the green stage, we must only add the smallest amount of code
 to make the test pass. In this case all we need to do is return the `5`. So
@@ -944,30 +965,30 @@ This time we see the green result:
 9ms
 ```
 
-##### Refactor
+#### Refactor
 
 This is when we refactor. However, right now there's not much to refactor so
 let's move straight on to the next failing test.
 
-##### Red
-##### Green
-##### Refactor
+#### Red
+#### Green
+#### Refactor
 
-##### Red
-##### Green
-##### Refactor
+#### Red
+#### Green
+#### Refactor
 
-##### Red
-##### Green
-##### Refactor
+#### Red
+#### Green
+#### Refactor
 
-##### Red
-##### Green
-##### Refactor
+#### Red
+#### Green
+#### Refactor
 
-##### Red
-##### Green
-##### Refactor
+#### Red
+#### Green
+#### Refactor
 
 #### The Result
 
