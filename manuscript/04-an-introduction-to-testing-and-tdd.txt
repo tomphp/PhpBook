@@ -748,13 +748,228 @@ Feature: List books
 0m0.02s (9.15Mb)
 ```
 
-## Mink & Selenium
+## Mink
+
+todo ...
 
 ### The Mink Context
 
+todo ...
+
 ### Which Language to use in Interface Tests
 
+todo ...
+
 ## Unit Testing with PHPSpec {#unit-testing-with-phpspec}
+
+Now let's take a look at *unit testing*, we'll use *PHPSpec* for this. As we
+work through the building the application in the next section of this book,
+we'll be applying the process of *acceptance testing*. However, we'll not be
+going through the *unit testing* in the examples except in certain
+circumstances where there is something to learn from it. The reason for this
+is that it would be a longwinded, pointless and excessive process to document
+and would detract from the topic of this book. That said, all the example code
+I will have written using the full TDD process and you should do the same. This
+also means that all the example code for this book will contain complete unit
+tests which you can study for yourself.
+
+Since we're not going to be highlighting the unit testing process when building
+the application, we'll go through an example now to get familiar with the
+process.
+
+### Example
+
+For our TDD example we'll create an algorithm which finds the greatest common
+divisor of 2 numbers.
+
+#### Setup
+
+Let's start by creating a new project:
+
+```
+$ mkdir phpspec-example
+$ cd phpspec-example
+```
+
+And configure Composer for the project:
+
+<<[composer.json](examples/chapter-04/phpspec-example/composer.json)
+
+```
+$ composer install
+```
+
+#### The TDD Cycle
+
+First of all we'll tell PHPSpec to create a new Spec file. To do this run:
+
+```
+$ phpspec desc PhpspecExample\\GreatestCommonDivisorFinder
+```
+
+This will create a file called
+`spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php`. To run it use:
+
+```
+$ phpspec run --format=pretty
+```
+
+PHPSpec will say it can't find the `PhpspecExample\GreatestCommonDivisorFinder`
+class and offer to create it. Say **Yes** and run `phpspec run --format=pretty`
+again. Now the test should pass.
+
+I> ## --format=pretty
+I>
+I> This option is not necessary, I have added it because it produces nice
+I> output which I can paste into this book.
+I>
+I> There are other formats available, these are: **progress** (the default),
+I> **html**, **pretty**, **junit** and **dot**.
+
+At this point 2 files have been created for us. The test:
+
+{title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace spec\PhpspecExample;
+
+use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
+
+class GreatestCommonDivisorFinderSpec extends ObjectBehavior
+{
+    function it_is_initializable()
+    {
+        $this->shouldHaveType('PhpspecExample\GreatestCommonDivisorFinder');
+    }
+}
+~~~~~~~~
+
+And the class being tested:
+
+{title="src/PhpspecExample/GreatestCommonDivisorFinder.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace PhpspecExample;
+
+class GreatestCommonDivisorFinder
+{
+}
+~~~~~~~~
+
+The `it_is_initializable` test has served it's purpose now so remove that from
+`spec\PhpspecExample\GreatestCommonDivisorFinderSpec`.
+
+##### Red
+
+Now we need to think what is the simplest condition we can test to make
+progress towards the final goal. Let's start with if both numbers are the same
+then that number is the greatest common divisor of both.
+
+All the following test to the
+`spec\PhpspecExample\GreatestCommonDivisorFinderSpec`
+
+{title="spec\PhpspecExample\GreatestCommonDivisorFinderSpec.php", lang="php"}
+~~~~~~~~
+    function it_returns_the_number_if_both_values_are_that_number()
+    {
+        $this->findGreatestDivisor(5, 5)->shouldReturn(5);
+    }
+~~~~~~~~
+
+Now we have to see this fail so run:
+
+```
+$ phpspec run --format=pretty
+```
+
+Again PHPSpec says that the `findGreatestDivisor` method does not exist and
+offers to create it. Say **yes**, this will add the empty method to
+`PhpspecExample\GreatestCommonDivisorFinder`.
+
+Now run `phpspec run --format=pretty` again and you should see some red:
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✘ returns the number if both values are that number
+        expected [integer:5], but got null.
+
+----  failed examples
+
+        PhpspecExample/GreatestCommonDivisorFinder
+  10  ✘ returns the number if both values are that number
+        expected [integer:5], but got null.
+
+
+1 specs
+1 examples (1 failed)
+11ms
+```
+
+This tells us that the test was expecting the value `5` to be returned but
+got `null` instead. Time to make make this test go green...
+
+##### Green
+
+Remember that in the green stage, we must only add the smallest amount of code
+to make the test pass. In this case all we need to do is return the `5`. So
+update the `PhpspecExample\GreatestCommonDivisorFinder::findGreatestDivisor()`
+method and re-run the tests:
+
+{title="src\PhpspecExample\GreatestCommonDivisorFinder.php", lang="php"}
+~~~~~~~~
+    public function findGreatestDivisor($a, $b)
+    {
+        return 5;
+    }
+~~~~~~~~
+
+```
+$ phpspec run --format=pretty
+```
+
+This time we see the green result:
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+
+
+1 specs
+1 examples (1 passed)
+9ms
+```
+
+##### Refactor
+
+This is when we refactor. However, right now there's not much to refactor so
+let's move straight on to the next failing test.
+
+##### Red
+##### Green
+##### Refactor
+
+##### Red
+##### Green
+##### Refactor
+
+##### Red
+##### Green
+##### Refactor
+
+##### Red
+##### Green
+##### Refactor
+
+##### Red
+##### Green
+##### Refactor
+
+#### The Result
 
 ## Test Doubles
 
