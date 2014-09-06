@@ -1316,8 +1316,8 @@ We actually only have to make a very small change here to make this pass:
         // leanpub-insert-start
         while (!$this->divisorIsFactorOf($a) || !$this->divisorIsFactorOf($b)) {
             $this->divisor--;
-            // leanpub-insert-end
         }
+        // leanpub-insert-end
 
         return $this->divisor;
     }
