@@ -892,7 +892,7 @@ then that number is the greatest common divisor of both.
 All the following test to the
 `spec\PhpspecExample\GreatestCommonDivisorFinderSpec`
 
-{title="spec\PhpspecExample\GreatestCommonDivisorFinderSpec.php", lang="php"}
+{title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
 ~~~~~~~~
     function it_returns_the_number_if_both_values_are_that_number()
     {
@@ -940,7 +940,7 @@ to make the test pass. In this case all we need to do is return the `5`. So
 update the `PhpspecExample\GreatestCommonDivisorFinder::findGreatestDivisor()`
 method and re-run the tests:
 
-{title="src\PhpspecExample\GreatestCommonDivisorFinder.php", lang="php"}
+{title="src/PhpspecExample/GreatestCommonDivisorFinder.php", lang="php"}
 ~~~~~~~~
     public function findGreatestDivisor($a, $b)
     {
@@ -971,27 +971,406 @@ This is when we refactor. However, right now there's not much to refactor so
 let's move straight on to the next failing test.
 
 #### Red
+
+For this next test let's check that if the first number is a divisor of the
+second number, then the first number should be returned:
+
+{title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
+~~~~~~~~
+    function it_returns_the_first_number_if_it_is_a_divisor_of_the_second()
+    {
+        $this->findGreatestDivisor(3, 9)->shouldReturn(3);
+    }
+~~~~~~~~
+
+Run PHPSpec:
+
+```
+$ phpspec run --format=pretty
+```
+
+And see red:
+
+```
+     PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+  15  ✘ returns the first number if it is a divisor of the second
+        expected [integer:3], but got [integer:5].
+
+----  failed examples
+
+        PhpspecExample/GreatestCommonDivisorFinder
+  15  ✘ returns the first number if it is a divisor of the second
+        expected [integer:3], but got [integer:5].
+
+
+1 specs
+2 examples (1 passed, 1 failed)
+12ms
+```
+
+The first test continues to pass but the second one does not as our
+implementation currently only returns the integer `5`.
+
 #### Green
+
+Again, using the smallest change possible we can easily change this to green
+by just returning the first number:
+
+{title="src/PhpspecExample/GreatestCommonDivisorFinder.php", lang="php"}
+~~~~~~~~
+    public function findGreatestDivisor($a, $b)
+    {
+        return $a;
+    }
+~~~~~~~~
+
+Running PHPSpec:
+
+```
+$ phpspec run --format=pretty
+```
+
+We see that both tests are successfully passing:
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+  15  ✔ returns the first number if it is a divisor of the second
+
+
+1 specs
+2 examples (2 passed)
+11ms
+```
+
 #### Refactor
 
-#### Red
-#### Green
-#### Refactor
+There's still nothing to refactor yet. One to the next failing test.
 
 #### Red
+
+Let's now try the previous test the other way around: if the second number is
+a divisor of the first, the second number should be returned.
+
+{title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
+~~~~~~~~
+    function it_returns_the_second_number_if_it_is_a_divisor_of_the_first()
+    {
+        $this->findGreatestDivisor(9, 3)->shouldReturn(3);
+    }
+~~~~~~~~
+
+Now run PHPSpec again (**you have to see it fail**):
+
+```
+$ phpspec run --format=pretty
+```
+
+And as expected:
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+  15  ✔ returns the first number if it is a divisor of the second
+  20  ✘ returns the second number if it is a divisor of the first
+        expected [integer:3], but got [integer:9].
+
+----  failed examples
+
+        PhpspecExample/GreatestCommonDivisorFinder
+  20  ✘ returns the second number if it is a divisor of the first
+        expected [integer:3], but got [integer:9].
+
+
+1 specs
+3 examples (2 passed, 1 failed)
+13ms
+```
+
 #### Green
+
+To make this one pass we can simply return the smaller number:
+
+{title="src/PhpspecExample/GreatestCommonDivisorFinder.php", lang="php"}
+~~~~~~~~
+    public function findGreatestDivisor($a, $b)
+    {
+        return min($a, $b);
+    }
+~~~~~~~~
+
+Yet again we run the tests and see the successful results:
+
+```
+$ phpspec run --format=pretty
+```
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+  15  ✔ returns the first number if it is a divisor of the second
+  20  ✔ returns the second number if it is a divisor of the first
+
+
+1 specs
+3 examples (3 passed)
+10ms
+```
+
 #### Refactor
 
-#### Red
-#### Green
-#### Refactor
+Still nothing to refactor so let's move on.
 
 #### Red
+
+How about if there's no common divisor other than one? Let's write a test for
+that:
+
+{title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
+~~~~~~~~
+    function it_returns_1_if_there_is_no_greater_divisor()
+    {
+        $this->findGreatestDivisor(3, 5)->shouldReturn(1);
+    }
+~~~~~~~~
+
+As always, run the tests and see the test fail:
+
+```
+$ phpspec run --format=pretty
+```
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+  15  ✔ returns the first number if it is a divisor of the second
+  20  ✔ returns the second number if it is a divisor of the first
+  25  ✘ returns 1 if there is no greater divisor
+        expected [integer:1], but got [integer:3].
+
+----  failed examples
+
+        PhpspecExample/GreatestCommonDivisorFinder
+  25  ✘ returns 1 if there is no greater divisor
+        expected [integer:1], but got [integer:3].
+
+
+1 specs
+4 examples (3 passed, 1 failed)
+13ms
+```
+
 #### Green
+
+This one is a tiny bit more involved. To solve it let's say that if the lower
+of the 2 number is not a factor of either of the numbers, then return `1`:
+
+{title="src/PhpspecExample/GreatestCommonDivisorFinder.php", lang="php"}
+~~~~~~~~
+    public function findGreatestDivisor($a, $b)
+    {
+        $divisor = min($a, $b);
+
+        if ($a % $divisor !== 0 || $b % $divisor !== 0) {
+            $divisor = 1;
+        }
+
+        return $divisor;
+    }
+~~~~~~~~
+
+Run the tests:
+
+```
+$ phpspec run --format=pretty
+```
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+  15  ✔ returns the first number if it is a divisor of the second
+  20  ✔ returns the second number if it is a divisor of the first
+  25  ✔ returns 1 if there is no greater divisor
+
+
+1 specs
+4 examples (4 passed)
+11ms
+```
+
+So far so good!
+
 #### Refactor
+
+Finally, something to refactor! There is a duplicate of the logic to check if
+the `$divisor` is a factor of a variable. Let's extract it out with the
+[extract method](http://refactoring.com/catalog/extractMethod.html) refactoring
+like so:
+
+{title="src/PhpspecExample/GreatestCommonDivisorFinder.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace PhpspecExample;
+
+class GreatestCommonDivisorFinder
+{
+    private $divisor;
+
+    public function findGreatestDivisor($a, $b)
+    {
+        $this->divisor = min($a, $b);
+
+        if (!$this->divisorIsFactorOf($a) || !$this->divisorIsFactorOf($b)) {
+            $this->divisor = 1;
+        }
+
+        return $this->divisor;
+    }
+
+    private function divisorIsFactorOf($target)
+    {
+        return $target % $this->divisor === 0;
+    }
+}
+~~~~~~~~
+
+As always, run the tests to make sure they still pass:
+
+```
+$ phpspec run --format=pretty
+```
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+  15  ✔ returns the first number if it is a divisor of the second
+  20  ✔ returns the second number if it is a divisor of the first
+  25  ✔ returns 1 if there is no greater divisor
+
+
+1 specs
+4 examples (4 passed)
+11ms
+```
+
+#### Red
+
+Ok, next let's try a divisor that is not `1` or either of the numbers
+themselves:
+
+{title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
+~~~~~~~~
+    function it_returns_a_divisor_of_both_numbers()
+    {
+        $this->findGreatestDivisor(6, 9)->shouldReturn(3);
+    }
+~~~~~~~~
+
+And watch the test fail:
+
+```
+$ phpspec run --format=pretty
+```
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+  15  ✔ returns the first number if it is a divisor of the second
+  20  ✔ returns the second number if it is a divisor of the first
+  25  ✔ returns 1 if there is no greater divisor
+  30  ✘ returns a divisor of both numbers
+        expected [integer:3], but got [integer:1].
+
+----  failed examples
+
+        PhpspecExample/GreatestCommonDivisorFinder
+  30  ✘ returns a divisor of both numbers
+        expected [integer:3], but got [integer:1].
+
+
+1 specs
+5 examples (4 passed, 1 failed)
+14ms
+```
+
+#### Green
+
+We actually only have to make a very small change here to make this pass:
+
+{title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
+~~~~~~~~
+    public function findGreatestDivisor($a, $b)
+    {
+        $this->divisor = min($a, $b);
+
+        // leanpub-insert-start
+        while (!$this->divisorIsFactorOf($a) || !$this->divisorIsFactorOf($b)) {
+            $this->divisor--;
+            // leanpub-insert-end
+        }
+
+        return $this->divisor;
+    }
+~~~~~~~~
+
+Run the tests:
+
+```
+$ phpspec run --format=pretty
+```
+
+```
+      PhpspecExample\GreatestCommonDivisorFinder
+
+  10  ✔ returns the number if both values are that number
+  15  ✔ returns the first number if it is a divisor of the second
+  20  ✔ returns the second number if it is a divisor of the first
+  25  ✔ returns 1 if there is no greater divisor
+  30  ✔ returns a divisor of both numbers
+
+
+1 specs
+5 examples (5 passed)
+11ms
+```
+
+Everything has passed, and if you look over the code you should see we've
+reached a final solution to *find the greatest common divisor or 2 numbers*.
+
+If you really want to double check out could add this extra test but it will
+pass straight away:
+
+{title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
+~~~~~~~~
+    function it_returns_the_greatest_divisor_of_both_numbers()
+    {
+        $this->findGreatestDivisor(12, 18)->shouldReturn(6);
+    }
+~~~~~~~~
+
+#### Refactor
+
+Looking at the code we've produced I'd say it's pretty neat already and doesn't
+require any additional refactoring. Maybe just add some *docblocks* for type
+information.
 
 #### The Result
 
+And here it is:
+
+<<[src/PhpspecExample/GreatestCommonDivisorFinder.php](examples/chapter-04/phpspec/example/src/PhpspecExample/GreatestCommonDivisorFinder.php)
+
+A complete solution to our original problem, achived by TDD.
 ## Test Doubles
 
 ### Testing Dependencies Which Don't Exist Yet
