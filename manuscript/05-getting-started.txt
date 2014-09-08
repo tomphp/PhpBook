@@ -2,6 +2,44 @@
 
 ## The Application
 
+The a brief discription of the application we are going to build is as follows:
+
+
+The aim is to produce a website which allows *users* of the of the site to
+*view* and *rate* cocktail recipes submitted by other users, as well as
+*submit their own*. Any *visitors* to the site can view the list *sorted by
+rating*, but they must *register* with an *email* and *password* in order to
+*rate* or *add* a *receipe*.
+
+Ratings will be *star* ratings with *users* being able to *rate* a receipe
+with 1 to 5 *stars*.
+
+*Quantities* can be entered as either *millilitres (ml)*, *fluid ounces (fl
+oz)* or *teaspoons (tsp)*.
+
+The cocktails ingredients available are limited to a selection which can only
+be added to by an *administrator*.
+
+
+Now we've got a basic understand of application we are going to build let's
+take a quick look at the list of [user stories](#user-stories). These are
+listed in order of priority.
+
+* A visitor can view a list of recipes
+* A visitor can register and become a user
+* A visitor can login to become a user
+* A user can rate a recipe
+* A user can add a recipe
+* An administrator can add an ingredient
+
+We will proceed to implement each of these stories in order. This may seem like
+a very basic application but it will provide enough functionality to give a
+good example of how to start building a well designed, extendable application.
+Also because this is being developed emulating an *agile* approach things may
+change as it progresses and extra features may be requested.
+
 ## Creating the Project
+
+Before 
 
 ## Our First Story

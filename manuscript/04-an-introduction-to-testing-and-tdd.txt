@@ -1381,9 +1381,31 @@ And here it is:
 
 <<[src/PhpspecExample/GreatestCommonDivisorFinder.php](examples/chapter-04/phpspec-example/src/PhpspecExample/GreatestCommonDivisorFinder.php)
 
-A complete solution to our original problem, achived by TDD.
+A complete solution to our original problem, achieved by TDD.
 
 ## Test Doubles
+
+We've already heard of *test doubles* and how they can be used to help test
+units of code in isolation by replacing the unit's dependencies. Now let's take
+a look at how this is actually done.
+
+### Types of Test Doubles
+
+*Tests doubles* take on different forms as they are used for different purposes.
+Each of these different types of test double is used to solve a different
+problem. Let's take a look at the different types.
+
+#### Dummy
+
+A *dummy* is the simplest *test double*, it simply serves as a placeholder for
+a dependency. It's essentially an empty class which implements the dependency
+interface.
+
+todo... example
+
+#### Stub
+#### Mock
+#### Spy
 
 ### Testing Dependencies Which Don't Exist Yet
 

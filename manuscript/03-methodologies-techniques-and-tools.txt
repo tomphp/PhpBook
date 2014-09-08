@@ -1765,7 +1765,7 @@ through the process of how we get to that point.
 A good book to check out on Agile style development is Kent Beck's *Extreme
 Programming Explained*.
 
-## User Stories
+## User Stories {#user-stories}
 
 A user story is a short description of one of the tasks that a user will do
 when interacting with the system:
