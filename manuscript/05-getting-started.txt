@@ -4,22 +4,20 @@
 
 The a brief discription of the application we are going to build is as follows:
 
-
-The aim is to produce a website which allows *users* of the of the site to
-*view* and *rate* cocktail recipes submitted by other users, as well as
-*submit their own*. Any *visitors* to the site can view the list *sorted by
-rating*, but they must *register* with an *email* and *password* in order to
-*rate* or *add* a *receipe*.
-
-Ratings will be *star* ratings with *users* being able to *rate* a receipe
-with 1 to 5 *stars*.
-
-*Quantities* can be entered as either *millilitres (ml)*, *fluid ounces (fl
-oz)* or *teaspoons (tsp)*.
-
-The cocktails ingredients available are limited to a selection which can only
-be added to by an *administrator*.
-
+> The aim is to produce a website which allows *users* of the of the site to
+> *view* and *rate* cocktail recipes submitted by other users, as well as
+> *submit their own*. Any *visitors* to the site can view the list *sorted by
+> rating*, but they must *register* with an *email* and *password* in order to
+> *rate* or *add* a *receipe*.
+> 
+> Ratings will be *star* ratings with *users* being able to *rate* a receipe
+> with 1 to 5 *stars*.
+> 
+> *Quantities* can be entered as either *millilitres (ml)*, *fluid ounces (fl
+> oz)* or *teaspoons (tsp)*.
+> 
+> The cocktail ingredients available are limited to a selection which can only
+> be added to by an *administrator*.
 
 Now we've got a basic understand of application we are going to build let's
 take a quick look at the list of [user stories](#user-stories). These are
@@ -40,6 +38,57 @@ change as it progresses and extra features may be requested.
 
 ## Creating the Project
 
-Before 
+Before jumping in let's quickly set up a project by running:
+
+```
+$ mkdir cocktail-rater
+$ cd cocktail-rater
+```
+
+Then add the following `composer.json`
+
+{title="composer.json", lang="json"}
+~~~~~~~~
+{
+    "require-dev": {
+        "behat/behat": "3.*",
+        "phpunit/phpunit": "4.2.*",
+        "phpspec/phpspec": "2.*@dev"
+    },
+    "autoload": {
+        "CocktailRater\\": "src/"
+    }
+}
+~~~~~~~~
+
+I> ### PhpSpec Version
+I>
+I> You may have notice that the PHPSpec requirement is for a development
+I> version. The reason for this is that there are some features which we will
+I> be using which are not in the stable release, when this changes I will
+I> update this accordingly.
+
+Run composer to install the test tools:
+
+```
+$ composer install
+```
+
+Next up we can quickly configure PHPSpec to format it's output as pretty by
+default so that we don't need to put it on the command line every time we run
+it. To do this create a file called `phpspec.yml` with the following contents:
+
+{title="phpspec.yml", format="yaml"}
+~~~~~~~~~
+formatter.name: pretty
+~~~~~~~~~
+
+Finally initialise Behat ready to start development:
+
+```
+$ behat --init
+```
+
+All done! Now we can start...
 
 ## Our First Story

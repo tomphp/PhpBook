@@ -1404,8 +1404,9 @@ interface.
 todo... example
 
 #### Stub
-#### Mock
 #### Spy
+#### Fake
+#### Mock
 
 ### Testing Dependencies Which Don't Exist Yet
 
