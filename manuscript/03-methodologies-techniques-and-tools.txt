@@ -1672,7 +1672,7 @@ Evans' book *Domain-Driven Design*.
 Another person to keep an eye on regarding this subject is the PHP's
 community's DDD man [Mathias Verraes](http://verraes.net/).
 
-## Command Query Responsibility Segregation (CQRS)
+## Command Query Responsibility Segregation (CQRS) {#cqrs}
 
 A lot of the techniques I have talked about have about so far have been about
 building a rock solid *domain model* which cannot be broken from creating

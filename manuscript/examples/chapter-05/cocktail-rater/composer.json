@@ -1,0 +1,10 @@
+{
+    "require-dev": {
+        "behat/behat": "3.*",
+        "phpunit/phpunit": "4.2.*",
+        "phpspec/phpspec": "2.*@dev"
+    },
+    "autoload": {
+        "CocktailRater\\": "src/"
+    }
+}

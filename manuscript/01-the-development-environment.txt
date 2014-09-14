@@ -8,8 +8,14 @@ things may be a bit different but shouldn't be too hard to work out.
 ## Requirements
 
 The only real requirement for working through this book is that you are using
-PHP 5.5 or above. Throughout this book we will be using PHP both from the
-command line and in a webserver environment.
+PHP 5.5 or above and the SQLite extension. Throughout this book we will be
+using PHP both from the command line and in a webserver environment.
+
+To install PHP and SQLite on Ubuntu easily by running:
+
+```
+$ sudo apt-get install php5-cli php5-sqlite
+```
 
 Where we are using it in a web environment I will be using a tool called
 Vagrant, it allows you to run your development environment in a virtual machine

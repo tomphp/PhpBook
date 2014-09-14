@@ -2,15 +2,15 @@
 
 ## The Application
 
-The a brief discription of the application we are going to build is as follows:
+A brief description of the application we are going to build is as follows:
 
-> The aim is to produce a website which allows *users* of the of the site to
+> The aim is to produce a website which allows *users* of the site to
 > *view* and *rate* cocktail recipes submitted by other users, as well as
 > *submit their own*. Any *visitors* to the site can view the list *sorted by
-> rating*, but they must *register* with an *email* and *password* in order to
-> *rate* or *add* a *receipe*.
+> rating*, but they must *register* with an *username*, *email* and *password*
+> in order to *rate* or *add* a *receipe*.
 > 
-> Ratings will be *star* ratings with *users* being able to *rate* a receipe
+> Ratings will be *star* ratings with *users* being able to *rate* a recipe
 > with 1 to 5 *stars*.
 > 
 > *Quantities* can be entered as either *millilitres (ml)*, *fluid ounces (fl
@@ -32,9 +32,9 @@ listed in order of priority.
 
 We will proceed to implement each of these stories in order. This may seem like
 a very basic application but it will provide enough functionality to give a
-good example of how to start building a well designed, extendable application.
-Also because this is being developed emulating an *agile* approach things may
-change as it progresses and extra features may be requested.
+good example of how to start building a well designed, extendible application.
+Also, because this is being developed emulating an *agile* approach, details
+may change as it progresses and extra features may be requested.
 
 ## Creating the Project
 
@@ -74,7 +74,7 @@ Run composer to install the test tools:
 $ composer install
 ```
 
-Next up we can quickly configure PHPSpec to format it's output as pretty by
+Next up we can quickly configure PHPSpec to format its output as pretty by
 default so that we don't need to put it on the command line every time we run
 it. To do this create a file called `phpspec.yml` with the following contents:
 
@@ -83,7 +83,7 @@ it. To do this create a file called `phpspec.yml` with the following contents:
 formatter.name: pretty
 ~~~~~~~~~
 
-Finally initialise Behat ready to start development:
+Finally, initialise Behat ready to start development:
 
 ```
 $ behat --init
@@ -91,4 +91,99 @@ $ behat --init
 
 All done! Now we can start...
 
-## Our First Story
+## The First Story
+
+Let's look at the first [story](#user-stories). One thing to note is that a
+story is not a specification, it's intentionally vague and it's purpose is to
+exist as a *request for conversation*. When it is time to implement a story the
+team (which includes the customer) should discuss the story and decide on the
+details, this will result in the generation of the acceptance tests. For the
+purpose of this book I'll provide the story and tests as though this conversation
+has already taken place. So, here's the story card for the first feature:
+
+> A visitor can view a list of recipes
+>
+> * Displays an empty list if there are no recipes
+> * Recipes display the *name of the cocktail*, *the rating* and the *name of 
+> the user who submitted it*
+> * The list should be presented it *decending* order of rating
+
+From this information we can add the following feature to the project:
+
+{title="features/visitors-can-list-recipes.feature", lang="cucumber"}
+~~~~~~~~
+Feature: A visitor can view a list of recipes
+    In order to view a list of recipes
+    As a visitor
+    I need to be able get a list of recipes
+
+    Scenario: View an empty list of recipes
+        Given there are no recipes
+        When I request a list of recipes
+        Then I should see an empty list
+
+    Scenario: View a list with 1 item
+        Given there is a recipe called "Mojito" with a rating of 5 submitted by "tom"
+        When I request a list of recipes
+        Then I should see a list of recipes containing:
+            | name   | rating | user |
+            | Mojito | 5.0    | tom  |
+
+    Scenario: Recipes are sorted by rating
+        Given there is a recipe called "Daquiri" with a rating of 4 submitted by "clare"
+        And there is a recipe called "Pina Colada" with a rating of 2 submitted by "jess"
+        And there is a recipe called "Mojito" with a rating of 5 submitted by "tom"
+        When I request a list of recipes
+        Then I should see a list of recipes containing:
+            | name        | rating | user  |
+            | Mojito      | 5.0    | tom   |
+            | Daquiri     | 4.0    | clare |
+            | Pina Colada | 2.0    | jess  |
+~~~~~~~~
+
+If you try to run Behat with this feature it will say that the context has missing
+steps, to add the required snippets run:
+
+```
+$ behat --append-snippets
+```
+
+Now we can start working to get these *scenarios* to pass.
+
+## Application Structure
+
+Before jumping straight into writing code let's just take a small moment to
+take a look at structure we plan to use to build the application.
+
+![Proposed Application Structure](images/05-application-structure.png)
+
+The core part of the application will be the *domain model*, this will consist
+of our modelled interpretation of the business rules. It will have no knowledge
+of how or where the data in stored, the user interface or any non-business related
+implementation details. To achieve this level of separation we'll use *inversion
+of control* to let the other layers *plug in* to the domain layer.
+
+Behind the *domain model* there will be storage implementation layer for our
+chosen storage system. The storage system has not yet been decided so we'll
+make use of SQLite until we decide. The reason of this choice is that SQLite
+allows the access of a database file without needing to set up a database
+server and it's easier to use that writing our own file based storage system.
+
+In chapter 3 I introduced [CQRS](#cqrs) and stated that while we are not going
+to implement it in our application we will make a distinction between *command*
+and *query* interactions with the application. Therefore, in front of the *domain
+model* we'll have a layer of *commands* and *queries*, all interactions with
+the *domain model* from the *GUI* will go through these.
+
+Finally, we'll have the GUI website. We'll start of just mocking this up with
+some basic HTML but as our application becomes more complete we can make use
+of a modern MVC[^mvc] framework. Again we won't worry about which one until
+later on.
+
+[^mvc]: The [Model View Controller](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) design pattern.
+
+## Scenario: View an empty list of recipes
+
+## Scenario: View a list with 1 item
+
+## Scenario: Recipes are sorted by rating
