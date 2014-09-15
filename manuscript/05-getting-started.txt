@@ -24,6 +24,7 @@ take a quick look at the list of [user stories](#user-stories). These are
 listed in order of priority.
 
 * A visitor can view a list of recipes
+* A visitor can view a recipe
 * A visitor can register and become a user
 * A visitor can login to become a user
 * A user can rate a recipe
