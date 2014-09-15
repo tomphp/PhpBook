@@ -7,7 +7,7 @@ A brief description of the application we are going to build is as follows:
 > The aim is to produce a website which allows *users* of the site to
 > *view* and *rate* cocktail recipes submitted by other users, as well as
 > *submit their own*. Any *visitors* to the site can view the list *sorted by
-> rating*, but they must *register* with an *username*, *email* and *password*
+> rating*, but they must *register* with a *username*, *email* and *password*
 > in order to *rate* or *add* a *receipe*.
 > 
 > Ratings will be *star* ratings with *users* being able to *rate* a recipe
@@ -56,7 +56,9 @@ Then add the following `composer.json`
         "phpspec/phpspec": "2.*@dev"
     },
     "autoload": {
-        "CocktailRater\\": "src/"
+        "psr-0": {
+            "CocktailRater\\": "src/"
+        }
     }
 }
 ~~~~~~~~

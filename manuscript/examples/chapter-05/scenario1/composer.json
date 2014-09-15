@@ -5,6 +5,8 @@
         "phpspec/phpspec": "2.*@dev"
     },
     "autoload": {
-        "CocktailRater\\": "src/"
+        "psr-0": {
+            "CocktailRater\\": "src/"
+        }
     }
 }
