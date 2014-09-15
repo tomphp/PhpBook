@@ -98,6 +98,7 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function iShouldSeeAListOfRecipesContaining(TableNode $table)
     {
+        // leanpub-start-insert
         $callback = function ($recipe) {
             return [
                 (string) $recipe['name'],
@@ -110,5 +111,6 @@ class FeatureContext implements SnippetAcceptingContext
             array_map($callback, $this->result->getRecipes()),
             array_map($callback, $table->getHash())
         );
+        // leanpub-end-insert
     }
 }
