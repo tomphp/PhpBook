@@ -2,6 +2,7 @@
 
 namespace CocktailRater\Domain;
 
+use Assert\Assertion;
 use CocktailRater\Domain\Exception\OutOfBoundsException;
 
 final class Rating
@@ -16,6 +17,8 @@ final class Rating
      */
     public function __construct($value)
     {
+        Assertion::numeric($value);
+
         $this->assertValueIsWithinRange($value);
 
         $this->value = (float) $value;

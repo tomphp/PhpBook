@@ -2,17 +2,16 @@
 
 namespace spec\CocktailRater\Domain;
 
+use CocktailRater\Domain\Rating;
+use CocktailRater\Domain\User;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use CocktailRater\Domain\User;
-use CocktailRater\Domain\Rating;
 
 class RecipeSpec extends ObjectBehavior
 {
-    function it_stores_name_as_a_string()
+    function it_is_initializable()
     {
-        $this->beConstructedWith(123, new Rating(1), User::fromValues('tom'));
-
-        $this->getName()->shouldReturn('123');
+        $this->beConstructedWith('test name', new Rating(5), User::fromValues('test user'));
+        $this->shouldHaveType('CocktailRater\Domain\Recipe');
     }
 }

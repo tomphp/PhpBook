@@ -7,10 +7,10 @@ use Prophecy\Argument;
 
 class UsernameSpec extends ObjectBehavior
 {
-    function it_stores_the_name_as_a_string()
+    function it_is_initializable()
     {
-        $this->beConstructedWith(123);
+        $this->beConstructedWith('test username');
 
-        $this->getValue()->shouldReturn('123');
+        $this->shouldHaveType('CocktailRater\Domain\Username');
     }
 }

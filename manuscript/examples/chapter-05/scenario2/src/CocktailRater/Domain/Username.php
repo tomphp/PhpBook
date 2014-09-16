@@ -2,6 +2,8 @@
 
 namespace CocktailRater\Domain;
 
+use Assert\Assertion;
+
 final class Username
 {
     /** @var string */
@@ -10,7 +12,9 @@ final class Username
     /** @param string $value */
     public function __construct($value)
     {
-        $this->value = (string) $value;
+        Assertion::string($value);
+
+        $this->value = $value;
     }
 
     /** @param */
