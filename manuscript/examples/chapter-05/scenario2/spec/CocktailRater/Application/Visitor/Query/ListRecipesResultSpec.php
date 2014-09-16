@@ -14,8 +14,8 @@ class ListRecipesResultSpec extends ObjectBehavior
 
     function it_can_add_recipes_details()
     {
-        $this->add('recipe 1', 3.0, 'user a');
-        $this->add('recipe 2', 5.0, 'user b');
+        $this->addRecipe('recipe 1', 3.0, 'user a');
+        $this->addRecipe('recipe 2', 5.0, 'user b');
 
         $this->getRecipes()->shouldReturn([
             [

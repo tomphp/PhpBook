@@ -13,7 +13,7 @@ final class ListRecipesResult
      * @param float  $rating
      * @param string $username
      */
-    public function add($name, $rating, $username)
+    public function addRecipe($name, $rating, $username)
     {
         $this->recipes[] = [
             'name'     => $name,
