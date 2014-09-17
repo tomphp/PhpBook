@@ -52,3 +52,16 @@ built at least one medium scale application but may not really know a lot
 about software design principles. If you have less experience than this you may
 struggle to keep up. If you have more then there may be less to be learnt from
 this book but hopefully it will still be helpful.
+
+## Getting in Contact
+
+I'd love to hear from you! Whether it's about something in the book which you
+didn't understand, think I could improve or didn't agree with; or if you'd like
+to share how you do things differently; or even just to talk about software
+design in general then please get in touch.
+
+You can find me on:
+
+Twitter: @tomphp
+Email: tom@x2k.co.uk
+Skype: x2kmusic
