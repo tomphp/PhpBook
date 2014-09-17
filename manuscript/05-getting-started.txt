@@ -159,6 +159,130 @@ later on.
 
 ## Scenario: View an empty list of recipes
 
+So here's the scenario which we want to get to pass:
+
+{title="View an empty list of recipes", lang="cucumber"}
+~~~~~~~~
+    Scenario: View an empty list of recipes
+        Given there are no recipes
+        When I request a list of recipes
+        Then I should see an empty list
+~~~~~~~~
+
+We're going to use TDD to work from the *outside in*. What I mean be this is
+rather than trying to build the model and then get it to do what we need it
+to do, we'll start with what we want it to do and let that help create the
+model.
+
+### Fleshing out the FeatureContext
+
+Behat has already added the required *snippet* templates to the
+`FeatureContext` so let's try and pencil in what we want to happen. Take a look
+at the code I have added first then I'll explain it:
+
+<<[features/bootstrap/FeatureContext.php](examples/chapter-05/scenario1/features/bootstrap/FeatureContext.php)
+
+The thinking I have used here goes something like this:
+
+> In order to list recipes we'll create a query object then somehow we'll
+> process that query to get the result. This process will involve fetching
+> all existing recipes and returning the result.
+
+The first line of our test states *"Given there are no recipes"*. Now I'm going
+to use the term *Respoitory* for the place where objects will be stored, so to
+make this pass we've got to ensure that the *Repository* for storing recipes is
+empty. I've also stated that we're not going to worry about what storage system
+we will be using until later, so in the mean time I've decide to create a
+simple repository which we'll use to emulate the repository functionality.
+I've decided to name this
+`CocktailRater\Testing\Repository\TestRecipeRepository`.
+
+With this information, the first thing we need to do is create an instance of
+this repository. I've done this in the `FeatureContext` method called
+`beforeScenario`.
+
+W> ### The @BeforeScenario Annotation
+W>
+W> You may also notice that I've added `@BeforeScenario` to the
+W> docblock for this method, this is known as an *annotation* and is required
+W> to inform Behat to run this method before it runs each *scenario*.
+
+Next we *clear* the repository to ensure there are no recipes in the
+`thereAreNoRecipes` method.
+
+Then next line of the test states *"When I request a list of recipes"*. For
+this we create the query object, run it and store the result. I've decided that
+the *running* of the query will be done by a *query handler* and therefore
+we'll use the verb *handle* to run it. Also, we know that the *query handler*
+will need to fetch recipes from the *repository* so we pass it to the *handler*
+via the constructor. All this is put into action in the
+`iRequestAListOfRecipes` method in our `FeatureContext`.
+
+Finally, the last line of the test says *"Then I should see an empty list"*, to
+do this we'll simple check the value in the query result. In order to make a
+Behat snippet fail it must throw an exception. However, rather than writing our
+own checking methods I've decided to make use of the *assert* methods provided
+by PHPUnit. For this test we've used 2 asserts, one to check the result is an
+*array* and the second to check it's empty.
+
+At this point if you try to run Behat you'll see PHP error messages since we've
+referenced classes which don't exist. To fix this lets add the classes.
+
+### Writing the Code
+
+The first list of the test requires the *respository* and that is has a method
+called `clear`. Let's quickly add that:
+
+{title="src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Testing\Repository;
+
+use CocktailRater\Domain\Repository\RecipeRepository;
+
+final class TestRecipeRepository implements RecipeRepository
+{
+    public function clear()
+    {
+    }
+}
+~~~~~~~~
+
+That's nice and simple for now, you may have noticed the use of the `final`
+keyword. For now I'm just going to say that I add this to my classes by
+default, this is not required but is my preference, I'll explain the reason for
+this a bit later on.
+
+Next up let's create the `ListRecipesQuery`. A query class will contain the
+parameters for the query, in this case there are none so the class simply looks
+like this:
+
+<<[src/CocktailRater/Application/Visitor/Query/ListRecipesQuery.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesQuery.php)
+
+I've chosen to add `Visitor` to the namespace since these are queries which
+will be made by *vistors*.
+
+Now for the interesting bit, the `ListRecipesHandler`. From looking at the
+`FeatureContext` it needs to take a *repository* as a constructor parameter,
+the query as a parameter to the `handle` method and return some object which
+has a `getRecipes` method.
+
+Here we don't want to depend on our test repository so we'll create a interface
+which will be used in it's place. For the return value we'll create a class
+called `CocktailRater\Application\Visitor\Query\ListRecipesResult`. Without
+further ado, here it is:
+
+<<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
+
+QueryResult
+
+Repository interface
+
+Update test repository
+
+<<[src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php](examples/chapter-05/scenario1/src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php)
+
 ## Scenario: View a list with 1 item
 
 ```
@@ -166,3 +290,7 @@ $ composer require beberlei/assert:@stable
 ```
 
 ## Scenario: Recipes are sorted by rating
+
+## Some Thoughts
+
+## What Next?
