@@ -49,21 +49,6 @@ $ cd cocktail-rater
 Then add the following `composer.json`
 
 <<[composer.json](examples/chapter-05/scenario1/composer.json)
-{title="composer.json", lang="json"}
-~~~~~~~~
-{
-    "require-dev": {
-        "behat/behat": "3.*",
-        "phpunit/phpunit": "4.2.*",
-        "phpspec/phpspec": "2.*@dev"
-    },
-    "autoload": {
-        "psr-0": {
-            "CocktailRater\\": "src/"
-        }
-    }
-}
-~~~~~~~~
 
 I> ### PhpSpec Version
 I>
