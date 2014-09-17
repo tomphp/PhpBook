@@ -1414,3 +1414,9 @@ todo... example
 ✘
 
 ✔
+
+  10  ✔ returns the number if both values are that number
+  15  ✔ returns the first number if it is a divisor of the second
+  20  ✔ returns the second number if it is a divisor of the first
+  25  ✔ returns 1 if there is no greater divisor
+  30  ✘ returns a divisor of both numbers
