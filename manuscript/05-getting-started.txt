@@ -281,7 +281,7 @@ Repository interface
 
 Update test repository
 
-<<[src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php](examples/chapter-05/scenario1/src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php)
+<<[src/CocktailRater/Testing/Repository/TestRecipeRepository.php](examples/chapter-05/scenario1/src/CocktailRater/Testing/Repository/TestRecipeRepository.php)
 
 ## Scenario: View a list with 1 item
 
