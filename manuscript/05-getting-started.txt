@@ -113,7 +113,7 @@ Now we can start working to get these *scenarios* to pass.
 ## Application Structure
 
 Before jumping straight into writing code let's just take a small moment to
-take a look at structure we plan to use to build the application.
+take a look at the structure we plan to use to build the application.
 
 ![Proposed Application Structure](images/05-application-structure.png)
 
@@ -162,7 +162,7 @@ model.
 ### Fleshing out the FeatureContext
 
 Behat has already added the required *snippet* templates to the
-`FeatureContext` so let's try and pencil in what we want to happen. Take a look
+`FeatureContext` so let's try to pencil in what we want to happen. Take a look
 at the code I have added first then I'll explain it:
 
 <<[features/bootstrap/FeatureContext.php](examples/chapter-05/scenario1/features/bootstrap/FeatureContext.php)
@@ -177,8 +177,8 @@ The first line of our test states *"Given there are no recipes"*. Now I'm going
 to use the term *Respoitory* for the place where objects will be stored, so to
 make this pass we've got to ensure that the *Repository* for storing recipes is
 empty. I've also stated that we're not going to worry about what storage system
-we will be using until later, so in the mean time I've decide to create a
-simple repository which we'll use to emulate the repository functionality.
+we will be using until later, so in the mean time I've decided to create a
+simple test repository which we'll use to emulate the repository functionality.
 I've decided to name this
 `CocktailRater\Testing\Repository\TestRecipeRepository`.
 
@@ -226,7 +226,7 @@ namespace CocktailRater\Testing\Repository;
 
 use CocktailRater\Domain\Repository\RecipeRepository;
 
-final class TestRecipeRepository implements RecipeRepository
+final class TestRecipeRepository 
 {
     public function clear()
     {
@@ -253,20 +253,59 @@ Now for the interesting bit, the `ListRecipesHandler`. From looking at the
 the query as a parameter to the `handle` method and return some object which
 has a `getRecipes` method.
 
-Here we don't want to depend on our test repository so we'll create a interface
-which will be used in it's place. For the return value we'll create a class
-called `CocktailRater\Application\Visitor\Query\ListRecipesResult`. Without
-further ado, here it is:
+Here we don't want to depend on our test repository so we'll create an
+interface which will be used in its place. For the return value we'll create a
+class called `CocktailRater\Application\Visitor\Query\ListRecipesResult`.
+Without further ado, here it is:
 
 <<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
 
-QueryResult
+At this point we've created all this classes that were referenced from the 
+`FeatureContext` but this last one has just introduced 2 more: the 
+`RecipeRepository` and the `ListRecipesResult` so let's add them quickly too
+(this is what I was referring to when I said we'd work from the *outside in*):
 
-Repository interface
+<<[src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php)
 
-Update test repository
+<<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario1/src/CocktailRater/Domain/Repository/RecipeRepository.php)
 
-<<[src/CocktailRater/Testing/Repository/TestRecipeRepository.php](examples/chapter-05/scenario1/src/CocktailRater/Testing/Repository/TestRecipeRepository.php)
+The `ListRecipesResult` class simply returns the and empty list from
+`getRecipes` which is all it needs to do now.
+
+The `RecipeRepository` interface currently has no methods. This is because the
+only method currently existing in out test repository is `clear`, however this
+method is only relevant for the tests, there is now requirement for this in the
+actual application.
+
+Now there's only one thing left to do: the `ListRecipesHandler` class requires
+a `RecipeRepository` to be provided to the constructor but, in the `FeatureContext`
+we've provided a `TestRecipeRepository`. To make this work we need to make the
+test repository implement the interface:
+
+{title="src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Testing\Repository;
+
+use CocktailRater\Domain\Repository\RecipeRepository;
+
+final class TestRecipeRepository implements RecipeRepository
+{
+    public function clear()
+    {
+    }
+}
+~~~~~~~~
+
+At this point should be able to run Behat by executing:
+
+{lang="text"}
+~~~~~~~~
+$ behat
+~~~~~~~~
+
+And see the first *scenario* pass.
 
 ## Scenario: View a list with 1 item
 
