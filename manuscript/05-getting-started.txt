@@ -294,7 +294,9 @@ namespace CocktailRater\Testing\Repository;
 
 use CocktailRater\Domain\Repository\RecipeRepository;
 
+// leanpub-start-insert
 final class TestRecipeRepository implements RecipeRepository
+// leanpub-end-insert
 {
     public function clear()
     {
@@ -302,14 +304,12 @@ final class TestRecipeRepository implements RecipeRepository
 }
 ~~~~~~~~
 
-At this point should be able to run Behat by executing:
+At this point should be able to run Behat and see the first *scenario* pass:
 
 {lang="console"}
 ~~~~~~~~
 $ behat
 ~~~~~~~~
-
-And see the first *scenario* pass.
 
 ## Scenario: View a list with 1 item
 
