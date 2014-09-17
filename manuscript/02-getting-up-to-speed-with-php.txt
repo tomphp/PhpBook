@@ -310,9 +310,10 @@ And the second one we'll call `page2.php`
 Next open a terminal and `cd` into the directory containing these files and use
 the following command to start up PHP's built in webserver:
 
-```
+{lang="console"}
+~~~~~~~~
 $ php -S localhost:8080
-```
+~~~~~~~~
 
 Now if you open your browser and go to `http://localhost:8080/page1.php` then
 you will see `You are viewing page 1`. If you then go to
@@ -335,9 +336,10 @@ Then in the terminal again `cd` to this new directory. This time start the PHP
 built in webserver with the name of the file we want to use as the application
 entry point like so:
 
-```
+{lang="console"}
+~~~~~~~~
 $ php -S localhost:8080 index.php
-```
+~~~~~~~~
 
 Again open your browser and visit `http://localhost:8080/page1` and you will
 see `You are looking at: /page1`, and again go to`http://localhost:8080/page2`
@@ -613,16 +615,18 @@ The various installation options for Composer can be found on the
 You can either install a copy locally to your project which means your use it
 by running:
 
-```
+{lang="console"}
+~~~~~~~~
 $ ./composer.phar
-```
+~~~~~~~~
 
 Or you can install it globally on your system and rename it to `composer`. I
 have done it this way so on my system I run Composer by simply typing:
 
-```
+{lang="console"}
+~~~~~~~~
 $ composer
-```
+~~~~~~~~
 
 If you have installed it differently to me you will need to adjust my
 instructions accordingly.
@@ -631,10 +635,11 @@ instructions accordingly.
 
 To start off, create a new project directory and `cd` into it:
 
-```
+{lang="console"}
+~~~~~~~~
 $ mkdir ComposerExample
 $ cd ComposerExample
-```
+~~~~~~~~
 
 If you want to use Composer locally you'll want to install it inside this
 directory now. However, if you have installed it global already then you can
@@ -652,9 +657,10 @@ inside a directory inside our project called `src`.
 Now tell Composer to apply these settings with the following command (remember
 you will need to adjust it if you have installed Composer locally):
 
-```
+{lang="console"}
+~~~~~~~~
 $ composer install
-```
+~~~~~~~~
 
 Once it has finished you will notice it has created a new directory called
 `vendor` and another file called `composer.lock`. If you're are using a *source
@@ -664,9 +670,10 @@ file should be added to the repository though.
 
 Next up create a directory structure for our PSR-0 classes to go:
 
-```
+{lang="console"}
+~~~~~~~~
 $ mkdir -p src/ComposerExample
-```
+~~~~~~~~
 
 Then create a file called `src/ComposerExample/HelloApplication.php` with the
 following content:
@@ -679,9 +686,10 @@ And finally create a class called `run.php` containing:
 
 Now to see it work run:
 
-```
+{lang="console"}
+~~~~~~~~
 $ php run.php
-```
+~~~~~~~~
 
 Ta da!
 
@@ -710,9 +718,10 @@ First up lets add it to the project as a dependency by updating our
 
 Next we tell Composer to download its new dependency by running:
 
-```
+{lang="console"}
+~~~~~~~~
 $ composer update
-```
+~~~~~~~~
 
 It should download the ConsoleKit package which will now be ready to use. Let's
 update our `ComposerExample\HelloApplication` class to look like this:
@@ -725,9 +734,10 @@ And let's add a new class called `ComposerExample\HelloCommand` like so:
 
 Now to try to run it:
 
-```
+{lang="console"}
+~~~~~~~~
 $ php run.php hello
-```
+~~~~~~~~
 
 There we have it, we've simply added a dependency to our app and made use of
 it, leaving Composer to do all the hard work of downloading it and setting up
@@ -748,9 +758,10 @@ Update the `composer.json` file to include the CodeSniffer dev dependency:
 
 Once again, tell Composer to update its dependencies by running:
 
-```
+{lang="console"}
+~~~~~~~~
 $ composer update
-```
+~~~~~~~~
 
 After it has finished CodeSniffer is ready to be used. When Composer installs
 any tools it will install the executable files in a local directory, by default
@@ -758,9 +769,10 @@ this directory is `vendor/bin`.
 
 We can now run CodeSniffer by running:
 
-```
+{lang="console"}
+~~~~~~~~
 $ vendor/bin/phpcs --standard=psr2 src
-```
+~~~~~~~~
 
 If all the code in our `src` directory conforms to the PSR-2 coding style then
 CodeSniffer should have completed without and errors.

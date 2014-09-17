@@ -355,17 +355,18 @@ We've already seen *Behat* and seen what *Cucumber* tests look like so let's
 have a go at setting up a project using them. To start off create a new folder
 for the project and `cd` into it:
 
-```
+{lang="console"}
+~~~~~~~~
 $ mkdir behat-example
 $ cd behat-example
-```
+~~~~~~~~
 
 Next up let's add Behat to the project. We've already seen how to set up the
 `composer.json` file but there is a simpler way; we can create it, add 
 the `composer.json`, add Behat to it and run `composer update` all in one
 command like so:
 
-```
+```console
 $ composer require behat/behat:3.* --dev
 ```
 
@@ -373,9 +374,10 @@ Once it has run let Behat will be installed in the project and the `behat`
 command is not available to us. Now we need to tell Behat to initialise the project,
 to do this simple run:
 
-```
+{lang="console"}
+~~~~~~~~
 $ behat --init
-```
+~~~~~~~~
 
 This command creates a directory called `features`, these is where we'll put
 the tests. It also creates directory called `features/bootstrap` which contains
@@ -399,13 +401,15 @@ Feature: List books
 
 Next run Behat:
 
-```
+{lang="console"}
+~~~~~~~~
 $ behat
-```
+~~~~~~~~
 
 And you should see this:
 
-```
+{lang="console"}
+~~~~~~~~
 Feature: List books
     In order to list books
     As a reader
@@ -445,24 +449,26 @@ Feature: List books
     {
         throw new PendingException();
     }
-```
+~~~~~~~~
 
 This is Behat saying that it doesn't understand the *snippets* which we have
 used in the test. It also gives some template code which can be copied and
 pasted into our feature context to implement these *snippets*, We could do that
 but we can actually get Behat to do this for use by running:
 
-```
+{lang="console"}
+~~~~~~~~
 $ behat --append-snippets
-```
+~~~~~~~~
 
 After this command is run if you look in `features/bootstrap/FeatureContext.php`
 you will see the template code has been added for the 3 *snippets*. At this point
 if we run Behat again:
 
-```
+{lang="console"}
+~~~~~~~~
 $ behat
-```
+~~~~~~~~
 
 It informs use that the first *snippet* has needs to be implemented (the others
 have been skipped). Let's do this now.
@@ -544,10 +550,11 @@ You can try running Behat again now but it will fail since there is no
 
 Then create the directory for the source code and update Composer:
 
-```
+{lang="console"}
+~~~~~~~~
 $ mkdir -p src/BehatExample
 $ composer update
-```
+~~~~~~~~
 
 Now we can create the `BookList` class:
 
@@ -667,15 +674,11 @@ class BookList
 }
 ~~~~~~~~
 
-Now run Behat:
+Now run Behat and see the test pass:
 
-```
+{lang="console"}
+~~~~~~~~
 $ behat
-```
-
-And you will see the test pass:
-
-```
 Feature: List books
     In order to list books
     As a reader
@@ -689,7 +692,7 @@ Feature: List books
 1 scenario (1 passed)
 3 steps (3 passed)
 0m0.01s (9.10Mb)
-```
+~~~~~~~~
 
 Before we move on, let's quickly add another test to the feature by appending
 the following to `features/list-books.feature`:
@@ -712,9 +715,10 @@ the following to `features/list-books.feature`:
 Again, if you run Behat it will say that there are new, unknown *snippets*. As
 before add these by running:
 
-```
+{lang="console"}
+~~~~~~~~
 $ behat --append-snippets
-```
+~~~~~~~~
 
 Open up `features/bootstrap/FeatureContext.php` again and update the 2 appended
 methods to look like this:
@@ -747,13 +751,9 @@ Finally, update `BehatExample\BookList` to contain a working implementation:
 
 Now run Behat to see the tests pass:
 
-```
+{lang="console"}
+~~~~~~~~
 $ behat
-```
-
-The result:
-
-```
 Feature: List books
     In order to list books
     As a reader
@@ -778,7 +778,7 @@ Feature: List books
 2 scenarios (2 passed)
 8 steps (8 passed)
 0m0.02s (9.15Mb)
-```
+~~~~~~~~
 
 ## Mink
 
@@ -818,33 +818,37 @@ divisor of 2 numbers.
 
 Let's start by creating a new project:
 
-```
+{lang="console"}
+~~~~~~~~
 $ mkdir phpspec-example
 $ cd phpspec-example
-```
+~~~~~~~~
 
 And configure Composer for the project:
 
 <<[composer.json](examples/chapter-04/phpspec-example/composer.json)
 
-```
+{lang="console"}
+~~~~~~~~
 $ composer install
-```
+~~~~~~~~
 
 Now we can start the TDD Cycle:
 
 First of all we'll tell PHPSpec to create a new Spec file. To do this run:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec desc PhpspecExample\\GreatestCommonDivisorFinder
-```
+~~~~~~~~
 
 This will create a file called
 `spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php`. To run it use:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
+~~~~~~~~
 
 PHPSpec will say it can't find the `PhpspecExample\GreatestCommonDivisorFinder`
 class and offer to create it. Say **Yes** and run `phpspec run --format=pretty`
@@ -913,9 +917,10 @@ All the following test to the
 
 Now we have to see this fail so run:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
+~~~~~~~~
 
 Again PHPSpec says that the `findGreatestDivisor` method does not exist and
 offers to create it. Say **yes**, this will add the empty method to
@@ -923,23 +928,26 @@ offers to create it. Say **yes**, this will add the empty method to
 
 Now run `phpspec run --format=pretty` again and you should see some red:
 
-```
+{lang="console"}
+~~~~~~~~
+$ phpspec run --format=pretty
+
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✘ returns the number if both values are that number
+  10  x returns the number if both values are that number
         expected [integer:5], but got null.
 
 ----  failed examples
 
         PhpspecExample/GreatestCommonDivisorFinder
-  10  ✘ returns the number if both values are that number
+  10  x returns the number if both values are that number
         expected [integer:5], but got null.
 
 
 1 specs
 1 examples (1 failed)
 11ms
-```
+~~~~~~~~
 
 This tells us that the test was expecting the value `5` to be returned but
 got `null` instead. Time to make make this test go green...
@@ -959,22 +967,21 @@ method and re-run the tests:
     }
 ~~~~~~~~
 
-```
-$ phpspec run --format=pretty
-```
-
 This time we see the green result:
 
-```
+{lang="console"}
+~~~~~~~~
+$ phpspec run --format=pretty
+
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
+  10  ✓ returns the number if both values are that number
 
 
 1 specs
 1 examples (1 passed)
 9ms
-```
+~~~~~~~~
 
 #### Refactor
 
@@ -994,32 +1001,29 @@ second number, then the first number should be returned:
     }
 ~~~~~~~~
 
-Run PHPSpec:
+Run PHPSpec to see red:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
 
-And see red:
-
-```
      PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
-  15  ✘ returns the first number if it is a divisor of the second
+  10  ✓ returns the number if both values are that number
+  15  x returns the first number if it is a divisor of the second
         expected [integer:3], but got [integer:5].
 
 ----  failed examples
 
         PhpspecExample/GreatestCommonDivisorFinder
-  15  ✘ returns the first number if it is a divisor of the second
+  15  x returns the first number if it is a divisor of the second
         expected [integer:3], but got [integer:5].
 
 
 1 specs
 2 examples (1 passed, 1 failed)
 12ms
-```
+~~~~~~~~
 
 The first test continues to pass but the second one does not as our
 implementation currently only returns the integer `5`.
@@ -1037,25 +1041,22 @@ by just returning the first number:
     }
 ~~~~~~~~
 
-Running PHPSpec:
+Now when running PHPSpec we see that both tests are successfully passing:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
 
-We see that both tests are successfully passing:
-
-```
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
-  15  ✔ returns the first number if it is a divisor of the second
+  10  ✓ returns the number if both values are that number
+  15  ✓ returns the first number if it is a divisor of the second
 
 
 1 specs
 2 examples (2 passed)
 11ms
-```
+~~~~~~~~
 
 #### Refactor
 
@@ -1076,31 +1077,33 @@ a divisor of the first, the second number should be returned.
 
 Now run PHPSpec again (**you have to see it fail**):
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
+~~~~~~~~
 
 And as expected:
 
-```
+{lang="console"}
+~~~~~~~~
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
-  15  ✔ returns the first number if it is a divisor of the second
-  20  ✘ returns the second number if it is a divisor of the first
+  10  ✓ returns the number if both values are that number
+  15  ✓ returns the first number if it is a divisor of the second
+  20  x returns the second number if it is a divisor of the first
         expected [integer:3], but got [integer:9].
 
 ----  failed examples
 
         PhpspecExample/GreatestCommonDivisorFinder
-  20  ✘ returns the second number if it is a divisor of the first
+  20  x returns the second number if it is a divisor of the first
         expected [integer:3], but got [integer:9].
 
 
 1 specs
 3 examples (2 passed, 1 failed)
 13ms
-```
+~~~~~~~~
 
 #### Green
 
@@ -1116,22 +1119,21 @@ To make this one pass we can simply return the smaller number:
 
 Yet again we run the tests and see the successful results:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
 
-```
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
-  15  ✔ returns the first number if it is a divisor of the second
-  20  ✔ returns the second number if it is a divisor of the first
+  10  ✓ returns the number if both values are that number
+  15  ✓ returns the first number if it is a divisor of the second
+  20  ✓ returns the second number if it is a divisor of the first
 
 
 1 specs
 3 examples (3 passed)
 10ms
-```
+~~~~~~~~
 
 #### Refactor
 
@@ -1152,30 +1154,29 @@ that:
 
 As always, run the tests and see the test fail:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
 
-```
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
-  15  ✔ returns the first number if it is a divisor of the second
-  20  ✔ returns the second number if it is a divisor of the first
-  25  ✘ returns 1 if there is no greater divisor
+  10  ✓ returns the number if both values are that number
+  15  ✓ returns the first number if it is a divisor of the second
+  20  ✓ returns the second number if it is a divisor of the first
+  25  x returns 1 if there is no greater divisor
         expected [integer:1], but got [integer:3].
 
 ----  failed examples
 
         PhpspecExample/GreatestCommonDivisorFinder
-  25  ✘ returns 1 if there is no greater divisor
+  25  x returns 1 if there is no greater divisor
         expected [integer:1], but got [integer:3].
 
 
 1 specs
 4 examples (3 passed, 1 failed)
 13ms
-```
+~~~~~~~~
 
 #### Green
 
@@ -1198,23 +1199,22 @@ of the 2 number is not a factor of either of the numbers, then return `1`:
 
 Run the tests:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
 
-```
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
-  15  ✔ returns the first number if it is a divisor of the second
-  20  ✔ returns the second number if it is a divisor of the first
-  25  ✔ returns 1 if there is no greater divisor
+  10  ✓ returns the number if both values are that number
+  15  ✓ returns the first number if it is a divisor of the second
+  20  ✓ returns the second number if it is a divisor of the first
+  25  ✓ returns 1 if there is no greater divisor
 
 
 1 specs
 4 examples (4 passed)
 11ms
-```
+~~~~~~~~
 
 So far so good!
 
@@ -1255,23 +1255,22 @@ class GreatestCommonDivisorFinder
 
 As always, run the tests to make sure they still pass:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
 
-```
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
-  15  ✔ returns the first number if it is a divisor of the second
-  20  ✔ returns the second number if it is a divisor of the first
-  25  ✔ returns 1 if there is no greater divisor
+  10  ✓ returns the number if both values are that number
+  15  ✓ returns the first number if it is a divisor of the second
+  20  ✓ returns the second number if it is a divisor of the first
+  25  ✓ returns 1 if there is no greater divisor
 
 
 1 specs
 4 examples (4 passed)
 11ms
-```
+~~~~~~~~
 
 #### Red
 
@@ -1288,31 +1287,30 @@ themselves:
 
 And watch the test fail:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
 
-```
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
-  15  ✔ returns the first number if it is a divisor of the second
-  20  ✔ returns the second number if it is a divisor of the first
-  25  ✔ returns 1 if there is no greater divisor
-  30  ✘ returns a divisor of both numbers
+  10  ✓ returns the number if both values are that number
+  15  ✓ returns the first number if it is a divisor of the second
+  20  ✓ returns the second number if it is a divisor of the first
+  25  ✓ returns 1 if there is no greater divisor
+  30  x returns a divisor of both numbers
         expected [integer:3], but got [integer:1].
 
 ----  failed examples
 
         PhpspecExample/GreatestCommonDivisorFinder
-  30  ✘ returns a divisor of both numbers
+  30  x returns a divisor of both numbers
         expected [integer:3], but got [integer:1].
 
 
 1 specs
 5 examples (4 passed, 1 failed)
 14ms
-```
+~~~~~~~~
 
 #### Green
 
@@ -1336,24 +1334,23 @@ We actually only have to make a very small change here to make this pass:
 
 Run the tests:
 
-```
+{lang="console"}
+~~~~~~~~
 $ phpspec run --format=pretty
-```
 
-```
       PhpspecExample\GreatestCommonDivisorFinder
 
-  10  ✔ returns the number if both values are that number
-  15  ✔ returns the first number if it is a divisor of the second
-  20  ✔ returns the second number if it is a divisor of the first
-  25  ✔ returns 1 if there is no greater divisor
-  30  ✔ returns a divisor of both numbers
+  10  ✓ returns the number if both values are that number
+  15  ✓ returns the first number if it is a divisor of the second
+  20  ✓ returns the second number if it is a divisor of the first
+  25  ✓ returns 1 if there is no greater divisor
+  30  ✓ returns a divisor of both numbers
 
 
 1 specs
 5 examples (5 passed)
 11ms
-```
+~~~~~~~~
 
 Everything has passed, and if you look over the code you should see we've
 reached a final solution to *find the greatest common divisor or 2 numbers*.
@@ -1404,19 +1401,14 @@ interface.
 todo... example
 
 #### Stub
+
 #### Spy
+
 #### Fake
+
 #### Mock
 
 ### Testing Dependencies Which Don't Exist Yet
 
 ## Resources
-✘
 
-✔
-
-  10  ✔ returns the number if both values are that number
-  15  ✔ returns the first number if it is a divisor of the second
-  20  ✔ returns the second number if it is a divisor of the first
-  25  ✔ returns 1 if there is no greater divisor
-  30  ✘ returns a divisor of both numbers

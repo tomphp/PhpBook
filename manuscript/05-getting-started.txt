@@ -41,10 +41,11 @@ may change as it progresses and extra features may be requested.
 
 Before jumping in let's quickly set up a project by running:
 
-```
+{lang="console"}
+~~~~~~~~
 $ mkdir cocktail-rater
 $ cd cocktail-rater
-```
+~~~~~~~~
 
 Then add the following `composer.json`
 
@@ -59,24 +60,26 @@ I> update this accordingly.
 
 Run composer to install the test tools:
 
-```
+{lang="console"}
+~~~~~~~~
 $ composer install
-```
+~~~~~~~~
 
 Next up we can quickly configure PHPSpec to format its output as pretty by
 default so that we don't need to put it on the command line every time we run
 it. To do this create a file called `phpspec.yml` with the following contents:
 
 {title="phpspec.yml", format="yaml"}
-~~~~~~~~~
+~~~~~~~~
 formatter.name: pretty
-~~~~~~~~~
+~~~~~~~~
 
 Finally, initialise Behat ready to start development:
 
-```
+{lang="console"}
+~~~~~~~~
 $ behat --init
-```
+~~~~~~~~
 
 All done! Now we can start...
 
@@ -104,9 +107,10 @@ From this information we can add the following feature to the project:
 If you try to run Behat with this feature it will say that the context has missing
 steps, to add the required snippets run:
 
-```
+{lang="console"}
+~~~~~~~~
 $ behat --append-snippets
-```
+~~~~~~~~
 
 Now we can start working to get these *scenarios* to pass.
 
@@ -300,7 +304,7 @@ final class TestRecipeRepository implements RecipeRepository
 
 At this point should be able to run Behat by executing:
 
-{lang="text"}
+{lang="console"}
 ~~~~~~~~
 $ behat
 ~~~~~~~~
@@ -309,9 +313,10 @@ And see the first *scenario* pass.
 
 ## Scenario: View a list with 1 item
 
-```
+{lang="console"}
+~~~~~~~~
 $ composer require beberlei/assert:@stable
-```
+~~~~~~~~
 
 ## Scenario: Recipes are sorted by rating
 

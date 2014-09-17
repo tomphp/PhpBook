@@ -13,9 +13,10 @@ using PHP both from the command line and in a webserver environment.
 
 To install PHP and SQLite on Ubuntu easily by running:
 
-```
+{lang="console"}
+~~~~~~~~
 $ sudo apt-get install php5-cli php5-sqlite
-```
+~~~~~~~~
 
 Where we are using it in a web environment I will be using a tool called
 Vagrant, it allows you to run your development environment in a virtual machine
@@ -106,16 +107,18 @@ add the Vagrant configuration to it.
 
 At your terminal `cd` to where ever you want to create your project:
 
-```
+{lang="console"}
+~~~~~~~~
 $ cd /home/tom/Projects
-```
+~~~~~~~~
 
 Next create a directory for your new project and `cd` into it:
 
-```
+{lang="console"}
+~~~~~~~~
 $ mkdir VagrantExample
 $ cd VagrantExample
-```
+~~~~~~~~
 
 Now create a file inside this directory called `index.php` and with your
 favourite IDE or text editor and add the following content:
@@ -125,16 +128,18 @@ favourite IDE or text editor and add the following content:
 Next unpack the contents of the Vagrant configuration `.zip` file that we
 downloaded from the Phansible website earlier,
 
-```
+{lang="console"}
+~~~~~~~~
 $ unzip /home/tom/Downloads/phansible_VagrantExample.zip
-```
+~~~~~~~~
 
 Finally, while still inside the project's directory and with your computer
 connected to the Internet, run:
 
-```
+{lang="console"}
+~~~~~~~~
 $ vagrant up
-```
+~~~~~~~~
 
 This may take some time and you may be prompted to enter your password to allow
 Vagrant to `sudo` to update some config files, but just be patient.
@@ -151,9 +156,10 @@ project without installing and configuring a webserver on our local machine.
 Once you have marvelled in the glory of Vagrant you can shut down the virtual
 machine by running:
 
-```
+{lang="console"}
+~~~~~~~~
 $ vagrant halt
-```
+~~~~~~~~
 
 at your terminal.
 
