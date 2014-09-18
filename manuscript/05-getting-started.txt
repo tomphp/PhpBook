@@ -313,13 +313,364 @@ $ behat
 
 ## Scenario: View a list with 1 item
 
+We got the first scenario to pass with very no real logic, to get the next one
+to pass we need to start filling in some of the blanks that we created.
+
+### Updating the FeatureContext
+
+Just like last time we can start by filling adding some content to our 2
+remaining methods in the `FeatureContext`. Here I'd just like to point out
+that you make find it easier to work with one at a time, but for the sake of
+not making this book too long I'm condensing the processes down a bit.
+
+{title="features/bootstrap/FeatureContext.php", lang="php"}
+~~~~~~~~
+<?php
+
+use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+use CocktailRater\Application\Visitor\Query\ListRecipes;
+use CocktailRater\Application\Visitor\Query\ListRecipesHandler;
+use CocktailRater\Application\Visitor\Query\ListRecipesQuery;
+use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
+// leanpub-start-insert
+use CocktailRater\Domain\Rating;
+use CocktailRater\Domain\Recipe;
+use CocktailRater\Domain\User;
+use CocktailRater\Domain\Username;
+// leanpub-end-insert
+use CocktailRater\Testing\Repository\TestRecipeRepository;
+use PHPUnit_Framework_Assert as Assert;
+
+/**
+ * Behat context class.
+ */
+class FeatureContext implements SnippetAcceptingContext
+{
+    // ...
+
+    /**
+     * @Given there is a recipe called :name with a rating of :rating submitted by :user
+     */
+    public function thereIsARecipeCalledWithARatingOfSubmittedBy($name, $rating, $user)
+    {
+        // leanpub-start-insert
+        $this->recipeRepository->add(
+            new Recipe(
+                $name,
+                new Rating($rating),
+                new User(new Username($user))
+            )
+        );
+        // leanpub-end-insert
+    }
+
+    /**
+     * @Then I should see a list of recipes containing:
+     */
+    public function iShouldSeeAListOfRecipesContaining(TableNode $table)
+    {
+        // leanpub-start-insert
+        $callback = function ($recipe) {
+            return [
+                (string) $recipe['name'],
+                (float) $recipe['rating'],
+                (string) $recipe['user']
+            ];
+        };
+
+        Assert::assertEquals(
+            array_map($callback, $this->result->getRecipes()),
+            array_map($callback, $table->getHash())
+        );
+        // leanpub-end-insert
+    }
+}
+~~~~~~~~
+
+In `thereIsARecipeCalledWithARatingOfSubmittedBy` we're creating a new `Recipe`
+object. The `Recipe` needs a name, rating and user so we can add what we think
+look like sensible dependencies via the constructor. We also *add* this new
+object to the repository.
+
+In the `iShouldSeeAListOfRecipesContaining` method we compare the results
+returned from the query with the table of expected results using PHPUnit's
+`assertEquals`. I've also used `array_map` to ensure both arrays contain the
+same types since all values in Behat tables are strings.
+
+### Adding new Classes to the Model
+
+I> ### Unit Tests
+I>
+I> Before continuing I'd just like to point out that up until this point I've
+I> not created any unit tests. From this point on I'll be using them for all
+I> development in the *domain model*. However, I won't be showing them or the
+I> process but they're all available in the example code if you want to study
+I> them.
+
+Let's start off by adding the new classes to the model:
+
+{title="src/CocktailRater/Domain/Recipe.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Domain;
+
+final class Recipe
+{
+    /** @param string $name */
+    public function __construct($name, Rating $rating, User $user)
+    {
+    }
+}
+~~~~~~~~
+
+{title="src/CocktailRater/Domain/Rating.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Domain;
+
+final class Rating
+{
+    /** @var float $value */
+    public function __construct($value)
+    {
+    }
+}
+~~~~~~~~
+
+{title="src/CocktailRater/Domain/User.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Domain;
+
+final class User
+{
+    /** @var string $username */
+    public function __construct(Username $username)
+    {
+    }
+}
+~~~~~~~~
+
+{title="src/CocktailRater/Domain/Username.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Domain;
+
+final class Username
+{
+    /** @param string $value */
+    public function __construct($value)
+    {
+    }
+}
+~~~~~~~~
+
+We also need to add the `add` method to the repository:
+
+{title="src/CocktailRater/Domain/Repository/RecipeRepository.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Domain\Repository;
+
+// leanpub-start-insert
+use CocktailRater\Domain\Recipe;
+// leanpub-end-insert
+
+interface RecipeRepository
+{
+    // leanpub-start-insert
+    public function add(Recipe $recipe);
+    // leanpub-end-insert
+}
+~~~~~~~~
+
+This also means we need to add the method to the `TestRecipeRepository`:
+
+{title="src/CocktailRater/Testing/Repository/TestRecipeRepository.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Testing\Repository;
+
+// leanpub-start-insert
+use CocktailRater\Domain\Recipe;
+// leanpub-end-insert
+use CocktailRater\Domain\Repository\RecipeRepository;
+
+final class TestRecipeRepository implements RecipeRepository
+{
+    // leanpub-start-insert
+    public function add(Recipe $recipe)
+    {
+    }
+    // leanpub-end-insert
+
+    public function clear()
+    {
+    }
+}
+~~~~~~~~
+
+### Making the Scenario Pass
+
+At this point only the last line of the scenario should be failing. We've got
+the template of the model laid out so we just need to fill in the details. To
+start with let's take a look at how the query handler will work:
+
+<<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Repository/RecipeRepository.php)
+
+It's quite simple, it fetches all recipes from the repository, adds the details
+of each one to the result object and returns it. This does however mean we've
+got a bit of work to do to get it all working. First up let's update the classes
+in the *domain model*:
+
+<<[src/CocktailRater/Domain/Recipe.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Recipe.php)
+
+<<[src/CocktailRater/Domain/Rating.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Rating.php)
+
+<<[src/CocktailRater/Domain/User.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/User.php)
+
+<<[src/CocktailRater/Domain/Username.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Username.php)
+
+In the *domain model* we've started to make use of Benjamin Eberlei's
+*[Assert](https://github.com/beberlei/assert)* library. To do this we need to
+install the dependency with composer by running:
+
 {lang="console"}
 ~~~~~~~~
 $ composer require beberlei/assert:@stable
 ~~~~~~~~
 
+A> ### The Assert Library
+A>
+A> Adding a dependency to a 3rd party library is something that should not be
+A> done without serious consideration. A better approach is to use *Inversion
+A> of Control* to make the model depend on the library via a layer of
+A> abstraction. The [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern)
+A> design pattern is a very good tool for this job.
+A>
+A> So, with that said way am I using the Assert library from within to domain
+A> model? The reason is: it's a well used and stable library with utility
+A> methods which have no side effects. More importantly I'm using it in a way
+A> which adds, what I think, is a missing feature in the PHP language; namely
+A> typehints for scalar types and arrays.
+A>
+A> There is an interesting discussion with Mathais Verraes on the [DDDinPHP
+A> Google Group](https://groups.google.com/forum/#!msg/dddinphp/YGogT1NSbO0/u22c4dgoxdEJ)
+A> about adding dependencies to 3rd party libraries to your domain model. The
+A> bottom line though it before doing this you should exercise extreme
+A> consideration of what you are about to do.
+
+One thing which may have caught your eye in the `User` class is the
+`fromValues` *static* method. This is known as a *named constructor* its a 
+way in which we can provide alternate constructors for classes and is one of
+the few valid uses of the *static* keyword since it maintains no state and
+works in a purely *functional* way. At this point in time this has only been
+used in the unit tests but the neater tests I felt were a good enough reason
+to add it.
+
+Another thing we have done here is restrict the value allowed for a rating to
+be between 1 and 5. If it falls outside of this range we throw and exception.
+The appropriate exception to be throw here is PHP SPL's `OutOfBoundsException`.
+However, rather than throw it directly we've extended it so that it can be
+tracked down to be coming from our application. Let's take a quite look at it:
+
+<<[src/CocktailRater/Domain/Exception/OutOfBoundsException.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Exception/OutOfBoundsException.php)
+
+Again you'll notice the use of a *named constructor*, I think this is a really
+neat way to keep the exception messages neat and tidy and in a relevant place.
+
+Next let's quickly update the `ListRecipesResult` class:
+
+<<[src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario2/src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php)
+
+Finally, we need to update the functionality of the repository to return the
+list of recipes stored:
+
+<<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Repository/RecipeRepository.php)
+
+<<[src/CocktailRater/Testing/Repository/TestRecipeRepository.php](examples/chapter-05/scenario2/src/CocktailRater/Testing/Repository/TestRecipeRepository.php)
+
+As you can see, we've created an in memory test repository which is good enough
+for what we need so far.
+
+You can now run Behat and watch the second scenario pass.
+
 ## Scenario: Recipes are sorted by rating
+
+You may have already noticed that when you run Behat now most of our final
+scenario already passes, the only thing which fails is the order in which
+the recipes are listed. To fix this we can just straight into the 
+`ListRecipesHandler` and sort the recipes:
+
+<<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario3/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
+
+We also need to add new methods to both the `Recipe` and `Rating` classes:
+
+{title="src/CocktailRater/Domain/Recipe.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Domain;
+
+use Assert\Assertion;
+// leanpub-start-insert
+use CocktailRater\Domain\Recipe;
+// leanpub-end-insert
+
+final class Recipe
+{
+    // ...
+
+    public function isHigherRatedThan(Recipe $other)
+    {
+        return $this->rating->isHigherThan($other->rating);
+    }
+}
+~~~~~~~~
+
+{title="src/CocktailRater/Domain/Rating.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Domain;
+
+use Assert\Assertion;
+use CocktailRater\Domain\Exception\OutOfBoundsException;
+
+final class Rating
+{
+    // ...
+
+    /** @return bool */
+    public function isHigherThan(Rating $other)
+    {
+        return $this->value > $other->value;
+    }
+}
+~~~~~~~~
+
+And that's it, the first feature is done!
 
 ## Some Thoughts
 
+todo:
+
+dto vs array return value
+
 ## What Next?
+
+So far we've managed to get the first feature's tests to pass. However, we've
+done it in quite an isolated way by considering this single *query* on it's
+own. In the next chapter we'll quickly add the second feature then we can 
+analyse the two to find similarities. We'll then use this knowledge to
+*refactor* what we have into a more generic form. After that we'll try display
+the application's output on a page.

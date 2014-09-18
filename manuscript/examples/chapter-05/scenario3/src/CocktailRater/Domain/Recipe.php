@@ -2,13 +2,13 @@
 
 namespace CocktailRater\Domain;
 
-// leanpub-start-insert
 use Assert\Assertion;
+// leanpub-start-insert
+use CocktailRater\Domain\Recipe;
 // leanpub-end-insert
 
 final class Recipe
 {
-    // leanpub-start-insert
     /** @var string */
     private $name;
 
@@ -17,21 +17,17 @@ final class Recipe
 
     /** @var User */
     private $user;
-    // leanpub-end-insert
 
     /** @param string $name */
     public function __construct($name, Rating $rating, User $user)
     {
-        // leanpub-start-insert
         Assertion::string($name);
 
         $this->name   = $name;
         $this->rating = $rating;
         $this->user   = $user;
-        // leanpub-end-insert
     }
 
-    // leanpub-start-insert
     /** @return string */
     public function getName()
     {
@@ -48,6 +44,12 @@ final class Recipe
     public function getUser()
     {
         return $this->user;
+    }
+
+    // leanpub-start-insert
+    public function isHigherRatedThan(Recipe $other)
+    {
+        return $this->rating->isHigherThan($other->rating);
     }
     // leanpub-end-insert
 }
