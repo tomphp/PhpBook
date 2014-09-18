@@ -2,8 +2,9 @@
 
 Here I'm going to quickly cover some testing tools which we will be using as
 well as give a brief introduction to TDD. This is an optional chapter so if you
-are familiar with these tools and TDD feel free to skip it. However, if you are
-new to it or have not been doing it for long then it should be worth reading.
+are already familiar with these tools and TDD feel free to skip it. However, if
+you are new to it or have not been doing it for long then it should be worth
+reading.
 
 Like most of the things I've covered so far, this chapter is just here to serve
 as a brief introduction to give you what you will need to work through the rest
@@ -12,16 +13,16 @@ resources out there.
 
 ## Types of Test
 
-The 2 main types of testing I will be using the process of building our
-application are *acceptance tests* and *unit tests*.
+The 2 main types of test which we will be using during the process of building
+our application are: *acceptance tests* and *unit tests*.
 
 ### Acceptance Tests {#acceptance-tests}
 
-*Acceptance tests* are high level tests which confirm to the customer that the
-features they've asked for are implemented and are working properly. Since
-these tests are about producing the feature that the customer requests, they
-are ideally produced with the customer's presence and input, in a form which
-they can understand.
+*Acceptance tests* are high level tests which confirm to the developer **and**
+the customer that the required features have been implemented and are
+working properly. Since these tests are about producing the features that the
+customer requests, they are ideally produced with the customer's presence and
+input and in a form which they can understand.
 
 A typical example might be to write something down like:
 
@@ -33,16 +34,16 @@ A typical example might be to write something down like:
 >
 > Then I should get an empty list
 
-These could then be simply implemented in any assert based test framework like
-so:
+These simple rules could then be simply converted into automated tests using
+any assert based test framework like so:
 
 {title="xUnit style acceptance test example:", lang="php"}
 ~~~~~~~~
-function test_listing_customers_where_there_a_none_will_return_an_empty_list()
+function test_that_listing_customers_when_there_are_none_will_return_an_empty_list()
 {
     // Given there are no customers
     $customerRepository = new CustomerRepository();
-    $customerRepository->removeAll();
+    $customerRepository->clear();
 
     // When I ask to list customers
     $lister = new CustomerLister($customerRepository);
@@ -53,12 +54,12 @@ function test_listing_customers_where_there_a_none_will_return_an_empty_list()
 }
 ~~~~~~~~
 
-This works, the comments are there to explain the test in terms the customer can
-understand and the code checks the conditions are met. That said it does mix up
-the 2 customers language with the programmers and it relies on comments being
-present and correct. Therefore, if you are working the customer on producing
-acceptance tests then there is a better tool for the job, it's called
-*cucumber* and it PHP it's implemented by a tool called
+This works, the comments are there to explain the test in terms the customer
+can understand and the code checks the conditions are met. That said, it does
+mix up the customer's language with the programmer's and it relies on the
+comments being present and correct. Therefore, if you are working with the
+customer to produce acceptance tests then there is a better tool for the job,
+it's called *Cucumber* and in PHP it's implemented by a tool called
 [Behat](http://behat.org/).
 
 *Cucumber* scripts are tests written in a language that the customer can read
@@ -79,8 +80,8 @@ Feature: List customers
 ~~~~~~~~
 
 The language which is used in the Behat features can include any phrases that
-you want to include. The meanings of these phases (called *snippets*) are then
-implemented in PHP in *context* classes like so:
+you want. The meanings of these phases (called *snippets*) are then implemented
+in PHP in *context* classes like so:
 
 {title="Behat context example", lang="php"}
 ~~~~~~~~
@@ -123,7 +124,7 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function thereAreNoCustomers()
     {
-        $this->customerRepository->removeAll();
+        $this->customerRepository->clear();
     }
 
     /**
@@ -149,30 +150,30 @@ class FeatureContext implements SnippetAcceptingContext
 
 The different *snippets* can then reused in other *scenarios* and *features*.
 
-In this I will be providing the *features* for each new bit of functionality
-that we add and well use Behat to test them.
+In this book I will be providing the *features* for each new bit of
+functionality that we add and we'll use Behat to run them.
 
 ### Unit Tests
 
-*Unit tests* are for the development teams benefit, they are not written with
+*Unit tests* are for the development team's benefit. They are not written with
 the customer's help, in fact the customer may not even know they exist.
 Instead, they are created by the developer as the code is written to test
 little bits of code as isolated *units*. A unit is a small piece of code which
-performs a specific task, often we treat each class as a unit but in reality a
-multiple classes or a subsection of a class could be considered a unit. Saying
-that PHPSpec, the main tool we will be using for unit testing, does treat each
-individual class as a *unit*.
+performs a specific task, often we treat each class as a unit but in reality
+both multiple classes or a subsection of a class could be considered a unit.
+Saying that PHPSpec, the main tool we will be using for unit testing, does
+enforce that each class is a *unit*.
 
-When doing [TDD](#tdd) the tests are actually written before each new bit of 
-code is written. This process when used properly actually influences what code
-is written, sometimes producing surprisingly elegant solutions.
+When doing [TDD](#tdd) the tests are actually written **before** each new bit
+of code is written. This process, when used properly, actually influences what
+code is written, sometimes producing surprisingly elegant solutions.
 
 There are 2 main types of *unit testing* tools, these are *xUnit* style tools
 and *BDD* style tools.
 
 #### xUnit Frameworks
 
-*xUnit* test tools are call so because each language has a least one of these
+*xUnit* test tools are call so because each language has at least one of these
 tools available and they are generally named *SomethingUnit* (e.g. JUnit for
 Java, CppUnit for C++). The origin of these names comes from *Smalltalk's*
 *SUnit* which was created by Kent Beck and was the first testing framework of
@@ -181,8 +182,8 @@ this kind. Of course, PHP has such a framework and as expected it is called
 and was created by Sebastian Bergmann.
 
 *xUnit* frameworks are based on assertions, each framework provides a set of
-available assertion functions, these are used to check the results our code
-produces are what we expect. Some examples of the assertions functions
+available assertion functions, these are used to check that the results our
+code produces are what we expect. Some examples of the assertions functions
 available in *PHPUnit* are:
 
 {title="PHPUnit assertions example", lang="php"}
@@ -195,9 +196,9 @@ $this->assertNull($subject->getNothing());
 // ...
 ~~~~~~~~
 
-A full list of *PHPUnit's* assertions can be found in [Appendix
-A](https://phpunit.de/manual/current/en/appendixes.assertions.html) of the
-manual.
+I> A full list of *PHPUnit's* assertions can be found in [Appendix
+I> A](https://phpunit.de/manual/current/en/appendixes.assertions.html) of the
+I> manual.
 
 While I will not be using PHPUnit as the main *unit testing* framework in this
 book we will be making use of it at some point for certain tests. We will
@@ -207,8 +208,8 @@ also make use if its assertion library in our *Behat Contexts* for simplicity.
 
 The second type of unit testing frameworks are [BDD](#bdd) *spec* frameworks.
 These are used in a very similar way to *xUnit* frameworks but the language
-used in a bit different. Instead of *asserting* a conditions expectations are
-described using the work *should*. I will be using
+used in a bit different. Instead of *asserting* a condition's expectations they
+are described using the work *should*. I will be using
 [PHPSpec](http://www.phpspec.net/) which is a great but *highly opinionated*
 BDD unit testing tool for PHP.
 
@@ -224,20 +225,20 @@ $this->shouldBeWonderful();
 $this->getNothing()->shouldReturn(null);
 ~~~~~~~~
 
-The first difference you should notice is that they just read as better
+The first difference you should notice is that they simply read as better
 sentences than the *PHPUnit* assertions.
 
 There is a second difference though: assertions allow you to assert the values
 of anything whereas, PHPSpec's _should\*_ methods only work on return values
-from the unit being tested or on test doubles. This means that you are much
-more limited in how you can test with *PHPSpec* but this is not necessarily a
-bad thing, it forces you to write good code and I like this (it's not for
-everyone though).
+from the unit being tested or on *test doubles*. This means that you are much
+more limited in how you can test with *PHPSpec*. However, his is not
+necessarily a bad thing, it forces you to write good code and I like this (it's
+not for everyone though).
 
 #### Red, Green, Refactor: The TDD Unit Testing Process
 
-When doing [TDD](#tdd) there is a process to the order in which things should
-be done. This order is known as **Red, Green, Refactor**:
+When doing [TDD](#tdd) there is a process which defines the order in which
+things should be done. This order is known as **Red, Green, Refactor**:
 
 Red
 
@@ -256,7 +257,7 @@ Then we run the test suite again and see that all tests pass.
 Refactor
 
 : The refactor step is the point at which the code can and should be
-refactored.  No functionality should be altered here, you simply tidy up the
+refactored. No functionality should be altered here, you simply tidy up the
 code. After any refactorings have been made you must run the test suite to make
 sure you've not broken anything.
 
@@ -270,12 +271,12 @@ With PHPSpec](#unit-testing-with-phpspec) section.
 
 ## The Double Feedback Loop
 
-*Acceptance tests* and *unit tests* support the development process in a *double
-feedback loop*. *Acceptance tests* come from the *customer* in order of priority,
-the *developers* then develop implement the features to using the *red, green,
-refactor cycle* until the *acceptance tests* pass. At this point the feature
-can be delivered to the *customer* and the next set of *acceptance tests* will 
-be produced.
+*Acceptance tests* and *unit tests* support the development process in a
+*double feedback loop*. *Acceptance tests* come from the *customer* in order of
+priority, the *developers* then develop implement the features using *unit
+tests* with the *red, green, refactor cycle* until the *acceptance tests* pass.
+At this point the feature can be delivered to the *customer* and the next set
+of *acceptance tests* will be produced.
 
 ![The Double Feedback Loop](images/04-double-feedback-loop.png)
 
@@ -288,8 +289,9 @@ the action being tested and the *then* part checks the result. Whenever you
 are writing a test it is a good idea to maintain clear grouping into these 3
 stages.
 
-We've seen this in Behat already, it's highlighted and enforce by the *Cucumber*
-language. Now lets take a look an example in a *PHPUnit* & a *PHPSpec* test:
+We've seen this in Behat already, it's highlighted and enforce by the
+*Cucumber* language. Now lets take a look an example in a *PHPUnit* & a
+*PHPSpec* test:
 
 {title="Given, When, Then example using PHPUnit", lang="php"}
 ~~~~~~~~
@@ -328,9 +330,9 @@ function it_can_calculate_the_age_of_a_customer()
 }
 ~~~~~~~~
 
-The comments are not actually necessary and it's also find to compound the
+The comments are not actually necessary and it's also fine to compound the
 various expressions (particularly the *when* and *then*) but the point is not
-to mix up the orders of each stage. I also like to use vertical whitespace to 
+to mix up the order of the stages. I like to use vertical whitespace to
 separate the setting up of the preconditions from the tests. A more condensed
 version of the *PHPSpec* example would be:
 
