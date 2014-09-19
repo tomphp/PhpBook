@@ -353,7 +353,7 @@ supposed to happen.
 
 ## Acceptance Testing with Behat
 
-We've already seen *Behat* and seen what *Cucumber* tests look like so let's
+We've already seen *Behat* and what *Cucumber* tests look like, so now let's
 have a go at setting up a project using them. To start off create a new folder
 for the project and `cd` into it:
 
@@ -364,29 +364,30 @@ $ cd behat-example
 ~~~~~~~~
 
 Next up let's add Behat to the project. We've already seen how to set up the
-`composer.json` file but there is a simpler way; we can create it, add 
-the `composer.json`, add Behat to it and run `composer update` all in one
-command like so:
+`composer.json` file but there is a simpler way. Instead, we can create the
+`composer.json`, add Behat to it and run `composer update` all in one command
+like so:
 
 ```console
 $ composer require behat/behat:3.* --dev
 ```
 
-Once it has run let Behat will be installed in the project and the `behat`
-command is not available to us. Now we need to tell Behat to initialise the project,
-to do this simple run:
+Once it has finished Behat will be installed in the project and the `behat`
+command will be available to us. Next we need to tell Behat to initialise the
+project, to do this simply run:
 
 {lang="console"}
 ~~~~~~~~
 $ behat --init
 ~~~~~~~~
 
-This command creates a directory called `features`, these is where we'll put
-the tests. It also creates directory called `features/bootstrap` which contains
-a file called `FeatureContext.php`, this is the default context where we can
-add our *snippets*.
+This command creates a directory called `features`, this is where we'll put the
+tests. It also creates directory inside `features` called `bootstrap` which
+contains a file called `FeatureContext.php`, this is the default context where
+we can add our *snippets*.
 
-Now let's add a feature by create a file called `features/list-books.feature`:
+Now let's add a feature by creating a file called
+`features/list-books.feature`:
 
 {title="features/list-books.feature", lang="cucumber"}
 ~~~~~~~~
@@ -455,27 +456,28 @@ Feature: List books
 
 This is Behat saying that it doesn't understand the *snippets* which we have
 used in the test. It also gives some template code which can be copied and
-pasted into our feature context to implement these *snippets*, We could do that
-but we can actually get Behat to do this for use by running:
+pasted into our feature context to implement these *snippets*. We could do that
+but we can actually get Behat to do this for us by running:
 
 {lang="console"}
 ~~~~~~~~
 $ behat --append-snippets
 ~~~~~~~~
 
-After this command is run if you look in `features/bootstrap/FeatureContext.php`
-you will see the template code has been added for the 3 *snippets*. At this point
-if we run Behat again:
+After this command has run, if you look in
+`features/bootstrap/FeatureContext.php` you will see the template code has been
+added for the 3 new *snippets*. At this point we can run Behat again:
 
 {lang="console"}
 ~~~~~~~~
 $ behat
 ~~~~~~~~
 
-It informs use that the first *snippet* has needs to be implemented (the others
-have been skipped). Let's do this now.
+It informs us that the first *snippet* has not content and needs to be
+implemented (the others have been skipped). Let's implement the first
+*snippet*.
 
-Inside `features/bootstrap/FeatureContext.php` update it to look like this:
+Update `features/bootstrap/FeatureContext.php` so that it looks like this:
 
 {title="features/bootstrap/FeatureContext.php", lang="php"}
 ~~~~~~~~
@@ -576,7 +578,7 @@ class BookList
 
 Running Behat now will show the first *snippet* passing and inform that the
 second snippet needs to up implemented. Let's implement the last 2 *snippets*
-together, update the `features/bootstrap/FeatureContext.php` to contain the
+at once, update the `features/bootstrap/FeatureContext.php` to contain the
 following:
 
 {title="features/bootstrap/FeatureContext.php", lang="php"}
@@ -652,7 +654,7 @@ class FeatureContext implements SnippetAcceptingContext
 ~~~~~~~~
 
 Again we've not implemented `BookList::getBooks()` so let's quickly do that
-now:
+too:
 
 {title="src/BehatExample/BookList.php", lang="php"}
 ~~~~~~~~
@@ -727,13 +729,14 @@ methods to look like this:
 
 {title="features/bootstrap/FeatureContext.php", lang="php"}
 ~~~~~~~~
-
     /**
      * @Given there is a book called :title by :author
      */
     public function thereIsABookCalledBy($title, $author)
     {
+        // leanpub-start-insert
         $this->bookList->add($title, $author);
+        // leanpub-end-insert
     }
 
     /**
@@ -741,9 +744,11 @@ methods to look like this:
      */
     public function iShouldSee(TableNode $table)
     {
+        // leanpub-start-insert
         if ($table->getHash() !== $this->result) {
             throw new Exception('Result was incorrect.');
         }
+        // leanpub-end-insert
     }
 ~~~~~~~~
 
@@ -751,7 +756,7 @@ Finally, update `BehatExample\BookList` to contain a working implementation:
 
 <<[src/BehatExample/BookList.php](examples/chapter-04/behat-example/src/BehatExample/BookList.php)
 
-Now run Behat to see the tests pass:
+Then, run Behat to see the tests pass:
 
 {lang="console"}
 ~~~~~~~~
@@ -797,13 +802,13 @@ todo ...
 ## Unit Testing with PHPSpec {#unit-testing-with-phpspec}
 
 Now let's take a look at *unit testing*, we'll use *PHPSpec* for this. As we
-work through the building the application in the next section of this book,
-we'll be applying the process of *acceptance testing*. However, we'll not be
-going through the *unit testing* in the examples except in certain
-circumstances where there is something to learn from it. The reason for this
-is that it would be a longwinded, pointless and excessive process to document
-and would detract from the topic of this book. That said, all the example code
-I will have written using the full TDD process and you should do the same. This
+work through building the application in the next section of this book, we'll
+be applying the process of *acceptance testing*. However, we'll not be going
+through the *unit testing* in the examples, except in certain circumstances
+where there is something to learn from it. The reason for this is that it would
+be a long winded, pointless and excessive process to document and it would
+detract from the topic of this book. That said, all the example code I will
+have been written using the full TDD process and you should do the same. This
 also means that all the example code for this book will contain complete unit
 tests which you can study for yourself.
 
@@ -844,7 +849,7 @@ First of all we'll tell PHPSpec to create a new Spec file. To do this run:
 $ phpspec desc PhpspecExample\\GreatestCommonDivisorFinder
 ~~~~~~~~
 
-This will create a file called
+This will create a test file called
 `spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php`. To run it use:
 
 {lang="console"}
@@ -853,8 +858,8 @@ $ phpspec run --format=pretty
 ~~~~~~~~
 
 PHPSpec will say it can't find the `PhpspecExample\GreatestCommonDivisorFinder`
-class and offer to create it. Say **Yes** and run `phpspec run --format=pretty`
-again. Now the test should pass.
+class and offer to create it, say **Yes** and run `phpspec run --format=pretty`
+again. This time the test should pass.
 
 I> ## Output Formatting
 I>
@@ -884,7 +889,7 @@ class GreatestCommonDivisorFinderSpec extends ObjectBehavior
 }
 ~~~~~~~~
 
-And the class being tested:
+And the class we are going to implement:
 
 {title="src/PhpspecExample/GreatestCommonDivisorFinder.php", lang="php"}
 ~~~~~~~~
@@ -897,17 +902,16 @@ class GreatestCommonDivisorFinder
 }
 ~~~~~~~~
 
-The `it_is_initializable` test has served it's purpose now so remove that from
-`spec\PhpspecExample\GreatestCommonDivisorFinderSpec`.
+The `it_is_initializable` test has served it's purpose now so you can  remove
+that from `spec\PhpspecExample\GreatestCommonDivisorFinderSpec`.
 
 #### Red
 
 Now we need to think what is the simplest condition we can test to make
-progress towards the final goal. Let's start with if both numbers are the same
-then that number is the greatest common divisor of both.
+progress towards the final goal. Let's start with when both numbers are the
+same then that number is the greatest common divisor of both.
 
-All the following test to the
-`spec\PhpspecExample\GreatestCommonDivisorFinderSpec`
+Add the following test to the spec file:
 
 {title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
 ~~~~~~~~
@@ -952,13 +956,13 @@ $ phpspec run --format=pretty
 ~~~~~~~~
 
 This tells us that the test was expecting the value `5` to be returned but
-got `null` instead. Time to make make this test go green...
+`null` was returned instead. Time to make make this test go green...
 
 #### Green
 
-Remember that in the green stage, we must only add the smallest amount of code
-to make the test pass. In this case all we need to do is return the `5`. So
-update the `PhpspecExample\GreatestCommonDivisorFinder::findGreatestDivisor()`
+Remember that in the green stage we must only add the smallest amount of code
+to make the test pass. In this case all we need to do is return the value `5`.
+Update the `PhpspecExample\GreatestCommonDivisorFinder::findGreatestDivisor()`
 method and re-run the tests:
 
 {title="src/PhpspecExample/GreatestCommonDivisorFinder.php", lang="php"}
@@ -987,12 +991,12 @@ $ phpspec run --format=pretty
 
 #### Refactor
 
-This is when we refactor. However, right now there's not much to refactor so
-let's move straight on to the next failing test.
+This is the point when we do our refactoring. However, right now there's not
+much to refactor so let's move straight on to the next failing test.
 
 #### Red
 
-For this next test let's check that if the first number is a divisor of the
+For this next test let's check that when the first number is a divisor of the
 second number, then the first number should be returned:
 
 {title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
@@ -1062,11 +1066,11 @@ $ phpspec run --format=pretty
 
 #### Refactor
 
-There's still nothing to refactor yet. One to the next failing test.
+There's still nothing to refactor yet so on to the next failing test.
 
 #### Red
 
-Let's now try the previous test the other way around: if the second number is
+Let's now try the previous test the other way around: when the second number is
 a divisor of the first, the second number should be returned.
 
 {title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
@@ -1077,7 +1081,7 @@ a divisor of the first, the second number should be returned.
     }
 ~~~~~~~~
 
-Now run PHPSpec again (**you have to see it fail**):
+Run PHPSpec again (**you have to see it fail**):
 
 {lang="console"}
 ~~~~~~~~
@@ -1143,8 +1147,8 @@ Still nothing to refactor so let's move on.
 
 #### Red
 
-How about if there's no common divisor other than one? Let's write a test for
-that:
+How about if there's no common divisor other than then number 1? Let's write a
+test for that:
 
 {title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
 ~~~~~~~~
@@ -1183,7 +1187,7 @@ $ phpspec run --format=pretty
 #### Green
 
 This one is a tiny bit more involved. To solve it let's say that if the lower
-of the 2 number is not a factor of either of the numbers, then return `1`:
+of the 2 numbers is not a factor of one of the numbers, then return `1`:
 
 {title="src/PhpspecExample/GreatestCommonDivisorFinder.php", lang="php"}
 ~~~~~~~~
@@ -1222,7 +1226,7 @@ So far so good!
 
 #### Refactor
 
-Finally, something to refactor! There is a duplicate of the logic to check if
+Finally, something to refactor! There is a duplication of the logic to check if
 the `$divisor` is a factor of a variable. Let's extract it out with the
 [extract method](http://refactoring.com/catalog/extractMethod.html) refactoring
 like so:
@@ -1276,7 +1280,7 @@ $ phpspec run --format=pretty
 
 #### Red
 
-Ok, next let's try a divisor that is not `1` or either of the numbers
+OK, next let's try a divisor that is not `1` or either of the numbers
 themselves:
 
 {title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
@@ -1316,7 +1320,8 @@ $ phpspec run --format=pretty
 
 #### Green
 
-We actually only have to make a very small change here to make this pass:
+We actually only have to make a very small change here to make this pass, we
+simply change the `if` to a `while` and decrement the divisor in the loop:
 
 {title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
 ~~~~~~~~
@@ -1357,7 +1362,7 @@ $ phpspec run --format=pretty
 Everything has passed, and if you look over the code you should see we've
 reached a final solution to *find the greatest common divisor or 2 numbers*.
 
-If you really want to double check out could add this extra test but it will
+If you really want to double check it you could add this extra test but it will
 pass straight away:
 
 {title="spec/PhpspecExample/GreatestCommonDivisorFinderSpec.php", lang="php"}
@@ -1371,16 +1376,15 @@ pass straight away:
 #### Refactor
 
 Looking at the code we've produced I'd say it's pretty neat already and doesn't
-require any additional refactoring. Maybe just add some *docblocks* for type
-information.
+require any additional refactoring. Maybe we could just add some *docblocks*
+for type information.
 
 #### The Result
 
-And here it is:
+And here it is, a complete solution to our original problem, achieved by TDD:
 
 <<[src/PhpspecExample/GreatestCommonDivisorFinder.php](examples/chapter-04/phpspec-example/src/PhpspecExample/GreatestCommonDivisorFinder.php)
 
-A complete solution to our original problem, achieved by TDD.
 
 ## Test Doubles
 
@@ -1390,14 +1394,14 @@ a look at how this is actually done.
 
 ### Types of Test Doubles
 
-*Tests doubles* take on different forms as they are used for different purposes.
-Each of these different types of test double is used to solve a different
-problem. Let's take a look at the different types.
+*Tests doubles* take on different forms as they are used for different
+purposes.  Each of these different types of test double are used to solve a
+different problem. Let's take a look at the different types.
 
 #### Dummy
 
 A *dummy* is the simplest *test double*, it simply serves as a placeholder for
-a dependency. It's essentially an empty class which implements the dependency
+a dependency. It's essentially an empty class which implements the dependency's
 interface.
 
 todo... example
