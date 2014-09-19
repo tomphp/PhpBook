@@ -5,8 +5,10 @@
 A brief description of the application we are going to build is as follows:
 
 > The aim is to produce a website which allows *users* of the site to
-> *view* and *rate* cocktail recipes submitted by other users, as well as
-> *submit their own*. Any *visitors* to the site can view the list *sorted by
+> *view* and *rate* cocktail recipes submitted by other users, they can also 
+> *submit their own*.
+>
+> Any *visitors* to the site can view the list of recipes *sorted by
 > rating*, but they must *register* with a *username*, *email* and *password*
 > in order to *rate* or *add* a *receipe*.
 > 
@@ -14,7 +16,7 @@ A brief description of the application we are going to build is as follows:
 > with 1 to 5 *stars*.
 > 
 > *Quantities* can be entered as either *millilitres (ml)*, *fluid ounces (fl
-> oz)* or *teaspoons (tsp)*.
+> oz)*, *teaspoons (tsp)* or just a a number.
 > 
 > The cocktail ingredients available are limited to a selection which can only
 > be added to by an *administrator*.
@@ -39,7 +41,8 @@ may change as it progresses and extra features may be requested.
 
 ## Creating the Project
 
-Before jumping in let's quickly set up a project by running:
+Before jumping in let's quickly set up a project by. First create a directory
+for the project:
 
 {lang="console"}
 ~~~~~~~~
@@ -51,23 +54,24 @@ Then add the following `composer.json`
 
 <<[composer.json](examples/chapter-05/scenario1/composer.json)
 
-I> ### PhpSpec Version
+I> ### PHPSpec Version
 I>
 I> You may have notice that the PHPSpec requirement is for a development
 I> version. The reason for this is that there are some features which we will
-I> be using which are not in the stable release, when this changes I will
-I> update this accordingly.
+I> be using which are not in the stable release yet. When this changes I will
+I> update the book.
 
-Run composer to install the test tools:
+Now run Composer to install the test tools:
 
 {lang="console"}
 ~~~~~~~~
 $ composer install
 ~~~~~~~~
 
-Next up we can quickly configure PHPSpec to format its output as pretty by
-default so that we don't need to put it on the command line every time we run
-it. To do this create a file called `phpspec.yml` with the following contents:
+Next up we can quickly configure PHPSpec to format its output using the
+*pretty* formatter by default so that we don't need to put it on the command
+line every time we run it. To do this create a file called `phpspec.yml` with
+the following contents:
 
 {title="phpspec.yml", format="yaml"}
 ~~~~~~~~
@@ -85,27 +89,21 @@ All done! Now we can start...
 
 ## The First Story
 
-Let's look at the first [story](#user-stories). One thing to note is that a
-story is not a specification, it's intentionally vague and it's purpose is to
-exist as a *request for conversation*. When it is time to implement a story the
-team (which includes the customer) should discuss the story and decide on the
-details, this will result in the generation of the acceptance tests. For the
-purpose of this book I'll provide the story and tests as though this conversation
-has already taken place. So, here's the story card for the first feature:
+Let's look at the first [story](#user-stories). Here's the story card:
 
 > A visitor can view a list of recipes
 >
 > * Displays an empty list if there are no recipes
 > * Recipes display the *name of the cocktail*, *the rating* and the *name of 
 > the user who submitted it*
-> * The list should be presented it *decending* order of rating
+> * The list should be presented it *decending* order of *rating*
 
-From this information we can add the following feature to the project:
+From this information we can add the following feature file to the project:
 
 <<[features/visitors-can-list-recipes.feature](examples/chapter-05/scenario1/features/visitors-can-list-recipes.feature)
 
-If you try to run Behat with this feature it will say that the context has missing
-steps, to add the required snippets run:
+If you try to run Behat with this feature it will say that the context has
+missing steps, to add the required snippets run:
 
 {lang="console"}
 ~~~~~~~~
@@ -123,32 +121,33 @@ take a look at the structure we plan to use to build the application.
 
 The core part of the application will be the *domain model*, this will consist
 of our modelled interpretation of the business rules. It will have no knowledge
-of how or where the data in stored, the user interface or any non-business related
-implementation details. To achieve this level of separation we'll use *inversion
-of control* to let the other layers *plug in* to the domain layer.
+of how or where the data in stored, the user interface or any non-business
+related implementation details. To achieve this level of separation we'll use
+*inversion of control* to let the other layers *plug in* to the domain layer.
 
 Behind the *domain model* there will be storage implementation layer for our
 chosen storage system. The storage system has not yet been decided so we'll
 make use of SQLite until we decide. The reason of this choice is that SQLite
-allows the access of a database file without needing to set up a database
-server and it's easier to use that writing our own file based storage system.
+allows the use of a database file without needing to set up a database server
+and it's easier to use that writing our own file based storage system.
 
 In chapter 3 I introduced [CQRS](#cqrs) and stated that while we are not going
 to implement it in our application we will make a distinction between *command*
-and *query* interactions with the application. Therefore, in front of the *domain
-model* we'll have a layer of *commands* and *queries*, all interactions with
-the *domain model* from the *GUI* will go through these.
+and *query* interactions with the application. Therefore, in front of the
+*domain model* we'll have a layer of *commands* and *queries*, all interactions
+with the *domain model* from the *GUI* will go through these.
 
-Finally, we'll have the GUI website. We'll start of just mocking this up with
-some basic HTML but as our application becomes more complete we can make use
-of a modern MVC[^mvc] framework. Again we won't worry about which one until
-later on.
+Finally, we'll have the GUI website. We'll start off by mocking this up with
+some basic HTML but as our application becomes more complete we can make use of
+a modern MVC[^mvc] framework. Again we won't worry about which one until later
+on.
 
 [^mvc]: The [Model View Controller](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) design pattern.
 
 ## Scenario: View an empty list of recipes
 
-So here's the scenario which we want to get to pass:
+Let's start off by getting the first scenrio to pass, as a quick reminder here
+it is:
 
 {title="View an empty list of recipes", lang="cucumber"}
 ~~~~~~~~
@@ -158,10 +157,10 @@ So here's the scenario which we want to get to pass:
         Then I should see an empty list
 ~~~~~~~~
 
-We're going to use TDD to work from the *outside in*. What I mean be this is
-rather than trying to build the model and then get it to do what we need it
-to do, we'll start with what we want it to do and let that help create the
-model.
+We're going to use TDD to create our code from the *outside in*. What I mean be
+this is rather than trying to build the model and then get it to do what we
+need it to do, we'll start with what we want it to do and let that help create
+the model.
 
 ### Fleshing out the FeatureContext
 
@@ -177,8 +176,8 @@ The thinking I have used here goes something like this:
 > process that query to get the result. This process will involve fetching
 > all existing recipes and returning the result.
 
-The first line of our test states *"Given there are no recipes"*. Now I'm going
-to use the term *Respoitory* for the place where objects will be stored, so to
+The first line of our test states *"Given there are no recipes"*. I'm going
+to use the *Respoitory* design pattern the storing of objects, so to
 make this pass we've got to ensure that the *Repository* for storing recipes is
 empty. I've also stated that we're not going to worry about what storage system
 we will be using until later, so in the mean time I've decided to create a
@@ -187,14 +186,19 @@ I've decided to name this
 `CocktailRater\Testing\Repository\TestRecipeRepository`.
 
 With this information, the first thing we need to do is create an instance of
-this repository. I've done this in the `FeatureContext` method called
-`beforeScenario`.
+this repository. I've done this in the `beforeScenario` method in the
+`FeatureContext`.
 
-W> ### The @BeforeScenario Annotation
+W> ### Annotations
 W>
 W> You may also notice that I've added `@BeforeScenario` to the
 W> docblock for this method, this is known as an *annotation* and is required
 W> to inform Behat to run this method before it runs each *scenario*.
+W>
+W> Annotations strings in the docblock which start with the `@` symbol. Behat
+W> uses annotations for several things, you will see that each snippet function
+W> has a `@Given`, `@When` or `@Then` annotation, again this is not just a
+W> comment but is actually required by Behat in order to work.
 
 Next we *clear* the repository to ensure there are no recipes in the
 `thereAreNoRecipes` method.
@@ -203,9 +207,9 @@ Then next line of the test states *"When I request a list of recipes"*. For
 this we create the query object, run it and store the result. I've decided that
 the *running* of the query will be done by a *query handler* and therefore
 we'll use the verb *handle* to run it. Also, we know that the *query handler*
-will need to fetch recipes from the *repository* so we pass it to the *handler*
-via the constructor. All this is put into action in the
-`iRequestAListOfRecipes` method in our `FeatureContext`.
+will need to fetch recipes from the *repository* so we pass this to the
+*handler* via the constructor. All this is put into action in the
+`iRequestAListOfRecipes` method in the `FeatureContext`.
 
 Finally, the last line of the test says *"Then I should see an empty list"*, to
 do this we'll simple check the value in the query result. In order to make a
@@ -214,13 +218,13 @@ own checking methods I've decided to make use of the *assert* methods provided
 by PHPUnit. For this test we've used 2 asserts, one to check the result is an
 *array* and the second to check it's empty.
 
-At this point if you try to run Behat you'll see PHP error messages since we've
-referenced classes which don't exist. To fix this lets add the classes.
+At this point if you try to run Behat you'll see PHP error messages saying we've
+referenced classes which don't exist, to fix this lets add the classes.
 
 ### Writing the Code
 
 The first list of the test requires the *respository* and that is has a method
-called `clear`. Let's quickly add that:
+called `clear` so to start with let's create that:
 
 {title="src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php", lang="php"}
 ~~~~~~~~
@@ -238,10 +242,9 @@ final class TestRecipeRepository
 }
 ~~~~~~~~
 
-That's nice and simple for now, you may have noticed the use of the `final`
-keyword. For now I'm just going to say that I add this to my classes by
-default, this is not required but is my preference, I'll explain the reason for
-this a bit later on.
+You may have noticed the use of the `final` keyword. For now I'm just going to
+say that I add this to my classes by default, this is not required but is my
+preference, I'll explain the reason for this [a bit later on](#final-keyword).
 
 Next up let's create the `ListRecipesQuery`. A query class will contain the
 parameters for the query, in this case there are none so the class simply looks
@@ -254,37 +257,38 @@ will be made by *vistors*.
 
 Now for the interesting bit, the `ListRecipesHandler`. From looking at the
 `FeatureContext` it needs to take a *repository* as a constructor parameter,
-the query as a parameter to the `handle` method and return some object which
+the *query* as a parameter to the `handle` method and return some object which
 has a `getRecipes` method.
 
 Here we don't want to depend on our test repository so we'll create an
-interface which will be used in its place. For the return value we'll create a
-class called `CocktailRater\Application\Visitor\Query\ListRecipesResult`.
+*interface* which will be used in its place. For the return value we'll create
+a class called `CocktailRater\Application\Visitor\Query\ListRecipesResult`.
 Without further ado, here it is:
 
 <<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
 
-At this point we've created all this classes that were referenced from the 
-`FeatureContext` but this last one has just introduced 2 more: the 
-`RecipeRepository` and the `ListRecipesResult` so let's add them quickly too
-(this is what I was referring to when I said we'd work from the *outside in*):
+At this point we've created all of the classes that were referenced from the
+`FeatureContext` but this last one has just introduced 2 more: the
+`RecipeRepository` and the `ListRecipesResult`. Let's add them to the project
+also (this is what I was referring to when I said we'd work from the *outside
+in*):
 
 <<[src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php)
 
 <<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario1/src/CocktailRater/Domain/Repository/RecipeRepository.php)
 
 The `ListRecipesResult` class simply returns the and empty list from
-`getRecipes` which is all it needs to do now.
+`getRecipes`, this is all it needs to do now.
 
 The `RecipeRepository` interface currently has no methods. This is because the
 only method currently existing in out test repository is `clear`, however this
-method is only relevant for the tests, there is now requirement for this in the
+method is only relevant for the tests, there is no requirement for this in the
 actual application.
 
 Now there's only one thing left to do: the `ListRecipesHandler` class requires
-a `RecipeRepository` to be provided to the constructor but, in the `FeatureContext`
-we've provided a `TestRecipeRepository`. To make this work we need to make the
-test repository implement the interface:
+a `RecipeRepository` to be provided to the constructor but, in the
+`FeatureContext` we've provided a `TestRecipeRepository`. To make this work we
+need to make the test repository implement the interface:
 
 {title="src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php", lang="php"}
 ~~~~~~~~
@@ -313,15 +317,15 @@ $ behat
 
 ## Scenario: View a list with 1 item
 
-We got the first scenario to pass with very no real logic, to get the next one
+We got the first scenario to pass without any real logic, to get the next one
 to pass we need to start filling in some of the blanks that we created.
 
 ### Updating the FeatureContext
 
-Just like last time we can start by filling adding some content to our 2
-remaining methods in the `FeatureContext`. Here I'd just like to point out
-that you make find it easier to work with one at a time, but for the sake of
-not making this book too long I'm condensing the processes down a bit.
+Just like last time we can start by adding some content to our 2 remaining
+methods in the `FeatureContext`. Here I'd just like to point out that you may
+find it easier to work with one at a time, but for the sake of not making this
+book too long I'm condensing the processes down a bit.
 
 {title="features/bootstrap/FeatureContext.php", lang="php"}
 ~~~~~~~~
@@ -407,8 +411,8 @@ I>
 I> Before continuing I'd just like to point out that up until this point I've
 I> not created any unit tests. From this point on I'll be using them for all
 I> development in the *domain model*. However, I won't be showing them or the
-I> process but they're all available in the example code if you want to study
-I> them.
+I> process as it would take up too many pages but they're all available in the
+I> example code for the book if you want to study them.
 
 Let's start off by adding the new classes to the model:
 
@@ -472,7 +476,7 @@ final class Username
 }
 ~~~~~~~~
 
-We also need to add the `add` method to the repository:
+We also need to add the `add` method to the repository interface:
 
 {title="src/CocktailRater/Domain/Repository/RecipeRepository.php", lang="php"}
 ~~~~~~~~
@@ -529,8 +533,8 @@ start with let's take a look at how the query handler will work:
 
 It's quite simple, it fetches all recipes from the repository, adds the details
 of each one to the result object and returns it. This does however mean we've
-got a bit of work to do to get it all working. First up let's update the classes
-in the *domain model*:
+got a bit of work to do to get it all working. First up let's update the
+classes in the *domain model*:
 
 <<[src/CocktailRater/Domain/Recipe.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Recipe.php)
 
@@ -542,46 +546,46 @@ in the *domain model*:
 
 In the *domain model* we've started to make use of Benjamin Eberlei's
 *[Assert](https://github.com/beberlei/assert)* library. To do this we need to
-install the dependency with composer by running:
+install the dependency with Composer by running:
 
 {lang="console"}
 ~~~~~~~~
 $ composer require beberlei/assert:@stable
 ~~~~~~~~
 
-A> ### The Assert Library
-A>
-A> Adding a dependency to a 3rd party library is something that should not be
-A> done without serious consideration. A better approach is to use *Inversion
-A> of Control* to make the model depend on the library via a layer of
-A> abstraction. The [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern)
-A> design pattern is a very good tool for this job.
-A>
-A> So, with that said way am I using the Assert library from within to domain
-A> model? The reason is: it's a well used and stable library with utility
-A> methods which have no side effects. More importantly I'm using it in a way
-A> which adds, what I think, is a missing feature in the PHP language; namely
-A> typehints for scalar types and arrays.
-A>
-A> There is an interesting discussion with Mathais Verraes on the [DDDinPHP
-A> Google Group](https://groups.google.com/forum/#!msg/dddinphp/YGogT1NSbO0/u22c4dgoxdEJ)
-A> about adding dependencies to 3rd party libraries to your domain model. The
-A> bottom line though it before doing this you should exercise extreme
-A> consideration of what you are about to do.
+W> ### Using 3rd Party Libraries in the Domain Model
+W>
+W> Adding a dependency to a 3rd party library is something that should not be
+W> done without serious consideration. A better approach is to use *Inversion
+W> of Control* to make the model depend on the library via a layer of
+W> abstraction. The [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern)
+W> design pattern is a very good tool for this job.
+W>
+W> So, with that said way am I using the Assert library from within to domain
+W> model? The reason is: firstly it's a well used and stable library with
+W> utility methods which have no side effects. Secondly, and more importantly,
+W> I'm using it in a way which adds, what I think, is a missing feature in the
+W> PHP language; namely typehints for scalar types and arrays.
+W>
+W> There is an interesting discussion with Mathais Verraes on the [DDDinPHP
+W> Google Group](https://groups.google.com/forum/#!msg/dddinphp/YGogT1NSbO0/u22c4dgoxdEJ)
+W> about adding dependencies to 3rd party libraries to your domain model. The
+W> bottom line though is, before doing this you should exercise extreme
+W> consideration of what you are about to do.
 
 One thing which may have caught your eye in the `User` class is the
-`fromValues` *static* method. This is known as a *named constructor* its a 
-way in which we can provide alternate constructors for classes and is one of
-the few valid uses of the *static* keyword since it maintains no state and
-works in a purely *functional* way. At this point in time this has only been
-used in the unit tests but the neater tests I felt were a good enough reason
-to add it.
+`fromValues` *static* method. This is known as a *named constructor*, its a way
+in which we can provide alternate constructors for classes and is one of the
+few valid uses of the `static` keyword. Since it maintains no state and works
+in a purely *functional* way is a safe use of `static`. At this point in time
+this has only been used in the unit tests but the neater tests I felt were a
+good enough reason to add it.
 
 Another thing we have done here is restrict the value allowed for a rating to
 be between 1 and 5. If it falls outside of this range we throw and exception.
 The appropriate exception to be throw here is PHP SPL's `OutOfBoundsException`.
 However, rather than throw it directly we've extended it so that it can be
-tracked down to be coming from our application. Let's take a quite look at it:
+tracked down as coming from our application. Let's take a quick look at it:
 
 <<[src/CocktailRater/Domain/Exception/OutOfBoundsException.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Exception/OutOfBoundsException.php)
 
@@ -599,7 +603,7 @@ list of recipes stored:
 
 <<[src/CocktailRater/Testing/Repository/TestRecipeRepository.php](examples/chapter-05/scenario2/src/CocktailRater/Testing/Repository/TestRecipeRepository.php)
 
-As you can see, we've created an in memory test repository which is good enough
+As you can see, we've created an in memory test repository. This is good enough
 for what we need so far.
 
 You can now run Behat and watch the second scenario pass.
@@ -608,8 +612,8 @@ You can now run Behat and watch the second scenario pass.
 
 You may have already noticed that when you run Behat now most of our final
 scenario already passes, the only thing which fails is the order in which
-the recipes are listed. To fix this we can just straight into the 
-`ListRecipesHandler` and sort the recipes:
+the recipes are listed. To fix this we can go straight into the 
+`ListRecipesHandler` and sort the recipes there:
 
 <<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario3/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
 
@@ -658,7 +662,7 @@ final class Rating
 }
 ~~~~~~~~
 
-And that's it, the first feature is done!
+That's it, the first feature is done!
 
 ## Some Thoughts
 

@@ -1776,7 +1776,13 @@ These are created as part of the planning an analysis process and are often
 written on small cards called *story cards*. *Acceptance tests* are then
 decided on for this story, then that feature can be implemented.
 
-For this book I will provide the *user story* and *acceptance tests* for each
-part of the application we implement. The creating of the stories is not
-something I will cover, but I really recommend Mike Cohn's rather fantastic
-book; *User Stories Applied*.
+One thing to note is that a story is not a specification, it's intentionally
+vague and it's purpose is to exist as a *request for conversation*. When it is
+time to implement a story the team (which includes the customer) should discuss
+the story and decide on the details, this will result in the generation of the
+*acceptance tests*. For the purpose of this book I'll provide the story and
+tests as though this conversation has already taken place. I'll do this for
+each part of the application we implement.
+
+Creating user stories is not something I will cover, but I really recommend
+Mike Cohn's rather fantastic book on the subject: *User Stories Applied*.
