@@ -78,9 +78,9 @@ class FeatureContext implements SnippetAcceptingContext
     }
 
     /**
-     * @Given there is a recipe called :name with a rating of :rating submitted by :user
+     * @Given there's a recipe for :name by user :user with :rating stars
      */
-    public function thereIsARecipeCalledWithARatingOfSubmittedBy($name, $rating, $user)
+    public function theresARecipeForByUserWithStars($name, $user, $rating)
     {
         // leanpub-start-insert
         $this->recipeRepository->add(

@@ -352,9 +352,9 @@ class FeatureContext implements SnippetAcceptingContext
     // ...
 
     /**
-     * @Given there is a recipe called :name with a rating of :rating submitted by :user
+     * @Given there's a recipe for :name by user :user with :rating stars
      */
-    public function thereIsARecipeCalledWithARatingOfSubmittedBy($name, $rating, $user)
+    public function theresARecipeForByUserWithStars($name, $user, $rating)
     {
         // leanpub-start-insert
         $this->recipeRepository->add(
@@ -390,10 +390,10 @@ class FeatureContext implements SnippetAcceptingContext
 }
 ~~~~~~~~
 
-In `thereIsARecipeCalledWithARatingOfSubmittedBy` we're creating a new `Recipe`
-object. The `Recipe` needs a name, rating and user so we can add what we think
-look like sensible dependencies via the constructor. We also *add* this new
-object to the repository.
+In `theresARecipeForByUserWithStars` we're creating a new `Recipe` object. The
+`Recipe` needs a name, rating and user so we can add what we think look like
+sensible dependencies via the constructor. We also *add* this new object to the
+repository.
 
 In the `iShouldSeeAListOfRecipesContaining` method we compare the results
 returned from the query with the table of expected results using PHPUnit's

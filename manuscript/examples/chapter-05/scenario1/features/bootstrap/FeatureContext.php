@@ -84,9 +84,9 @@ class FeatureContext implements SnippetAcceptingContext
     }
 
     /**
-     * @Given there is a recipe called :arg1 with a rating of :arg3 submitted by :arg2
+     * @Given there's a recipe for :arg1 by user :arg2 with :arg3 stars
      */
-    public function thereIsARecipeCalledWithARatingOfSubmittedBy($arg1, $arg2, $arg3)
+    public function theresARecipeForByUserWithStars($arg1, $arg2, $arg3)
     {
         throw new PendingException();
     }

@@ -8,17 +8,17 @@ Feature: A visitor can view a list of recipes
         When I request a list of recipes
         Then I should see an empty list
 
-    Scenario: Viewing a list with 1 item
-        Given there is a recipe called "Mojito" with a rating of 5 submitted by "tom"
+   Scenario: Viewing a list with 1 item
+        Given there's a recipe for "Mojito" by user "tom" with 5 stars
         When I request a list of recipes
         Then I should see a list of recipes containing:
             | name   | rating | user |
             | Mojito | 5.0    | tom  |
 
     Scenario: Recipes are sorted by rating
-        Given there is a recipe called "Daquiri" with a rating of 4 submitted by "clare"
-        And there is a recipe called "Pina Colada" with a rating of 2 submitted by "jess"
-        And there is a recipe called "Mojito" with a rating of 5 submitted by "tom"
+        Given there's a recipe for "Daquiri" by user "clare" with 4 stars
+        And there's a recipe for "Pina Colada" by user "jess" with 2 stars
+        And there's a recipe for "Mojito" by user "tom" with 5 stars
         When I request a list of recipes
         Then I should see a list of recipes containing:
             | name        | rating | user  |

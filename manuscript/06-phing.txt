@@ -1,1 +1,4 @@
 # Phing
+
+> Tom Oram @tomphp · 18 Oct 2012
+> I've just realized that I've never used the final keyword
