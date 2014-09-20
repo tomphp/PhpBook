@@ -6,4 +6,6 @@ section1.txt
 04-an-introduction-to-testing-and-tdd.txt
 section2.txt
 05-getting-started.txt
-06-phing.txt
+06-adding-the-second-feature.txt
+07-creating-a-simple-ui.txt
+08-phing.txt
