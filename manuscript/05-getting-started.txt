@@ -666,9 +666,23 @@ That's it, the first feature is done!
 
 ## Some Thoughts
 
-todo:
+What we have implemented so far is pretty basic. We will also evolve it
+somewhat over the next few chapters and in that process I think the various
+design decisions should become clearer. For now the only thing I want to
+discuss is the `ListRecipesResult` class.
 
-dto vs array return value
+I choose to create this `ListRecipesResult` as a container or *DTO* (*Data
+Transfer Object*) to wrap up the values returned from the query. We could
+have also simply returned an *associative array* containing the values or
+an instance of PHP's `stdClass` with them as properties. Either of these
+options would have involved less code and work so why create the object?
+
+Any of the approaches I've just mentioned would work fine and there is no right
+or wrong, it's just a design decision. The reason I've chosen this approach is
+because this is the API which code interacting with the *domain* will go
+though. For this reason I feel that the object serves as clear documentation to
+the UI programmers as to what values will be return. For this extra bit of
+descriptiveness in the API I feel it's work the additional class.
 
 ## What Next?
 
