@@ -315,7 +315,7 @@ At this point should be able to run Behat and see the first *scenario* pass:
 $ behat
 ~~~~~~~~
 
-## Scenario: View a list with 1 item
+## Scenario: View a list with 1 recipe
 
 We got the first scenario to pass without any real logic, to get the next one
 to pass we need to start filling in some of the blanks that we created.

@@ -8,7 +8,7 @@ Feature: A visitor can view a list of recipes
         When I request a list of recipes
         Then I should see an empty list
 
-   Scenario: Viewing a list with 1 item
+   Scenario: Viewing a list with 1 recipe
         Given there's a recipe for "Mojito" by user "tom" with 5 stars
         When I request a list of recipes
         Then I should see a list of recipes containing:
