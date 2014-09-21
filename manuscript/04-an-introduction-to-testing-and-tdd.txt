@@ -1388,33 +1388,312 @@ And here it is, a complete solution to our original problem, achieved by TDD:
 
 ## Test Doubles
 
-We've already heard of *test doubles* and how they can be used to help test
+I've already mentioned of *test doubles* and how they can be used to help test
 units of code in isolation by replacing the unit's dependencies. Now let's take
 a look at how this is actually done.
 
 ### Types of Test Doubles
 
-*Tests doubles* take on different forms as they are used for different
-purposes.  Each of these different types of test double are used to solve a
-different problem. Let's take a look at the different types.
+*Tests doubles* take on different forms depending on how the are used, each of
+these different types of are used to solve a different problem. Let's take a
+look at the different types.
 
 #### Dummy
 
-A *dummy* is the simplest *test double*, it simply serves as a placeholder for
+A *dummy* is the simplest *test double*, it simply serves as a place holder for
 a dependency. It's essentially an empty class which implements the dependency's
-interface.
+interface. *Dummies* are used when the unit being tested has a required
+dependency, but the dependency is not needed for the functionality being
+tested.
 
+{title="Dummy test double example", lang="php"}
+~~~~~~~~
+/**
+ * Method to be tested.
+ *
+ * @param number $a
+ * @param number $b
+ *
+ * @return number
+ */
+public function addValues(Writer $writer, $a, $b)
+{
+    $writer->write("Adding $a and $b");
 
+    return $a + $b;
+}
+
+/**
+ * The test.
+ *
+ * Here we only want to test the addition takes place and don't care
+ * about the writer. However, the writer is required so we provide a dummy in
+ * its place.
+ */
+function test_dummy()
+{
+    $writer = new DummyWriter();
+    $examples = new Examples();
+
+    $this->assertEquals(5, $examples->addValues($writer, 2, 3));
+}
+
+/**
+ * The dummy writer.
+ *
+ * No functionality is requried, it just needs to implement the Writer
+ * interface.
+ */
+final class DummyWriter implements \Writer
+{
+    public function write($string)
+    {
+    }
+}
+~~~~~~~~
 
 #### Stub
 
-#### Spy
+A *stub* is the next simplest *test double*, it simply returns constant values
+from the methods in the public interface. *Stubs* are used to isolate the unit
+under test from the complexity of its dependency or for testing an
+interface/abstract class which has no implementation available.
+
+{title="Stub test double example", lang="php"}
+~~~~~~~~
+/**
+ * The method being tested.
+ *
+ * @return int
+ */
+public function doubleInput(Reader $reader)
+{
+    return $reader->readInt() * 2;
+}
+
+/**
+ * The test.
+ *
+ * We don't want to use a real Reader to check the logic so we use a stub
+ * which returns a constant value which we can reliably check.
+ */
+function test_stub()
+{
+    $reader = new StubReader();
+    $examples = new Examples();
+
+    $this->assertEquals(14, $examples->doubleInput($reader));
+}
+
+/**
+ * The stub reader.
+ *
+ * There is no logic in a stub, it simply returns constant values.
+ */
+final class StubReader implements Reader
+{
+    public function readInt($src = self::STDIN)
+    {
+        return 7;
+    }
+}
+~~~~~~~~
 
 #### Fake
 
+A *fake* contains logic which emulates a simplified and reliable version of the
+dependency. *Fakes* are used when the dependency is suitably complex that a
+stub is not powerful enough.
+
+{title="Fake test double example", lang="php"}
+~~~~~~~~
+/**
+ * The method being tested.
+ *
+ * Here Reader::readInt() is called multiple times with different parameters.
+ */
+public function addFromInputAndFile(Reader $reader, $filename)
+{
+    return $reader->readInt(Reader::STDIN) + $reader->readInt($filename);
+}
+
+/**
+ * The test.
+ *
+ * We're using a fake as we want different values to be returned depending
+ * on the parameters provided.
+ */
+function test_fake()
+{
+    $reader = new FakeReader();
+    $examples = new Examples();
+
+    $this->assertEquals(
+        7,
+        $examples->addFromInputAndFile($reader, 'file.txt')
+    );
+}
+
+/**
+ * The fake reader.
+ *
+ * Here we return a 2 if the reader is instructed to read from STDIN, otherwise
+ * it returns 5.
+ */
+final class FakeReader implements Reader
+{
+    public function readInt($src = self::STDIN)
+    {
+        return $src == self::STDIN ? 2 : 5;
+    }
+}
+~~~~~~~~
+
 #### Mock
 
-### Testing Dependencies Which Don't Exist Yet
+A *mock* is like a *fake* but unlike a *fake* *mocks* are aware that they are
+part of a test suite. Rather than being just a simplified implementation of
+the dependency's interface they contain testing related logic and code.
 
-## Resources
+When crafting *test doubles* by hand the situation for creating a *mock* comes
+up very rarely. However, as we'll see in a moment, *test doubles* can be
+created automatically using *mocking frameworks* and in this case all test
+doubles are technically *mocks*, regardless of the actual way they are being
+used. For this reason the term *mock* is often used interchangeably with *test
+double*.
 
+#### Spy
+
+A *spy* is a type of *mock* which records the actions which have been performed
+on it. After executing the code under test a spy can be asked if it was
+interacted with as expected. *Spies* are used to verify a dependency has be
+used in the correct way.
+
+{title="Spy test double example", lang="php"}
+~~~~~~~~
+/**
+ * Method being tested.
+ *
+ * @param number $a
+ * @param number $b
+ *
+ * @return number
+ */
+public function addValues(Writer $writer, $a, $b)
+{
+    $writer->write("Adding $a and $b");
+
+    return $a + $b;
+}
+
+/**
+ * The test.
+ *
+ * This time we want to make sure that the writer instructed to write a
+ * message.
+ */
+function test_spy()
+{
+    $writer = new SpyWriter();
+    $examples = new Examples();
+
+    $examples->addValues($writer, 2, 3);
+
+    $this->assertTrue(
+        $writer->hasWriteBeenCalledWith('Adding 2 and 3'),
+        '$writer->write("Adding 2 and 3") should have been called'
+    );
+}
+
+/**
+ * The spy write test double.
+ *
+ * The spy records the message the write function was called with.
+ */
+final class SpyWriter implements \Writer
+{
+    private $message;
+
+    public function write($message)
+    {
+        $this->message = $message;
+    }
+
+    /**
+     * @param string $message
+     *
+     * @return bool
+     */
+    public function hasWriteBeenCalledWith($message)
+    {
+        return $this->message == $message;
+    }
+}
+~~~~~~~~
+
+### Expectations
+
+*Expectations* serve a similar purpose to *spies*, except rather than recording
+what methods have been called so they can be checked later, the methods
+required to be called are defined first. Not all mocking framework's provide
+both *spies* and *expectations* but generally they will support at least one of
+these features.
+
+The one thing which using *expectations* does is mix up the *given, when, then*
+order, for this reason I prefer to use *spies* when possible.
+
+### Mocking Frameworks
+
+There are many mocking frameworks available for PHP. PHPUnit has one built in,
+PhpSpec uses one called [Prophecy](https://github.com/phpspec/prophecy) and
+there are other's available too. The main reasons for using a different
+framework are either because it provides some extra features or because
+they produce tests which you think are easier to understand.
+
+Some examples of other mocking frameworks are
+[Mockery](https://github.com/padraic/mockery),
+[Phake](http://phake.readthedocs.org/en/latest/) and Facebook's
+[FBMock](https://github.com/facebook/FBMock).
+
+Now let's quickly take a look at the previous test double examples this time
+using PHPUnit and PHPSpec's Prophecy framework's mocking facilities.
+
+#### PHPUnit
+
+PHPUnit's built in mocking facilities are quite verbose and often considered 
+to not be the easiest to read. It also doesn't support *spies* so you have to
+use *expectations*. For these reasons alternative mocking frameworks are often
+chosen when work with PHPUnit.
+
+Here's the examples with PHPUnit:
+
+<<[tests/MockExampleTest.php](examples/chapter-04/test-doubles/tests/MockExampleTest.php)
+
+#### PHPSpec & Prophecy
+
+Prophecy is very much a part of PHPSpec and by using PHPSpec you are choosing
+to use Prophecy also. That said Prophecy doesn't have to be used with PHPSpec
+and can be used with other test frameworks also.
+
+PHPSpec makes mocking exceptionally simple. You don't need to call any special
+methods to create a mock, rather you just provide a *typehinted* parameter to
+the test method and PHPSpec will create and inject the mock automatically.
+
+Here's the same examples with PHPSpec:
+
+<<[spec/ExamplesSpec.php](examples/chapter-04/test-doubles/spec/ExamplesSpec.php)
+
+## Katas
+
+In order to develop and hone your programming skills the concept of *katas* has
+become a popular way to practice them. A *kata* (like a martial arts kata) is a
+sequence of steps which are performed repeatedly in order to drill and perfect
+the skills and techniques which they they contain.
+
+Some popular katas are *Prime Factors*, *The Bowling Game*, *String Calculator*
+and *Roman Numerals*. You can easily find the details and demonstrations of
+these katas in many languages with a quick web search, that said Ciaran
+McNulty has put up excellent videos of the [Prime
+Factors](http://vimeo.com/74529780) and [Roman
+Numerals](http://vimeo.com/88289877) katas using PHPSpec on Vimeo. I think
+these are well worth a watch.
