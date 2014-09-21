@@ -1404,7 +1404,7 @@ A *dummy* is the simplest *test double*, it simply serves as a placeholder for
 a dependency. It's essentially an empty class which implements the dependency's
 interface.
 
-todo... example
+
 
 #### Stub
 
