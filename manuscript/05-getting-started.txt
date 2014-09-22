@@ -35,7 +35,7 @@ listed in order of priority.
 
 We will proceed to implement each of these stories in order. This may seem like
 a very basic application but it will provide enough functionality to give a
-good example of how to start building a well designed, extendible application.
+good example of how to start building a well designed, extensible application.
 Also, because this is being developed emulating an *agile* approach, details
 may change as it progresses and extra features may be requested.
 

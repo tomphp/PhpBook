@@ -916,7 +916,7 @@ again, what is it useful for?
 
 Well...
 
-* Using it creates extendible code
+* Using it creates extensible code
 * It removes the need for your business model to know about implementation
 details such as; how things are displayed or how messages are sent. Instead, it
 allows those details to be plugged in. This is often done using the
@@ -996,7 +996,7 @@ More in-depth details can be found on
 [Wikipedia](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)).
 
 If you stick to these principles you will create fantastically modular,
-extendible and testable applications.
+extensible and testable applications.
 
 ## Functional Programming (FP)
 
@@ -1535,9 +1535,9 @@ finished, refactored output. That said you will see the code evolve throughout
 the book as functionality is added and that will include some refactoring. I'll
 also cover it a bit more in the next chapter.
 
-## Object Callisthenics
+## Object Calisthenics
 
-*Object Callisthenics* is an idea suggested by Jeff Bay in *The ThoughtWorks
+*Object Calisthenics* is an idea suggested by Jeff Bay in *The ThoughtWorks
 Anthology*, it consists of 9 rules to help write better *Object Oriented* code.
 
 These rules are:
@@ -1557,7 +1557,7 @@ follow them as much as possible you will write much cleaner and more
 manageable, *Object Oriented* code.
 
 For more details on the rules take a look at William Durand's blog post titled
-[Object Callisthenics](http://williamdurand.fr/2013/06/03/object-calisthenics/).
+[Object Calisthenics](http://williamdurand.fr/2013/06/03/object-calisthenics/).
 
 Also, Guilherme Blanco's [slides on the
 subject](http://www.slideshare.net/guilhermeblanco/object-calisthenics-applied-to-php)

@@ -27,19 +27,19 @@ will be quite a ride.
 I do not intend on covering any of these topics extensively, there are already
 many great books and resources covering all of them already and written by far
 cleverer people than myself. Therefore, I encourage you to read and learn more
-about all these subjects further. This book should however, hopefully provide a
-great introduction to many of these methodologies, techniques and tools and
-show you how to quickly get started using them with PHP.
+about all these subjects further. This book should, however, provide a great
+introduction to many of these methodologies, techniques and tools and show you
+how to quickly get started using them with PHP.
 
 This book aims to introduce you to what you need to start building a well
-designed, manageable and extendible, medium size PHP application. The approach
+designed, manageable and extensible, medium size PHP application. The approach
 and process of working throughout this book should also fit very well into an
 *Agile* process of working. However, it will only deal with the actual
 development and architecture of the project rather than the full planning,
 communication and team management aspects included in the Agile way of working.
 
 The architecture of the application we will be building in this book is a
-fairly common approach. It will not be based on any frameworks but, we will
+fairly common approach. It will not be based on any frameworks, but we will
 make use of some later on to see how frameworks can be very useful tools. In my
 mind this is how modern frameworks should be used. This architecture and
 approach to PHP application design is one we often use at the company I work
