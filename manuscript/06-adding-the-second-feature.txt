@@ -13,14 +13,15 @@ As before I shall provide the following acceptance tests:
 <<[features/visitors-can-view-a-recipe.feature](examples/chapter-06/feature2/features/visitors-can-view-a-recipe.feature)
 
 In the last chapter I put a lot of focus on the TDD process and the way the
-code evolved. Doing this for the whole book would get pretty long winded so as
+code evolved. Doing this for the whole book would get pretty long winded, so as
 we progress I'll be doing this less and instead focusing on the specific points
 and decisions made in each step.
 
 In this chapter we want to implement the second feature which requires a very
 similar process to in the previous chapter so I'll cover it in less detail.
 Once we have this done we're going to spend a bit time analysing what we have
-created so far and try extract a better application structure out of it.
+created so far and try refactor and extract a better application structure out
+of it.
 
 ## The FeatureContext
 
@@ -36,9 +37,39 @@ Now the feature context needs to be updated, here what I've come up with:
 
 <<[features/bootstrap/FeatureContext.php](examples/chapter-06/feature2/features/bootstrap/FeatureContext.php)
 
+This has got a little bit complex because we're building the `Recipe` objects
+over a sequence of steps. Since the `Recipe` is still an immutable object we
+have to store up the details until we have them all and can create the object
+in `iRequestToViewRecipe`. The `FeatureContext` definitely needs to be tidied
+up a bit but before we look at doing that lets see the actual implementation.
 
+## The Implementation
 
+I'm just going to show you all the code now, there is a fair bit of it but it
+should all be self explanatory. I'll explain a couple of small bits and then
+well look at ways we can improve it.
 
+todo ... lots of code here
+
+## DRY - Don't Repeat Yourself
+
+DRY is a simple software principle which I've not mentioned yet and the name
+pretty much sums it up. Applying DRY simply means if you find yourself typing
+the same piece of code more than once, then extract it out into a
+function, method, class or anything else which may be appropriate.
+
+I've already applied this principle in some places, for example the
+`getResultField` method in the `FeatureContext`. However, let's find another
+place to apply it.
+
+We've definitely got some repetition in some of the exception
+class, take a look at these:
+
+todo ... exception code.
+
+To tidy this up let's use one of PHP's newer features, *traits*:
+
+todo ... tidy exceptions code.
 
 Things:
 * DRY and exception traits

@@ -2,10 +2,17 @@
 
 namespace CocktailRater\Application\Exception;
 
+// leanpub-start-insert
+use CocktailRater\Domain\Exception\ExceptionFactory;
+// leanpub-end-insert
 use Exception;
 
 class InvalidIdException extends ApplicationException
 {
+    // leanpub-start-insert
+    use ExceptionFactory;
+    // leanpub-end-insert
+
     /**
      * @param string $entityName
      * @param string $id
@@ -17,10 +24,13 @@ class InvalidIdException extends ApplicationException
         $id,
         Exception $previous
     ) {
-        return new static(sprintf(
+        // leanpub-start-insert
+        return self::create(
             'A %s entity with id "%s" does not exist.',
-            $entityName,
-            $id
-        ), 0, $previous);
+            [$entityName, $id],
+            0,
+            $previous
+        );
+        // leanpub-end-insert
     }
 }
