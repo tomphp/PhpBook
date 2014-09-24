@@ -35,3 +35,15 @@ $ behat --append-snippets
 Now the feature context needs to be updated, here what I've come up with:
 
 <<[features/bootstrap/FeatureContext.php](examples/chapter-06/feature2/features/bootstrap/FeatureContext.php)
+
+
+
+
+
+Things:
+* DRY and exception traits
+* Problems in Feature Context
+* Builder pattern
+* Too many getters
+* LoD and possible solutions - ISP/Extracted Object/Presenter
+

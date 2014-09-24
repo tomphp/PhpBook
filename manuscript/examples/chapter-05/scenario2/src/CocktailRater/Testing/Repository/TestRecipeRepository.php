@@ -12,7 +12,7 @@ final class TestRecipeRepository implements RecipeRepository
     private $recipes = [];
     // leanpub-end-insert
 
-    public function add(Recipe $recipe)
+    public function store(Recipe $recipe)
     {
         // leanpub-start-insert
         $this->recipes[] = $recipe;

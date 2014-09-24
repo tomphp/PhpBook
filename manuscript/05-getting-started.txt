@@ -11,6 +11,10 @@ A brief description of the application we are going to build is as follows:
 > Any *visitors* to the site can view the list of recipes *sorted by
 > rating*, but they must *register* with a *username*, *email* and *password*
 > in order to *rate* or *add* a *receipe*.
+>
+> A *recipe* consists of the *name*, the *method* and the list of *measured
+> ingredients* consisting of the *ingredient* and *amount*. It also must keep
+> track of the *user* who submitted it.
 > 
 > Ratings will be *star* ratings with *users* being able to *rate* a recipe
 > with 1 to 5 *stars*.
@@ -361,7 +365,7 @@ class FeatureContext implements SnippetAcceptingContext
     public function theresARecipeForByUserWithStars($name, $user, $rating)
     {
         // leanpub-start-insert
-        $this->recipeRepository->add(
+        $this->recipeRepository->store(
             new Recipe(
                 $name,
                 new Rating($rating),
@@ -396,8 +400,8 @@ class FeatureContext implements SnippetAcceptingContext
 
 In `theresARecipeForByUserWithStars` we're creating a new `Recipe` object. The
 `Recipe` needs a name, rating and user so we can add what we think look like
-sensible dependencies via the constructor. We also *add* this new object to the
-repository.
+sensible dependencies via the constructor. We also *store* this new object in
+the repository.
 
 In the `iShouldSeeAListOfRecipesContaining` method we compare the results
 returned from the query with the table of expected results using PHPUnit's
@@ -476,7 +480,7 @@ final class Username
 }
 ~~~~~~~~
 
-We also need to add the `add` method to the repository interface:
+We also need to add the `store` method to the repository interface:
 
 {title="src/CocktailRater/Domain/Repository/RecipeRepository.php", lang="php"}
 ~~~~~~~~
@@ -491,7 +495,7 @@ use CocktailRater\Domain\Recipe;
 interface RecipeRepository
 {
     // leanpub-start-insert
-    public function add(Recipe $recipe);
+    public function store(Recipe $recipe);
     // leanpub-end-insert
 }
 ~~~~~~~~
@@ -512,7 +516,7 @@ use CocktailRater\Domain\Repository\RecipeRepository;
 final class TestRecipeRepository implements RecipeRepository
 {
     // leanpub-start-insert
-    public function add(Recipe $recipe)
+    public function store(Recipe $recipe)
     {
     }
     // leanpub-end-insert

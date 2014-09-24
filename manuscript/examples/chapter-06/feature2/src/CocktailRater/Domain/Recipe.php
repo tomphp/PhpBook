@@ -7,6 +7,9 @@ use CocktailRater\Domain\Recipe;
 
 final class Recipe
 {
+    /** @var Identity */
+    private $id;
+
     /** @var string */
     private $name;
 
@@ -16,14 +19,38 @@ final class Recipe
     /** @var User */
     private $user;
 
-    /** @param string $name */
-    public function __construct($name, Rating $rating, User $user)
-    {
+    /**
+     * @param string               $name
+     * @param MeasuredIngredient[] $measuredIngredients
+     * @param string               $method
+     */
+    public function __construct(
+        $name,
+        Rating $rating,
+        User $user,
+        array $measuredIngredients,
+        $method,
+        Identity $id = null
+    ) {
         Assertion::string($name);
+        Assertion::allIsInstanceOf(
+            $measuredIngredients,
+            MeasuredIngredient::class
+        );
+        //Assertion::string($method);
 
-        $this->name   = $name;
-        $this->rating = $rating;
-        $this->user   = $user;
+        $this->id                  = $id;
+        $this->name                = $name;
+        $this->rating              = $rating;
+        $this->user                = $user;
+        $this->method              = $method;
+        $this->measuredIngredients = $measuredIngredients;
+    }
+
+    /** @return Identity */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /** @return string */
@@ -42,6 +69,18 @@ final class Recipe
     public function getUser()
     {
         return $this->user;
+    }
+
+    /** @return string */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /** @return MeasuredIngredient[] */
+    public function getMeasuredIngredients()
+    {
+        return $this->measuredIngredients;
     }
 
     public function isHigherRatedThan(Recipe $other)

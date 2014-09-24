@@ -4,12 +4,20 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use CocktailRater\Application\Exception\ApplicationException;
 use CocktailRater\Application\Visitor\Query\ListRecipes;
 use CocktailRater\Application\Visitor\Query\ListRecipesHandler;
 use CocktailRater\Application\Visitor\Query\ListRecipesQuery;
 use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
+use CocktailRater\Application\Visitor\Query\ViewRecipeHandler;
+use CocktailRater\Application\Visitor\Query\ViewRecipeQuery;
+use CocktailRater\Domain\Identity;
+use CocktailRater\Domain\Ingredient;
+use CocktailRater\Domain\IngredientAmount;
+use CocktailRater\Domain\MeasuredIngredient;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
+use CocktailRater\Domain\Unit;
 use CocktailRater\Domain\User;
 use CocktailRater\Domain\Username;
 use CocktailRater\Testing\Repository\TestRecipeRepository;
@@ -25,6 +33,14 @@ class FeatureContext implements SnippetAcceptingContext
 
     /** @var mixed */
     private $result;
+
+    // leanpub-start-insert
+    /** @var ApplicationException */
+    private $error;
+
+    /** @var array */
+    private $recipes = [];
+    // leanpub-end-insert
 
     /**
      * Initializes context.
@@ -43,6 +59,9 @@ class FeatureContext implements SnippetAcceptingContext
     public function beforeScenario()
     {
         $this->recipeRepository = new TestRecipeRepository();
+        // leanpub-start-insert
+        $this->error = null;
+        // leanpub-end-insert
     }
 
     /**
@@ -80,11 +99,13 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function theresARecipeForByUserWithStars($name, $user, $rating)
     {
-        $this->recipeRepository->add(
+        $this->recipeRepository->store(
             new Recipe(
                 $name,
                 new Rating($rating),
-                new User(new Username($user))
+                new User(new Username($user)),
+                [],
+                ''
             )
         );
     }
@@ -108,12 +129,46 @@ class FeatureContext implements SnippetAcceptingContext
         );
     }
 
+    // leanpub-start-insert
     /**
-     * @When I request to view recipe :arg1
+     * @When I request to view recipe :id
      */
-    public function iRequestToViewRecipe($arg1)
+    public function iRequestToViewRecipe($id)
     {
-        throw new PendingException();
+        foreach ($this->recipes as $name => $properties) {
+            $measuredIngredients = array_map(
+                function ($ingredient) {
+                    return new MeasuredIngredient(
+                        new Ingredient($ingredient['name']),
+                        new IngredientAmount(
+                            $ingredient['amount'],
+                            new Unit($ingredient['unit'])
+                        )
+                    );
+                },
+                $properties['ingredients']
+            );
+
+            $this->recipeRepository->store(
+                new Recipe(
+                    $name,
+                    new Rating($properties['rating']),
+                    User::fromValues($properties['username']),
+                    $measuredIngredients,
+                    $properties['method'],
+                    new Identity($properties['id'])
+                )
+            );
+        }
+
+        try {
+            $query = new ViewRecipeQuery($id);
+            $handler = new ViewRecipeHandler($this->recipeRepository);
+
+            $this->result = $handler->handle($query);
+        } catch (ApplicationException $e) {
+            $this->error = $e;
+        }
     }
 
     /**
@@ -121,70 +176,94 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function iShouldSeeAnInvalidIdError()
     {
-        throw new PendingException();
+        Assert::assertInstanceOf(
+            'CocktailRater\Application\Exception\InvalidIdException',
+            $this->error,
+            'Expected an invalid id error.'
+        );
     }
 
     /**
-     * @Given there's a recipe for :arg1 with id :arg2
+     * @Given there's a recipe for :name with id :id
      */
-    public function thereSARecipeForWithId($arg1, $arg2)
+    public function thereSARecipeForWithId($name, $id)
     {
-        throw new PendingException();
+        $this->recipes[$name]['id'] = $id;
     }
 
     /**
-     * @Given the recipe for :arg1 was submitted by user :arg2
+     * @Given the recipe for :name was submitted by user :username
      */
-    public function theRecipeForWasSubmittedByUser($arg1, $arg2)
+    public function theRecipeForWasSubmittedByUser($name, $username)
     {
-        throw new PendingException();
+        $this->recipes[$name]['username'] = $username;
     }
 
     /**
-     * @Given the recipe for :arg1 is rated with :arg2 stars
+     * @Given the recipe for :name is rated with :rating stars
      */
-    public function theRecipeForIsRatedWithStars($arg1, $arg2)
+    public function theRecipeForIsRatedWithStars($name, $rating)
     {
-        throw new PendingException();
+        $this->recipes[$name]['rating'] = $rating;
     }
 
     /**
-     * @Given the recipe for :arg1 has directions:
+     * @Given the recipe for :name has method:
      */
-    public function theRecipeForHasDirections($arg1, PyStringNode $string)
+    public function theRecipeForHasMethod($name, PyStringNode $method)
     {
-        throw new PendingException();
+        $this->recipes[$name]['method'] = $method;
     }
 
     /**
-     * @Given the recipe for :arg1 has ingredients:
+     * @Given the recipe for :name has measured ingredients:
      */
-    public function theRecipeForHasIngredients($arg1, TableNode $table)
+    public function theRecipeForHasMeasuredIngredients($name, TableNode $ingredients)
     {
-        throw new PendingException();
+        $this->recipes[$name]['ingredients'] = [];
+
+        foreach ($ingredients->getHash() as $ingredient) {
+            $this->recipes[$name]['ingredients'][] = [
+                'name'   => $ingredient['name'],
+                'amount' => $ingredient['amount'],
+                'unit'   => $ingredient['unit']
+            ];
+        }
     }
 
     /**
-     * @Then I should see a field :arg1 with value of :arg2
+     * @Then I should see a field :name with value of :value
      */
-    public function iShouldSeeAFieldWithValueOf($arg1, $arg2)
+    public function iShouldSeeAFieldWithValueOf($name, $value)
     {
-        throw new PendingException();
+        Assert::assertEquals($value, $this->getResultField($name));
     }
 
     /**
-     * @Then I should see a file :arg1 with value:
+     * @Then I should see a field :name with value:
      */
-    public function iShouldSeeAFileWithValue($arg1, PyStringNode $string)
+    public function iShouldSeeAFileWithValue($name, PyStringNode $value)
     {
-        throw new PendingException();
+        Assert::assertEquals($value->getRaw(), $this->getResultField($name));
     }
 
     /**
-     * @Then I should see a list of ingredients containing:
+     * @Then I should see a list of measured ingredients containing:
      */
-    public function iShouldSeeAListOfIngredientsContaining(TableNode $table)
+    public function iShouldSeeAListOfMeasuredIngredientsContaining(TableNode $table)
     {
-        throw new PendingException();
+        Assert::assertEquals(
+            $table->getHash(),
+            $this->getResultField('measuredIngredients')
+        );
     }
+
+    /** @return mixed */
+    private function getResultField($name)
+    {
+        $getter = 'get' . ucfirst($name);
+
+        return $this->result->$getter();
+    }
+    // leanpub-end-insert
 }

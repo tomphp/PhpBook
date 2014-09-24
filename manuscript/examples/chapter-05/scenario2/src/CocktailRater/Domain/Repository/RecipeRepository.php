@@ -6,7 +6,7 @@ use CocktailRater\Domain\Recipe;
 
 interface RecipeRepository
 {
-    public function add(Recipe $recipe);
+    public function store(Recipe $recipe);
 
     // leanpub-start-insert
     /** @return Recipe[] */

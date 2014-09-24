@@ -83,7 +83,7 @@ class FeatureContext implements SnippetAcceptingContext
     public function theresARecipeForByUserWithStars($name, $user, $rating)
     {
         // leanpub-start-insert
-        $this->recipeRepository->add(
+        $this->recipeRepository->store(
             new Recipe(
                 $name,
                 new Rating($rating),

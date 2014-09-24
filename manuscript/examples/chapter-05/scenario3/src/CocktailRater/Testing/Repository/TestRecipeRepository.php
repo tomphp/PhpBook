@@ -10,7 +10,7 @@ final class TestRecipeRepository implements RecipeRepository
     /** @var Recipe[] */
     private $recipes = [];
 
-    public function add(Recipe $recipe)
+    public function store(Recipe $recipe)
     {
         $this->recipes[] = $recipe;
     }
