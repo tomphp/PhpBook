@@ -2,11 +2,11 @@
 
 As I said previously this book assumes you are already familiar with PHP. In
 this chapter I will just quickly cover a few newer additions to PHP as well as
-some tools and techniques process which you will need to know about to continue
+some tools and techniques which you will need to know about to continue
 with this book.
 
 I don't intend to go into anything in too much depth, it will contain just
-enough information of the things we will be using and I encourage you to
+enough information on the things we will be using and I encourage you to
 research them further yourself.
 
 ## Namespaces
@@ -135,7 +135,7 @@ PHP is a dynamically typed language and has a few basic, scalar types:
 false; // boolean
 ~~~~~~~~
 
-It also has *arrays*, *callables* and any user define classes or interfaces
+It also has *arrays*, *callables* and any user defined classes or interfaces
 which are all also types.
 
 Being a dynamically typed language means that a variable or function argument
@@ -376,12 +376,12 @@ to your `.htaccess` file in your document root.
 
 ## Standards
 
-As a language get more powerful it often allows many different ways and
+As a language gets more powerful it often allows many different ways and
 approaches to achieve the same thing. Each person then has their own
 preferences of how they personally like to do things.
 
-On one hand this is great; it allows programmers to be to write their code in
-the way which best fits how they think, lay it out in they way which look the
+On one hand this is great; it allows programmers to write their code in
+the way which best fits how they think, lay it out in they way which looks the
 most aesthetically pleasing to them, and structure it in the way which they
 find easiest to navigate.
 
@@ -391,7 +391,7 @@ way of doing all things. You have to learn each of the different approaches to
 efficiently navigate and understand each author's code. Also, it may make it
 tricky for some of the libraries to happily interact with each other.
 
-So for the reasons just mentioned, programmers get together is groups and
+So for the reasons just mentioned, programmers get together in groups and
 create standards which are a nice middle ground which everyone is mostly happy
 with.  You'll often find that you might not agree with everything defined in a
 standard but by putting that to one side and accepting it you reap the benefits
@@ -403,8 +403,8 @@ standard.
 
 Introducing PHP-FIG! PHP-FIG or the PHP Framework Interoperability Group is a group
 built up of various key people in the PHP community who have got together and
-started to build some standards for using PHP. Many PHP software project have
-now adopted or are adopting many of these standards and I full recommend you do
+started to build some standards for using PHP. Many PHP software projects have
+now adopted or are adopting many of these standards and I fully recommend you do
 the same.
 
 At the time of writing this there are 5 published standards:
@@ -441,13 +441,13 @@ advice and I highly recommend studying it.
 
 Docblocks are comments which contain annotations which can be added to your code
 to make it possible to generate documentation about your codebase
-automatically. One such too is [phpDocumentor](http://www.phpdoc.org/).
+automatically. One such tool is [phpDocumentor](http://www.phpdoc.org/).
 
 This can be fantastically useful if you are building a library for others to
 use as you can generate great API documentation using it.
 
 There is however another use for it; we've already talked about typehints
-which, by enforcing the types of function arguments, provided an extra level of
+which, by enforcing the types of function arguments, provide an extra level of
 documentation to people reading the code and help them understand it quicker.
 It also helps IDEs provide auto completion functionality while you're writing
 the code. This is great but so far PHP has only gone half way, as I said
@@ -502,14 +502,14 @@ referencing code in different files by using PHP's `require`, `require_once`,
 section now!
 
 The autoloader is a system in PHP where you can create a callback function that
-will be called if your try to use a class which has not yet been defined. This
+will be called if you try to use a class which has not yet been defined. This
 callback receives the name of the class trying to be used a parameter and the
 function can then use this to lookup and require the file needed to provide the
 class definition.
 
 In order to use an autoloader callback you can either define a function called
 `__autoload` which will provide the autoloading logic, or you can use the more
-recent and flexible `spl_autoload_register` function to register you
+recent and flexible `spl_autoload_register` function to register your
 autoloading function.
 
 Now you know what an autoloader is there's some good news, there's no actual
@@ -530,8 +530,8 @@ The basic rules are as follows:
 * There is exactly one class defined per file
 * The file name is the same name (and case) as the name of the class defined
 inside it with `.php` appended to it
-* The file exists in directory structure which fully matches the namespace
-which the class is defined in
+* The file exists in directory structure which fully matches the namespace in
+which the class is defined.
 
 The full PSR-0 specification can be read on the [PHP-FIG
 website](http://www.php-fig.org/psr/psr-0/).
@@ -576,9 +576,9 @@ the project to easily install them themselves. It also makes it easy to quickly
 update to newer versions of dependencies.
 
 Composer installs its dependencies locally to the project in a directory called
-`vendor` rather than installing them globally onto the system on. This is a
+`vendor` rather than installing them globally onto the system. This is a
 definite plus as it means you can run many projects on the same system, all
-working with different versions their dependencies and without getting in to a
+working with different versions of their dependencies and without getting in to a
 mess.
 
 Now this is all very interesting but you might have no intention of using any
@@ -597,7 +597,7 @@ By simply adding a few lines of JSON to your project your autoloader is set up
 and ready to go
 
 While there are plenty of people out there who will have a good reason not to
-use Composer, in my opinion if you don't have on then you should definitely be
+use Composer, in my opinion if you don't have one then you should definitely be
 using it in your projects.
 
 So that's a little intro on what Composer can do for you. You can find out
@@ -628,7 +628,7 @@ have done it this way so on my system I run Composer by simply typing:
 $ composer
 ~~~~~~~~
 
-If you have installed it differently to me you will need to adjust my
+If you have installed it differently from me you will need to adjust my
 instructions accordingly.
 
 #### Setting up the Autoloader
@@ -880,7 +880,7 @@ function definition or on the line after
 * etc.
 
 As with all standards you'll unlikely find one which you agree with every bit
-of but, rather that creating your own perfect one which no one else uses, you
+of, but, rather that creating your own perfect one which no one else uses, you
 should use a well used one you like mostly.
 
 At the moment the best one to use for PHP in my opinion is the one defined by
