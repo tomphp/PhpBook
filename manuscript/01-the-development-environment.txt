@@ -11,7 +11,7 @@ The only real requirement for working through this book is that you are using
 PHP 5.5 or above and the SQLite extension. Throughout this book we will be
 using PHP both from the command line and in a webserver environment.
 
-To install PHP and SQLite on Ubuntu easily by running:
+Install PHP and SQLite on Ubuntu easily by running:
 
 {lang="console"}
 ~~~~~~~~
@@ -30,7 +30,7 @@ you will have to work that out yourself.
 
 Vagrant is a neat little tool, it allows many developers working on the same
 project to easily run a local copy of the project's environment without having
-to install all the projects dependencies on their development machines. It does
+to install all the project's dependencies on their development machines. It does
 this by building and running a virtual machine from a config file included in the
 project.
 
@@ -89,7 +89,7 @@ want to create, for this example choose the following options:
 | Webserver        | Apache + PHP5                 |
 | PHP Version      | 5.5                           |
 
-You can use different local IP address if you want but remember it as we will
+You can use a different local IP address if you want but remember it as we will
 need to know what it is shortly.
 
 Ignore the **Database** and **Package** settings for now and finally choose an
