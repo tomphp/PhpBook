@@ -7,8 +7,10 @@ use CocktailRater\Domain\Recipe;
 
 final class Recipe
 {
+    // leanpub-start-insert
     /** @var Identity */
     private $id;
+    // leanpub-end-insert
 
     /** @var string */
     private $name;
@@ -19,6 +21,7 @@ final class Recipe
     /** @var User */
     private $user;
 
+    // leanpub-start-insert
     /**
      * @param string               $name
      * @param MeasuredIngredient[] $measuredIngredients
@@ -32,26 +35,33 @@ final class Recipe
         $method,
         Identity $id = null
     ) {
+    // leanpub-end-insert
         Assertion::string($name);
+        // leanpub-start-insert
         Assertion::allIsInstanceOf(
             $measuredIngredients,
             MeasuredIngredient::class
         );
-        //Assertion::string($method);
+        Assertion::string($method);
+        // leanpub-end-insert
 
-        $this->id                  = $id;
         $this->name                = $name;
         $this->rating              = $rating;
         $this->user                = $user;
+        // leanpub-start-insert
+        $this->id                  = $id;
         $this->method              = $method;
         $this->measuredIngredients = $measuredIngredients;
+        // leanpub-end-insert
     }
 
+    // leanpub-start-insert
     /** @return Identity */
     public function getId()
     {
         return $this->id;
     }
+    // leanpub-end-insert
 
     /** @return string */
     public function getName()
@@ -71,6 +81,7 @@ final class Recipe
         return $this->user;
     }
 
+    // leanpub-start-insert
     /** @return string */
     public function getMethod()
     {
@@ -82,6 +93,7 @@ final class Recipe
     {
         return $this->measuredIngredients;
     }
+    // leanpub-end-insert
 
     public function isHigherRatedThan(Recipe $other)
     {

@@ -212,7 +212,7 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function theRecipeForHasMethod($name, PyStringNode $method)
     {
-        $this->recipes[$name]['method'] = $method;
+        $this->recipes[$name]['method'] = $method->getRaw();
     }
 
     /**
