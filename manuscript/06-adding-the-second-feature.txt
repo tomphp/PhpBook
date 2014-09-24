@@ -71,6 +71,31 @@ To tidy this up let's use one of PHP's newer features, *traits*:
 
 todo ... tidy exceptions code.
 
+D> ## Exception Messages
+D>
+D> Since we've put all this effort into creating nice exception message let's
+D> quickly talk about them. Exception messages should not be designed to
+D> display to the users of the application, they should be caught before they
+D> get to the UI, logged, then a user friendly message displayed on screen.
+D> The exception messages are for the developers, they are logged so problems
+D> and bugs can be tracked down. Therfore, make your exception messages contain
+D> as much context as necessary to understand the context.
+D>
+D> ### Example
+D>
+D> A *user* is logged in and tries to view their *recipe* but it's not found. A
+D> reasonable message to display to the user might be:
+D>
+D> *"A recipe with ID '123' was not found."*
+D>
+D> But is this a good exception message? Not really as there's some missing
+D> context here, they user know's who they are but to someone reading that
+D> message in a log it is unclear. A better message might say:
+D>
+D> *"A recipe with ID '123' could not be found for user with ID '456'."*
+D>
+D> This is much more helpful.
+
 Things:
 * DRY and exception traits
 * Problems in Feature Context
