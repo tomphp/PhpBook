@@ -8,7 +8,7 @@ development company will be using at least some, if not all of these already.
 While some of these are new and have been developed in recent years, many of
 them have been developed over the last 1, 2 or more decades.
 
-Like the previous chapter I don't want to go into any real depth with any of
+As in the previous chapter I don't want to go into any real depth with any of
 these topics, I just want to give a short introduction or primer on each
 subject. These should provide enough of an understanding to work through this
 book. As always I do encourage you dig deeper into each of the subjects
@@ -267,7 +267,7 @@ by *radio*.
 Finally we've categorised birds and aeroplanes, which are 2 very different
 things, together as *flying things* and *communicating things* which we've
 had to make up. A much more sensible category for an aeroplane might be a
-*vehical*, and for a bird maybe an *animal*.
+*vehicle*, and for a bird maybe an *animal*.
 
 So how to fix it? So far we've been talking about *is a* relationships; *a bird
 **is a** flying thing*. Inheritance is all about *is a* relationships, but we
@@ -357,7 +357,7 @@ class Aeroplane
 ~~~~~~~~
 
 What's more, once we start to realise that a bird's flight system is very
-different from an aeroplane's then we can start have different flight systems
+different from an aeroplane's then we can start having different flight systems
 which can still be instructed to start flying in the same way by making use
 of an *interface*:
 
@@ -403,7 +403,7 @@ class Aeroplane
 
     public function __construct()
     {
-        $this->flightSystem = new FlappingFlightSystem();
+        $this->flightSystem = new PropelledFlightSystem();
         // ...
     }
 
@@ -801,7 +801,7 @@ That's it, *Dependency Injection* is as easy as that, but why do it?
 ### Substituting Behaviour
 
 Well first up, by injecting dependencies you're promoting the development of
-flexible & reusable code because, not only can you inject the dependant type
+flexible & reusable code, because not only can you inject the dependent type
 but also any subtype. This makes it possible to extend your code without
 actually modifying it by simply injecting a different subtype of a dependency.
 
@@ -941,12 +941,12 @@ get code which doesn't depend on fixed dependencies but rather on abstractions
 dependencies are considered to be *loosely coupled*. 
 
 When your dependencies are *loosely coupled* you can create *test doubles*.
-These are very simple & predictable versions of a class's dependencies which
+These are very simple and predictable versions of a class's dependencies which
 can be injected into the class instead of the real dependencies. This allows
 the class to be tested in isolation. We'll look at this in more detail in the
 next chapter.
 
-### Dependency Inject Containers (DIC) & Service Managers
+### Dependency Injection Containers (DIC) & Service Managers
 
 These are tools which can manage the creation of objects and ensure that the
 required dependencies get injected into them on creation. I'm not going to talk
@@ -988,7 +988,7 @@ into a separate interface and that interface should become the dependency.
 
 Dependency Inversion Principle (DIP)
 
-: Class's should not depend on other concrete classes, but rather on
+: Classes should not depend on other concrete classes, but rather on
 abstractions (i.e. *abstract classes* and *interfaces*). Again we looked at
 this earlier on in the [email printer example](#email-printer-example).
 
@@ -1002,7 +1002,7 @@ extensible and testable applications.
 
 ### History
 
-PHP is naturally, heavily biased towards the
+PHP is naturally heavily biased towards the
 *[imperative programming](http://en.wikipedia.org/wiki/Imperative_programming)*
 paradigm. Imperative programs are basically sequences of statements which are
 executed in order, changing the program state they run. The imperative style of
@@ -1011,8 +1011,8 @@ programming has been the most popular style for several decades now.
 There are however other paradigms, one of which is *[functional
 programming](http://en.wikipedia.org/wiki/Functional_programming)*. Functional
 Programming pre-dates Imperative Programming but Imperative Programming still
-won the popularity race up until recently: Once it stopped being possible for
-computer CPUs to get any faster the manufacturers decided instead, to start
+won the popularity race up until recently. Once it stopped being possible for
+computer CPUs to get any faster the manufacturers decided instead to start
 adding more cores. So rather than trying to have a single thread of
 instructions executing faster and faster, we have multiple threads executing
 simultaneously.
@@ -1020,14 +1020,14 @@ simultaneously.
 The imperative style of programming is very well suited towards single threads
 of execution because statements always run in the correct order. With multiple
 threads however, one thread might run faster than another, and if they are both
-trying to read & change the same state there's no guarantee that it will
+trying to read and change the same state there's no guarantee that it will
 happen in the right order. To make this work using imperative programming you
 need to introduces *locks* to keep track and synchronise how the threads are
 interacting with the shared state. This is tricky and is not fun to do!
 
 The functional style of programming however, makes this a lot simpler. You can
 tell the computer to execute 2 different functions in 2 different threads and
-be sure that they will behave and expected and on conflict with each other. For
+be sure that they will behave as expected and not conflict with each other. For
 this reason functional programming and functional programming languages are
 gaining a lot of popularity at the moment. Also, many imperative languages are
 adding more and more functional style features.
@@ -1047,9 +1047,9 @@ will always be that value.
 These are known as *higher order functions*.
 
 I'm not going to go much deeper into functional programming in this book, I
-only real want to show what *pure functions* are. I will be applying some
+only really want to show what *pure functions* are. I will be applying some
 functional programming knowledge during the building of our application but I'm
-not really going to highlight it too much.
+not going to highlight it too much.
 
 ### Pure Functions
 
@@ -1140,7 +1140,7 @@ function applyNTimesAndAdd(callable $fn, $n, $value)
 
 So while `applyNTimesAndAdd` does have internal state, it is never persisted
 beyond each execution of the function so this can still be considered a
-functional function, even though the implementation uses imperative code.
+pure function, even though the implementation uses imperative code.
 
 Now lets move this theory inside objects. Obviously we can have methods which
 are pure functions:
@@ -1201,7 +1201,7 @@ class Counter
 ~~~~~~~~
 
 Since the behaviour of the methods in the `Counter` class now depends on the
-`$counter` property, none of the methods in the class could be considerer
+`$counter` property, none of the methods in the class could be considered
 pure.
 
 Now thinking back to the `applyNTimesAndAdd` function, is there something
@@ -1258,7 +1258,7 @@ refactoring.
 
 Learning a functional programming language is not only fascinating but it also
 gives you a whole new set of tools which you can apply in any language. Also,
-as we get more and more cores it's going to become more important over the next
+as we get more and more cores it's going to become increasingly important over the next
 few years! So, if you're not already familiar with functional programming I
 really recommend taking a look at it in the not so distant future - it will be a
 very rewarding experience!
@@ -1268,15 +1268,15 @@ but 2 notable ones are:
 
 Structure and Interpretation of Computer Programs (SICP)
 
-: This is one of the most recommended text books covering function programming.
+: This is one of the most recommended text books covering functional programming.
 It was written by MIT professors Harold Abelson & Gerald Jay Sussman with Julie
-Sussman and was formerly used as a text book used there.  It can also be read
+Sussman and was formerly used there as a text book.  It can also be read
 [online](http://mitpress.mit.edu/sicp/).
 
 [Functional Programming in PHP](http://www.functionalphp.com/)
 
 : This is a much easier to read book, written by Simon Holywell. It introduces
-functional programming to PHP programmers along with some use functional
+functional programming to PHP programmers along with some useful functional
 libraries which are available for PHP.
 
 ## Command Query Separation (CQS)
@@ -1347,7 +1347,7 @@ actually break this rule.
 When writing code you have to decide on the names of many things, these include
 *variables*, *classes* and *methods*. Choosing the names of these carefully
 makes the difference between code which is easily understandable and completely
-indecipherable code.
+indecipherable.
 
 When choosing names make them descriptive so that the intent of your code is
 clear. If your code is written well and the names are chosen well there should
@@ -1359,7 +1359,7 @@ It's OK to use comments when something cannot be make clear in code but those
 situations should be very, very rare!
 
 A very simple rule for naming is *use nouns for variable and class names and
-use verbs for method names*. It's not quite as[ black and white as that but
+use verbs for method names*. It's not quite as black and white as that but
 it's a very good place to start.
 
 For some more interesting talk on naming I thoroughly recommend having a read
@@ -1526,7 +1526,7 @@ to read Martin Fowler's book titled *Refactoring*.
 
 Also, much like with design patterns, lots of information can be found about
 the different refactorings online. In fact, Martin Fowler also has website
-called http://refactoring.com/ and it has a [catalogue of
+called http://refactoring.com/ which has a [catalogue of
 refactorings](http://refactoring.com/catalog/) on it.
 
 As I write this book I'll be refactoring all the example code as I go, sadly
@@ -1631,12 +1631,12 @@ include:
 * The Clean Coder: A Code of Conduct for Professional Programmers
 * Agile Software Development, Principles, Patterns, and Practices
 
-He also had a fantastic video series called
+He also has a fantastic video series called
 [Clean Code](http://cleancoders.com/).
 
 Through his books and videos he covers all the topics we've looked at in this
-chapter in a lot more depth. If you really want to improve the way your work
-he is definitely someone who you should be paying attention to.
+chapter in a lot more depth. If you really want to improve the way you work
+he is definitely someone to whom you should be paying attention.
 
 ## Domain Driven Design (DDD) {#ddd}
 
@@ -1651,7 +1651,7 @@ our software.
 
 The first stage of DDD is sitting down with the *domain experts* and starting
 to learn about their business. During this time we start to build a *ubiquitous
-language* which is the words and phrase that we can use to discuss the domain
+language* which is the words and phrases that we can use to discuss the domain
 in the *domain expert's* terms. This *ubiquitous language* should be used in
 all following discussions, as well as being transferred into the actual source
 code of the application.
@@ -1662,23 +1662,23 @@ through to actually modelling it, there is a certain style of code and set of
 [value objects](#value-objects-and-immutability), entities, aggregates,
 the repository pattern and more.
 
-Since DDD a far broader scope than just the writing of the code this book
+Since DDD has a far broader scope than just the writing of the code, this book
 doesn't really cover it in any depth. However, the code produced in this book
 is heavily influence by this style of design.
 
 If you really want to understand DDD you want to start off by reading Eric
 Evans' book *Domain-Driven Design*.
 
-Another person to keep an eye on regarding this subject is the PHP's
+Another person to keep an eye on regarding this subject is the PHP
 community's DDD man [Mathias Verraes](http://verraes.net/).
 
 ## Command Query Responsibility Segregation (CQRS) {#cqrs}
 
 A lot of the techniques I have talked about have about so far have been about
-building a rock solid *domain model* which cannot be broken from creating
+building a rock solid *domain model* which cannot be broken by creating
 objects in invalid states. Now all these careful checks are very important when
-state is being changed and manipulated. However, often we just one to view the
-state. In this circumstance the construction a complex domain model be
+state is being changed and manipulated. However, often we just want to view the
+state. In this circumstance the construction of a complex domain model may be
 considered unnecessarily computationally expensive. For this reason we could
 consider a bomb proof domain model to be *optimised for change*.
 
@@ -1719,7 +1719,7 @@ these *queries*.
 
 That's it, CQRS is all about splitting your application in half. One half is
 optimised for updating, the other for reading. There is more to this regarding
-scaling across multiple service but that the main gist from the software
+scaling across multiple servers but that is the main gist from the software
 architecture point of view.
 
 Now in this book we will not be building a full CQRS implementation (maybe that
@@ -1728,7 +1728,7 @@ distinction between the  *command* and *query* transactions in our application.
 My reason for this is that without the extra cost of building a full CQRS
 solution we still make it clear which *transactions* change state. Then should
 the day come that the application needs to be scaled in a big way and the
-decision to implement CQRS is decided on, this will make it just that little
+decision to implement CQRS is taken, this will make it just that little
 bit easier.
 
 If you want to learn more about CQRS there's a few great articles by Greg Young
@@ -1742,13 +1742,13 @@ such as *[Extreme Programming
 *[SCRUM](http://en.wikipedia.org/wiki/Scrum_(software_development))*. It
 accepts the fact that getting from the customer's idea to the final product is
 not something that can be set as a rigid path from the beginning. As the
-project progresses the customers ideas evolve and technical challenges might
-cause effect the way the project progresses.
+project progresses the customer's ideas evolve and technical challenges might
+affect the way the project progresses.
 
 With *agile* development the customer is heavily involved with the development
-process and the project is broken down in to manageable sized tasks. The
+process and the project is broken down into manageable sized tasks. The
 customer then prioritises the tasks, then the development team works in small
-burst of time to get the tasks completed and delivered to the customer - in
+bursts of time to get the tasks completed and delivered to the customer - in
 order of priority. In XP these bursts of time are called *iterations* whereas
 in SCRUM they're know as *sprints*. After each *iteration*/*sprint* the
 customer and development team review what has been done and decide what to
@@ -1772,7 +1772,7 @@ when interacting with the system:
 
 > A customer can view their previous orders.
 
-These are created as part of the planning an analysis process and are often
+These are created as part of the planning and analysis process and are often
 written on small cards called *story cards*. *Acceptance tests* are then
 decided on for this story, then that feature can be implemented.
 
