@@ -18,7 +18,7 @@ we progress I'll be doing this less and instead focusing on the specific points
 and decisions made in each step.
 
 In this chapter we want to implement the second feature which requires a very
-similar process to in the previous chapter so I'll cover it in less detail.
+similar process to that in the previous chapter so I'll cover it in less detail.
 Once we have this done we're going to spend a bit time analysing what we have
 created so far and try extract a better application structure out of it.
 
