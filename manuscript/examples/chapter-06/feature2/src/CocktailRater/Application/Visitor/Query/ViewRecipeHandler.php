@@ -3,7 +3,7 @@
 namespace CocktailRater\Application\Visitor\Query;
 
 use CocktailRater\Application\Exception\InvalidIdException;
-use CocktailRater\Domain\Identity;
+use CocktailRater\Domain\RecipeId;
 use CocktailRater\Domain\MeasuredIngredient;
 use CocktailRater\Domain\Recipe;
 use CocktailRater\Domain\Repository\Exception\NoSuchEntityException;
@@ -56,7 +56,7 @@ final class ViewRecipeHandler
     private function findRecipe($query)
     {
         try {
-            return $this->repository->findById(new Identity($query->getId()));
+            return $this->repository->findById(new RecipeId($query->getId()));
         } catch (NoSuchEntityException $e) {
             throw InvalidIdException::invalidEntityId(
                 'Recipe',

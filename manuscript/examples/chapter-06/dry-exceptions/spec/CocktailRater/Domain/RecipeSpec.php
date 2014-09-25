@@ -7,7 +7,7 @@ use CocktailRater\Domain\Recipe;
 use CocktailRater\Domain\User;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use CocktailRater\Domain\Identity;
+use CocktailRater\Domain\RecipeId;
 
 class RecipeSpec extends ObjectBehavior
 {
@@ -19,10 +19,10 @@ class RecipeSpec extends ObjectBehavior
             User::fromValues('test user'),
             [],
             '',
-            new Identity('test id')
+            new RecipeId('test id')
         );
 
-        $this->getId()->shouldBeLike(new Identity('test id'));
+        $this->getId()->shouldBeLike(new RecipeId('test id'));
     }
 
     function it_is_higher_rated_than_a_recipe_with_a_lower_rating()

@@ -3,7 +3,7 @@
 namespace CocktailRater\Domain\Repository;
 
 use CocktailRater\Domain\Recipe;
-use CocktailRater\Domain\Identity;
+use CocktailRater\Domain\RecipeId;
 use CocktailRater\Domain\Repository\Exception\NoSuchEntityException;
 
 interface RecipeRepository
@@ -16,7 +16,7 @@ interface RecipeRepository
      *
      * @throws NoSuchEntityException
      */
-    public function findById(Identity $id);
+    public function findById(RecipeId $id);
     // leanpub-end-insert
 
     /** @return Recipe[] */

@@ -8,7 +8,7 @@ use CocktailRater\Domain\Recipe;
 final class Recipe
 {
     // leanpub-start-insert
-    /** @var Identity */
+    /** @var RecipeId */
     private $id;
     // leanpub-end-insert
 
@@ -33,7 +33,7 @@ final class Recipe
         User $user,
         array $measuredIngredients,
         $method,
-        Identity $id = null
+        RecipeId $id = null
     ) {
     // leanpub-end-insert
         Assertion::string($name);
@@ -56,7 +56,7 @@ final class Recipe
     }
 
     // leanpub-start-insert
-    /** @return Identity */
+    /** @return RecipeId */
     public function getId()
     {
         return $this->id;

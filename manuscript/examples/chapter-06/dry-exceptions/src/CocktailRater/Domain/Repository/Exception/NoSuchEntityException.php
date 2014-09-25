@@ -5,7 +5,7 @@ namespace CocktailRater\Domain\Repository\Exception;
 // leanpub-start-insert
 use CocktailRater\Domain\Exception\ExceptionFactory;
 // leanpub-end-insert
-use CocktailRater\Domain\Identity;
+use CocktailRater\Domain\RecipeId;
 
 class NoSuchEntityException extends \RuntimeException
 {
@@ -18,7 +18,7 @@ class NoSuchEntityException extends \RuntimeException
      *
      * @return self
      */
-    public static function invalidId($entityName, Identity $id)
+    public static function invalidId($entityName, RecipeId $id)
     {
         // leanpub-start-insert
         return self::create(

@@ -2,7 +2,7 @@
 
 namespace CocktailRater\Domain;
 
-final class Identity
+final class RecipeId
 {
     public function __toString()
     {

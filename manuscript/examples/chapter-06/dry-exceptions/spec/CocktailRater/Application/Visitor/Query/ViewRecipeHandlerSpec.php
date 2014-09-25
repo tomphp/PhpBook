@@ -6,7 +6,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use CocktailRater\Application\Visitor\Query\ViewRecipeQuery;
 use CocktailRater\Domain\Repository\RecipeRepository;
-use CocktailRater\Domain\Identity;
+use CocktailRater\Domain\RecipeId;
 use CocktailRater\Domain\Repository\Exception\NoSuchEntityException;
 use CocktailRater\Application\Exception\InvalidIdException;
 
@@ -19,9 +19,9 @@ class ViewRecipeHandlerSpec extends ObjectBehavior
         $query = new ViewRecipeQuery('bad id');
         $repoException = NoSuchEntityException::invalidId(
             'Recipe',
-            new Identity('bad id')
+            new RecipeId('bad id')
         );
-        $repository->findById(new Identity('bad id'))->willThrow($repoException);
+        $repository->findById(new RecipeId('bad id'))->willThrow($repoException);
 
         $this->shouldThrow(
             InvalidIdException::invalidEntityId('Recipe', 'bad id', $repoException)

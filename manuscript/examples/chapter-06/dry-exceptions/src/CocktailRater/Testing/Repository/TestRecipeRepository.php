@@ -3,7 +3,7 @@
 namespace CocktailRater\Testing\Repository;
 
 // leanpub-start-insert
-use CocktailRater\Domain\Identity;
+use CocktailRater\Domain\RecipeId;
 // leanpub-end-insert
 use CocktailRater\Domain\Recipe;
 // leanpub-start-insert
@@ -33,7 +33,7 @@ final class TestRecipeRepository implements RecipeRepository
     }
 
     // leanpub-start-insert
-    public function findById(Identity $id)
+    public function findById(RecipeId $id)
     {
         $key = (string) $id;
 

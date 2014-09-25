@@ -2,7 +2,7 @@
 
 namespace CocktailRater\Domain\Repository\Exception;
 
-use CocktailRater\Domain\Identity;
+use CocktailRater\Domain\RecipeId;
 
 class NoSuchEntityException extends \RuntimeException
 {
@@ -11,7 +11,7 @@ class NoSuchEntityException extends \RuntimeException
      *
      * @return self
      */
-    public static function invalidId($entityName, Identity $id)
+    public static function invalidId($entityName, RecipeId $id)
     {
         return new static(sprintf(
             'A %s with the id "%s" does not exist.',

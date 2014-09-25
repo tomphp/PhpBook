@@ -665,7 +665,7 @@ Here's a simple example of what a simple entity class make look like:
 
 class Customer
 {
-    /** @var Identity */
+    /** @var CustomerId */
     private $id;
 
     /** @var PersonName */
@@ -675,7 +675,7 @@ class Customer
     private $email;
 
     public function __construct(
-        Identity $id,
+        CustomerId $id,
         PersonName $name,
         EmailAddress $email
     ) {
@@ -694,7 +694,7 @@ class Customer
         $this->email = $newAddress;
     }
 
-    /** @return Identity */
+    /** @return CustomerId */
     public function getId()
     {
         return $this->id;

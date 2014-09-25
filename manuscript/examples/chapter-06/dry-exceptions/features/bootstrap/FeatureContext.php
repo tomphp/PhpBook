@@ -14,7 +14,7 @@ use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
 // leanpub-start-insert
 use CocktailRater\Application\Visitor\Query\ViewRecipeHandler;
 use CocktailRater\Application\Visitor\Query\ViewRecipeQuery;
-use CocktailRater\Domain\Identity;
+use CocktailRater\Domain\RecipeId;
 use CocktailRater\Domain\Ingredient;
 use CocktailRater\Domain\IngredientAmount;
 use CocktailRater\Domain\MeasuredIngredient;
@@ -163,7 +163,7 @@ class FeatureContext implements SnippetAcceptingContext
                     // leanpub-start-insert
                     $measuredIngredients,
                     $properties['method'],
-                    new Identity($properties['id'])
+                    new RecipeId($properties['id'])
                     // leanpub-end-insert
                 )
             );
