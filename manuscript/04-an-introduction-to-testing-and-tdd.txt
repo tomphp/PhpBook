@@ -273,7 +273,7 @@ With PHPSpec](#unit-testing-with-phpspec) section.
 
 *Acceptance tests* and *unit tests* support the development process in a
 *double feedback loop*. *Acceptance tests* come from the *customer* in order of
-priority, the *developers* then develop implement the features using *unit
+priority, the *developers* then implement the features using *unit
 tests* with the *red, green, refactor cycle* until the *acceptance tests* pass.
 At this point the feature can be delivered to the *customer* and the next set
 of *acceptance tests* will be produced.
@@ -473,7 +473,7 @@ added for the 3 new *snippets*. At this point we can run Behat again:
 $ behat
 ~~~~~~~~
 
-It informs us that the first *snippet* has not content and needs to be
+It informs us that the first *snippet* has no content and needs to be
 implemented (the others have been skipped). Let's implement the first
 *snippet*.
 
@@ -807,7 +807,7 @@ be applying the process of *acceptance testing*. However, we'll not be going
 through the *unit testing* in the examples, except in certain circumstances
 where there is something to learn from it. The reason for this is that it would
 be a long winded, pointless and excessive process to document and it would
-detract from the topic of this book. That said, all the example code I will
+detract from the topic of this book. That said, all the example code will
 have been written using the full TDD process and you should do the same. This
 also means that all the example code for this book will contain complete unit
 tests which you can study for yourself.
@@ -1394,8 +1394,8 @@ a look at how this is actually done.
 
 ### Types of Test Doubles
 
-*Tests doubles* take on different forms depending on how the are used, each of
-these different types of are used to solve a different problem. Let's take a
+*Test doubles* take on different forms depending on how the are used, each of
+these different types are used to solve a different problem. Let's take a
 look at the different types.
 
 #### Dummy
@@ -1646,7 +1646,7 @@ order, for this reason I prefer to use *spies* when possible.
 
 There are many mocking frameworks available for PHP. PHPUnit has one built in,
 PhpSpec uses one called [Prophecy](https://github.com/phpspec/prophecy) and
-there are other's available too. The main reasons for using a different
+there are others available too. The main reasons for using a different
 framework are either because it provides some extra features or because
 they produce tests which you think are easier to understand.
 
@@ -1663,7 +1663,7 @@ using PHPUnit and PHPSpec's Prophecy framework's mocking facilities.
 PHPUnit's built in mocking facilities are quite verbose and often considered 
 to not be the easiest to read. It also doesn't support *spies* so you have to
 use *expectations*. For these reasons alternative mocking frameworks are often
-chosen when work with PHPUnit.
+chosen when working with PHPUnit.
 
 Here's the examples with PHPUnit:
 
