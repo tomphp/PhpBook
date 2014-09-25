@@ -181,7 +181,7 @@ The thinking I have used here goes something like this:
 > all existing recipes and returning the result.
 
 The first line of our test states *"Given there are no recipes"*. I'm going
-to use the *Respoitory* design pattern for the storing of objects, so to
+to use the *Repository* design pattern for the storing of objects, so to
 make this pass we've got to ensure that the *Repository* for storing recipes is
 empty. I've also stated that we're not going to worry about what storage system
 we will be using until later, so in the mean time I've decided to create a
@@ -227,7 +227,7 @@ referenced classes which don't exist, to fix this lets add the classes.
 
 ### Writing the Code
 
-The first line of the test requires the *respository* and that it has a method
+The first line of the test requires the *repository* and that it has a method
 called `clear` so to start with let's create that:
 
 {title="src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php", lang="php"}
