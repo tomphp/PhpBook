@@ -10,7 +10,7 @@ A brief description of the application we are going to build is as follows:
 >
 > Any *visitors* to the site can view the list of recipes *sorted by
 > rating*, but they must *register* with a *username*, *email* and *password*
-> in order to *rate* or *add* a *receipe*.
+> in order to *rate* or *add* a *recipe*.
 >
 > A *recipe* consists of the *name*, the *method* and the list of *measured
 > ingredients* consisting of the *ingredient* and *amount*. It also must keep
@@ -20,12 +20,12 @@ A brief description of the application we are going to build is as follows:
 > with 1 to 5 *stars*.
 > 
 > *Quantities* can be entered as either *millilitres (ml)*, *fluid ounces (fl
-> oz)*, *teaspoons (tsp)* or just a a number.
+> oz)*, *teaspoons (tsp)* or just a number.
 > 
 > The cocktail ingredients available are limited to a selection which can only
 > be added to by an *administrator*.
 
-Now we've got a basic understand of application we are going to build let's
+Now we've got a basic understanding of the application we are going to build let's
 take a quick look at the list of [user stories](#user-stories). These are
 listed in order of priority.
 
@@ -40,12 +40,12 @@ listed in order of priority.
 We will proceed to implement each of these stories in order. This may seem like
 a very basic application but it will provide enough functionality to give a
 good example of how to start building a well designed, extensible application.
-Also, because this is being developed emulating an *agile* approach, details
+Also, because this is being developed by emulating an *agile* approach, details
 may change as it progresses and extra features may be requested.
 
 ## Creating the Project
 
-Before jumping in let's quickly set up a project by. First create a directory
+Before jumping in let's quickly set up a project. First create a directory
 for the project:
 
 {lang="console"}
@@ -60,7 +60,7 @@ Then add the following `composer.json`
 
 I> ### PHPSpec Version
 I>
-I> You may have notice that the PHPSpec requirement is for a development
+I> You may have noticed that the PHPSpec requirement is for a development
 I> version. The reason for this is that there are some features which we will
 I> be using which are not in the stable release yet. When this changes I will
 I> update the book.
@@ -100,7 +100,7 @@ Let's look at the first [story](#user-stories). Here's the story card:
 > * Displays an empty list if there are no recipes
 > * Recipes display the *name of the cocktail*, *the rating* and the *name of 
 > the user who submitted it*
-> * The list should be presented it *decending* order of *rating*
+> * The list should be presented in *decending* order of *rating*
 
 From this information we can add the following feature file to the project:
 
@@ -125,19 +125,19 @@ take a look at the structure we plan to use to build the application.
 
 The core part of the application will be the *domain model*, this will consist
 of our modelled interpretation of the business rules. It will have no knowledge
-of how or where the data in stored, the user interface or any non-business
+of how or where the data is stored, the user interface or any non-business
 related implementation details. To achieve this level of separation we'll use
 *inversion of control* to let the other layers *plug in* to the domain layer.
 
-Behind the *domain model* there will be storage implementation layer for our
+Behind the *domain model* there will be a storage implementation layer for our
 chosen storage system. The storage system has not yet been decided so we'll
-make use of SQLite until we decide. The reason of this choice is that SQLite
+make use of SQLite until we decide. The reason for this choice is that SQLite
 allows the use of a database file without needing to set up a database server
-and it's easier to use that writing our own file based storage system.
+and it's easier to use than writing our own file-based storage system.
 
 In chapter 3 I introduced [CQRS](#cqrs) and stated that while we are not going
 to implement it in our application we will make a distinction between *command*
-and *query* interactions with the application. Therefore, in front of the
+and *query* interactions within the application. Therefore, in front of the
 *domain model* we'll have a layer of *commands* and *queries*, all interactions
 with the *domain model* from the *GUI* will go through these.
 
@@ -150,7 +150,7 @@ on.
 
 ## Scenario: View an empty list of recipes
 
-Let's start off by getting the first scenrio to pass, as a quick reminder here
+Let's start off by getting the first scenario to pass, as a quick reminder here
 it is:
 
 {title="View an empty list of recipes", lang="cucumber"}
@@ -161,7 +161,7 @@ it is:
         Then I should see an empty list
 ~~~~~~~~
 
-We're going to use TDD to create our code from the *outside in*. What I mean be
+We're going to use TDD to create our code from the *outside in*. What I mean by
 this is rather than trying to build the model and then get it to do what we
 need it to do, we'll start with what we want it to do and let that help create
 the model.
@@ -181,7 +181,7 @@ The thinking I have used here goes something like this:
 > all existing recipes and returning the result.
 
 The first line of our test states *"Given there are no recipes"*. I'm going
-to use the *Respoitory* design pattern the storing of objects, so to
+to use the *Respoitory* design pattern for the storing of objects, so to
 make this pass we've got to ensure that the *Repository* for storing recipes is
 empty. I've also stated that we're not going to worry about what storage system
 we will be using until later, so in the mean time I've decided to create a
@@ -199,7 +199,7 @@ W> You may also notice that I've added `@BeforeScenario` to the
 W> docblock for this method, this is known as an *annotation* and is required
 W> to inform Behat to run this method before it runs each *scenario*.
 W>
-W> Annotations strings in the docblock which start with the `@` symbol. Behat
+W> Annotation strings in the docblock start with the `@` symbol. Behat
 W> uses annotations for several things, you will see that each snippet function
 W> has a `@Given`, `@When` or `@Then` annotation, again this is not just a
 W> comment but is actually required by Behat in order to work.
@@ -227,7 +227,7 @@ referenced classes which don't exist, to fix this lets add the classes.
 
 ### Writing the Code
 
-The first list of the test requires the *respository* and that is has a method
+The first line of the test requires the *respository* and that it has a method
 called `clear` so to start with let's create that:
 
 {title="src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php", lang="php"}
@@ -257,7 +257,7 @@ like this:
 <<[src/CocktailRater/Application/Visitor/Query/ListRecipesQuery.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesQuery.php)
 
 I've chosen to add `Visitor` to the namespace since these are queries which
-will be made by *vistors*.
+will be made by *visitors*.
 
 Now for the interesting bit, the `ListRecipesHandler`. From looking at the
 `FeatureContext` it needs to take a *repository* as a constructor parameter,
@@ -267,6 +267,7 @@ has a `getRecipes` method.
 Here we don't want to depend on our test repository so we'll create an
 *interface* which will be used in its place. For the return value we'll create
 a class called `CocktailRater\Application\Visitor\Query\ListRecipesResult`.
+
 Without further ado, here it is:
 
 <<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
@@ -281,11 +282,11 @@ in*):
 
 <<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario1/src/CocktailRater/Domain/Repository/RecipeRepository.php)
 
-The `ListRecipesResult` class simply returns the and empty list from
-`getRecipes`, this is all it needs to do now.
+The `ListRecipesResult` class simply returns an empty list from
+`getRecipes`, this is all it needs to do for now.
 
 The `RecipeRepository` interface currently has no methods. This is because the
-only method currently existing in out test repository is `clear`, however this
+only method currently existing in our test repository is `clear`, however this
 method is only relevant for the tests, there is no requirement for this in the
 actual application.
 
@@ -294,7 +295,7 @@ a `RecipeRepository` to be provided to the constructor but, in the
 `FeatureContext` we've provided a `TestRecipeRepository`. To make this work we
 need to make the test repository implement the interface:
 
-{title="src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php", lang="php"}
+{title="src/CocktailRater/Testing/Repository/TestRecipeRepository.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -312,7 +313,7 @@ final class TestRecipeRepository implements RecipeRepository
 }
 ~~~~~~~~
 
-At this point should be able to run Behat and see the first *scenario* pass:
+At this point we should be able to run Behat and see the first *scenario* pass:
 
 {lang="console"}
 ~~~~~~~~
@@ -565,8 +566,8 @@ W> of Control* to make the model depend on the library via a layer of
 W> abstraction. The [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern)
 W> design pattern is a very good tool for this job.
 W>
-W> So, with that said way am I using the Assert library from within to domain
-W> model? The reason is: firstly it's a well used and stable library with
+W> So, with that said, why am I using the Assert library from within the domain
+W> model? The reason is: firstly it's a well-used and stable library with
 W> utility methods which have no side effects. Secondly, and more importantly,
 W> I'm using it in a way which adds, what I think, is a missing feature in the
 W> PHP language; namely typehints for scalar types and arrays.
@@ -581,12 +582,12 @@ One thing which may have caught your eye in the `User` class is the
 `fromValues` *static* method. This is known as a *named constructor*, its a way
 in which we can provide alternate constructors for classes and is one of the
 few valid uses of the `static` keyword. Since it maintains no state and works
-in a purely *functional* way is a safe use of `static`. At this point in time
+in a purely *functional* way it is a safe use of `static`. At this point in time
 this has only been used in the unit tests but the neater tests I felt were a
 good enough reason to add it.
 
 Another thing we have done here is restrict the value allowed for a rating to
-be between 1 and 5. If it falls outside of this range we throw and exception.
+be between 1 and 5. If it falls outside of this range we throw an exception.
 The appropriate exception to be throw here is PHP SPL's `OutOfBoundsException`.
 However, rather than throw it directly we've extended it so that it can be
 tracked down as coming from our application. Let's take a quick look at it:
@@ -607,7 +608,7 @@ list of recipes stored:
 
 <<[src/CocktailRater/Testing/Repository/TestRecipeRepository.php](examples/chapter-05/scenario2/src/CocktailRater/Testing/Repository/TestRecipeRepository.php)
 
-As you can see, we've created an in memory test repository. This is good enough
+As you can see, we've created an in-memory test repository. This is good enough
 for what we need so far.
 
 You can now run Behat and watch the second scenario pass.
@@ -694,5 +695,5 @@ So far we've managed to get the first feature's tests to pass. However, we've
 done it in quite an isolated way by considering this single *query* on it's
 own. In the next chapter we'll quickly add the second feature then we can 
 analyse the two to find similarities. We'll then use this knowledge to
-*refactor* what we have into a more generic form. After that we'll try display
+*refactor* what we have into a more generic form. After that we'll try to display
 the application's output on a page.
