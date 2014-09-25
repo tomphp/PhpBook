@@ -17,11 +17,14 @@ class ViewRecipeHandlerSpec extends ObjectBehavior
     ) {
         $this->beConstructedWith($repository);
         $query = new ViewRecipeQuery('bad id');
-        $repoException = NoSuchEntityException::invalidId('Recipe', new Identity('bad id'));
+        $repoException = NoSuchEntityException::invalidId(
+            'Recipe',
+            new Identity('bad id')
+        );
         $repository->findById(new Identity('bad id'))->willThrow($repoException);
 
-
-        $this->shouldThrow(InvalidIdException::invalidEntityId('Recipe', 'bad id', $repoException))
-             ->duringHandle($query);
+        $this->shouldThrow(
+            InvalidIdException::invalidEntityId('Recipe', 'bad id', $repoException)
+        )->duringHandle($query);
     }
 }
