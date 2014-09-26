@@ -100,7 +100,7 @@ Let's look at the first [story](#user-stories). Here's the story card:
 > * Displays an empty list if there are no recipes
 > * Recipes display the *name of the cocktail*, *the rating* and the *name of 
 > the user who submitted it*
-> * The list should be presented in *decending* order of *rating*
+> * The list should be presented in *descending* order of *rating*
 
 From this information we can add the following feature file to the project:
 
@@ -230,7 +230,7 @@ referenced classes which don't exist, to fix this lets add the classes.
 The first line of the test requires the *repository* and that it has a method
 called `clear` so to start with let's create that:
 
-{title="src/CocktailRater/Testing/Repository/TestRecipeRepoitory.php", lang="php"}
+{title="src/CocktailRater/Testing/Repository/TestRecipeRepository.php", lang="php"}
 ~~~~~~~~
 <?php
 
