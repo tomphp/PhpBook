@@ -4,8 +4,7 @@ Let's take a look at the story card for the next feature:
 
 > A visitor can view a recipe
 >
-> * Responds with an error if invalid recipe is requested
-> * Displays name, rating, user, and directions
+> * Displays name, rating, user, and the method
 > * Displays ingredients with quantities and units
 
 As before I shall provide the following acceptance tests:
@@ -38,10 +37,11 @@ Now the feature context needs to be updated, here what I've come up with:
 <<[features/bootstrap/FeatureContext.php](examples/chapter-06/feature2/features/bootstrap/FeatureContext.php)
 
 This has got a little bit complex because we're building the `Recipe` objects
-over a sequence of steps. Since the `Recipe` is still an immutable object we
-have to store up the details until we have them all and can create the object
-in `iRequestToViewRecipe`. The `FeatureContext` definitely needs to be tidied
-up a bit but before we look at doing that lets see the actual implementation.
+over a sequence of steps. Since the `Recipe` is takes most of it's values via
+the constructor we have to store up the details until we have them all and can
+create the object in `iRequestToViewRecipeFor`. Also, once a `Recipe` is stored
+we save the ID. The `FeatureContext` definitely needs to be tidied up a bit but
+before we look at doing that lets see the actual implementation.
 
 ## The Implementation
 
@@ -51,11 +51,44 @@ well look at ways we can improve it.
 
 <<[src/CocktailRater/Application/Visitor/Query/ViewRecipeQuery.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeQuery.php)
 
+This time the *query* contains the *ID* of the recipe to be viewed.
+
 <<[src/CocktailRater/Application/Visitor/Query/ViewRecipeHandler.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeHandler.php)
+
+The *handler* makes a new request `findById` to the repository. There's also
+some pretty ugly chaining of function calls to get the values. We'll do
+something about that soon.
 
 <<[src/CocktailRater/Application/Visitor/Query/ViewRecipeResult.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeResult.php)
 
-todo ... lots more of code here
+There's nothing really special in the *result*, it's just the collection of
+data.
+
+<<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Repository/RecipeRepository.php)
+
+<<[src/CocktailRater/Testing/Repository/TestRecipeRepository.php](examples/chapter-06/feature2/src/CocktailRater/Testing/Repository/TestRecipeRepository.php)
+
+The repository now has the concept of an ID, in the test repository we just
+generation an incremental one and provide and extra method so the test suite
+can retrieve the last one.
+
+<<[src/CocktailRater/Domain/RecipeId.php](examples/chapter-06/feature2/src/CocktailRater/Domain/RecipeId.php)
+
+<<[src/CocktailRater/Domain/Recipe.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Recipe.php)
+
+Last but not least, there are a few more new fields in the `Recipe` class
+
+## The Builder Pattern
+
+The issue I'd like to tackle is the complex building the `Recipe` in the
+`FeatureContext`. I think a nice way to tidy this up a bit would be to use
+the [builder design pattern](http://en.wikipedia.org/wiki/Builder_pattern).
+
+First of all let's create a `RecipeBuilder`:
+
+
+Even though we have only done this for the benefit of the `FeatureContext` it
+could definitely be useful later on.
 
 ## DRY - Don't Repeat Yourself
 
@@ -74,6 +107,18 @@ class, take a look at these:
 todo ... exception code.
 
 To tidy this up let's use one of PHP's newer features, *traits*:
+
+I> ### Traits
+I>
+I> PHP recently introduced `traits`. These are a way to include common bits
+I> of code into multiple classes, almost in a copy & paste style. Traits in
+I> PHP should be used to remove the repetition of small bit of code rather
+I> than performing complex tasks, they should be extracted to dedicated
+I> classes.
+I>
+I> You define the *methods* and *properties* in your `trait`, you can then use
+I> those methods and properties in any class by including `use TraitName;` in
+I> the body of the class.
 
 todo ... tidy exceptions code.
 
@@ -103,9 +148,14 @@ D>
 D> This is much more helpful.
 
 Things:
+* REMOVE ID FROM ACCEPTANCE TEST
 * DRY and exception traits
 * Problems in Feature Context
 * Builder pattern
 * Too many getters
 * LoD and possible solutions - ISP/Extracted Object/Presenter
 
+
+## Some Thoughts
+
+Lots of test refactoring.
