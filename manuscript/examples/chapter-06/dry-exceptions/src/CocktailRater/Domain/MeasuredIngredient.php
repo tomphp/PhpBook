@@ -7,12 +7,12 @@ final class MeasuredIngredient
     /** @var Ingredient */
     private $ingredient;
 
-    /** @var IngredientAmount */
+    /** @var Amount */
     private $amount;
 
     public function __construct(
         Ingredient $ingredient,
-        IngredientAmount $amount
+        Amount $amount
     ) {
         $this->ingredient = $ingredient;
         $this->amount     = $amount;
@@ -24,7 +24,7 @@ final class MeasuredIngredient
         return $this->ingredient;
     }
 
-    /** @return IngredientAmount */
+    /** @return Amount */
     public function getAmount()
     {
         return $this->amount;

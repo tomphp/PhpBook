@@ -76,7 +76,21 @@ can retrieve the last one.
 
 <<[src/CocktailRater/Domain/Recipe.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Recipe.php)
 
-Last but not least, there are a few more new fields in the `Recipe` class
+There has been a few new fields added to the `Recipe` class. This has lead to
+a few more *value objects* being created also:
+
+<<[src/CocktailRater/Domain/MeasuredIngredient.php](examples/chapter-06/feature2/src/CocktailRater/Domain/MeasuredIngredient.php)
+
+<<[src/CocktailRater/Domain/Ingredient.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Ingredient.php)
+
+<<[src/CocktailRater/Domain/Amount.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Amount.php)
+
+<<[src/CocktailRater/Domain/Unit.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Unit.php)
+
+These are all pretty plain but it's worth taking a quick look a `Unit`. This is
+basically how to achieve an *enumeration* in PHP. It's basically a value object
+which accepts a finite set of values, each defined as a constant of the class.
+You create a *unit* of millilitres like this: `new Unit(Unit::ML)`.
 
 ## The Builder Pattern
 
@@ -86,9 +100,187 @@ the [builder design pattern](http://en.wikipedia.org/wiki/Builder_pattern).
 
 First of all let's create a `RecipeBuilder`:
 
+<<[src/CocktailRater/Domain/Builder/RecipeBuilder.php](examples/chapter-06/builder-pattern/src/CocktailRater/Domain/Builder/RecipeBuilder.php)
+
+Now we can use the builder in the `FeatureContext` but adding the following
+method:
+
+{title="features/bootstrap/FeatureContext.php", lang="php"}
+~~~~~~~~
+    // leanpub-start-insert
+    /**
+     * @param string $name
+     *
+     * @return RecipeBuilder
+     */
+    private function getRecipeBuilder($name)
+    {
+        if (!isset($this->recipes[$name])) {
+            $this->recipes[$name]['builder'] = new RecipeBuilder();
+            $this->recipes[$name]['builder']->setName($name);
+        }
+
+        return $this->recipes[$name]['builder'];
+    }
+    // leanpub-end-insert
+~~~~~~~~
+
+And updating these ones:
+
+{title="features/bootstrap/FeatureContext.php", lang="php"}
+~~~~~~~~
+    /**
+     * @Given there's a recipe for :name by user :user with :rating stars
+     */
+    public function theresARecipeForByUserWithStars($name, $user, $rating)
+    {
+        // leanpub-start-insert
+        $builder = $this->getRecipeBuilder($name);
+
+        $builder->setUser(User::fromValues($user));
+        $builder->setRating(new Rating($rating));
+        // leanpub-end-insert
+    }
+~~~~~~~~
+
+{title="features/bootstrap/FeatureContext.php", lang="php"}
+~~~~~~~~
+    /**
+     * @Given the recipe for :name has method:
+     */
+    public function theRecipeForHasMethod($name, PyStringNode $method)
+    {
+        // leanpub-start-insert
+        $this->getRecipeBuilder($name)->setMethod($method->getRaw());
+        // leanpub-end-insert
+    }
+~~~~~~~~
+
+{title="features/bootstrap/FeatureContext.php", lang="php"}
+~~~~~~~~
+    /**
+     * @Given the recipe for :name has measured ingredients:
+     */
+    public function theRecipeForHasMeasuredIngredients($name, TableNode $ingredients)
+    {
+        // leanpub-start-insert
+        $builder = $this->getRecipeBuilder($name);
+
+        foreach ($ingredients->getHash() as $ingredient) {
+            $builder->addIngredient(
+                Amount::fromValues(
+                    $ingredient['amount'],
+                    $ingredient['unit']
+                ),
+                new Ingredient($ingredient['name'])
+            );
+        }
+        // leanpub-end-insert
+    }
+~~~~~~~~
+
+{title="features/bootstrap/FeatureContext.php", lang="php"}
+~~~~~~~~
+    private function storeRecipes()
+    {
+        // leanpub-start-insert
+        foreach ($this->recipes as $name => &$recipeSpec) {
+            $recipe = $recipeSpec['builder']->build();
+
+            $this->recipeRepository->store($recipe);
+
+            $recipeSpec['id'] = $this->recipeRepository
+                                     ->getLastInsertId()
+                                     ->getValue();
+        }
+        // leanpub-end-insert
+    }
+~~~~~~~~
+
+I also added this named constructor to `Amount` to make things a little bit
+tidier:
+
+{title="src/CocktailRater/Domain/Amount.php", lang="php"}
+~~~~~~~~
+    /**
+     * @param float  $value
+     * @oaram string $unit
+     *
+     * @return Amount
+     */
+    public static function fromValues($value, $unit)
+    {
+        return new self($value, new Unit($unit));
+    }
+~~~~~~~~
 
 Even though we have only done this for the benefit of the `FeatureContext` it
 could definitely be useful later on.
+
+## The Law of Demeter
+
+Next up, let's look at tidying up some code in the *query handlers*. Both of
+ones we have created have ugly lines of code like this:
+
+~~~~~~~~
+$recipe->getUser()->getUsername()->getValue()
+~~~~~~~~
+
+The `ViewRecipe` handler also has the particularly ugly `array_map` to get the
+list of ingredients.
+
+Big chains of method calls like this violate the [Law of
+Demeter](http://en.wikipedia.org/wiki/Law_of_Demeter) which states *you should
+only talk to your immediate friends*. What this means is you can **only** call
+methods and access properties only of objects which are properties of the
+current class, which are parameters to the current method, or have been created
+inside the method. This law is pretty much stating the same thing as the
+*one dot per line* rule of [Object Calisthenics](#object-calisthenics). Note
+that PHP request the use of `$this->` to methods and properties so it's actual
+*two arrows per line*.
+
+So how to solve it? Well on approach might be to ask the top level class
+(*aggregate*) to ask the next level down to return the value and so on like so:
+
+~~~~~~~~
+class Recipe
+{
+    // ...
+
+    public function getUsername()
+    {
+        return $this->user->getUsernameValue();
+    }
+}
+
+class User
+{
+    // ...
+
+    public function getUsernameValue()
+    {
+        return $this->username->getValue();
+    }
+}
+~~~~~~~~
+
+However, if you're going to do this for more that 2 or 3 values the interface
+is going to start to get pretty bloated. Another way might be to add a method
+to the `Recipe` class to return all it's values as an array or *data transfer
+object*. There are other ways you could do this but for this project let's use
+a combination of these 2 methods. If only 1 or 2 getters are required we'll
+consider using them, otherwise well using a *read* method to return a DTO (I
+prefer objects to arrays because the content is defined and it can be immutable
+- even though it's extra code. However, using an array or object with public
+properties might be appropriate for your project).
+
+### Exposing Recipe Values
+
+With this in mind, let's expose the contents of the `Recipe` class via a DTO.
+
+### Interface Segregation Principle
+
+### More LoD
 
 ## DRY - Don't Repeat Yourself
 

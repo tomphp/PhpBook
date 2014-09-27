@@ -2,7 +2,7 @@
 
 namespace CocktailRater\Domain;
 
-final class IngredientAmount
+final class Amount
 {
     /** @var float */
     private $value;

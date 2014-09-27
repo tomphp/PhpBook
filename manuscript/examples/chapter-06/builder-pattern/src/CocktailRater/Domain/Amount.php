@@ -2,7 +2,7 @@
 
 namespace CocktailRater\Domain;
 
-final class IngredientAmount
+final class Amount
 {
     /** @var float */
     private $value;
@@ -15,7 +15,7 @@ final class IngredientAmount
      * @param float  $value
      * @oaram string $unit
      *
-     * @return IngredientAmount
+     * @return Amount
      */
     public static function fromValues($value, $unit)
     {

@@ -15,7 +15,7 @@ use CocktailRater\Application\Visitor\Query\ViewRecipeQuery;
 use CocktailRater\Domain\Builder\RecipeBuilder;
 // leanpub-end-insert
 use CocktailRater\Domain\Ingredient;
-use CocktailRater\Domain\IngredientAmount;
+use CocktailRater\Domain\Amount;
 use CocktailRater\Domain\MeasuredIngredient;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
@@ -187,7 +187,7 @@ class FeatureContext implements SnippetAcceptingContext
 
         foreach ($ingredients->getHash() as $ingredient) {
             $builder->addIngredient(
-                IngredientAmount::fromValues(
+                Amount::fromValues(
                     $ingredient['amount'],
                     $ingredient['unit']
                 ),

@@ -3,7 +3,7 @@
 namespace CocktailRater\Domain\Builder;
 
 use CocktailRater\Domain\Ingredient;
-use CocktailRater\Domain\IngredientAmount;
+use CocktailRater\Domain\Amount;
 use CocktailRater\Domain\MeasuredIngredient;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
@@ -49,7 +49,7 @@ class RecipeBuilder
     }
 
     public function addIngredient(
-        IngredientAmount $amount,
+        Amount $amount,
         Ingredient $ingredient
     ) {
         $this->ingredients[] = new MeasuredIngredient(

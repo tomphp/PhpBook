@@ -3,7 +3,7 @@
 namespace spec\CocktailRater\Domain\Builder;
 
 use CocktailRater\Domain\Ingredient;
-use CocktailRater\Domain\IngredientAmount;
+use CocktailRater\Domain\Amount;
 use CocktailRater\Domain\MeasuredIngredient;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
@@ -21,11 +21,11 @@ class RecipeBuilderSpec extends ObjectBehavior
         $this->setUser(User::fromValues('test user'));
         $this->setMethod('test method');
         $this->addIngredient(
-            IngredientAmount::fromValues(10, 'ml'),
+            Amount::fromValues(10, Unit::ML),
             new Ingredient('ingredient 1')
         );
         $this->addIngredient(
-            IngredientAmount::fromValues(50, 'ml'),
+            Amount::fromValues(50, Unit::ML),
             new Ingredient('ingredient 2')
         );
 
@@ -37,11 +37,11 @@ class RecipeBuilderSpec extends ObjectBehavior
                 [
                     new MeasuredIngredient(
                         new Ingredient('ingredient 1'),
-                        IngredientAmount::fromValues(10, 'ml')
+                        Amount::fromValues(10, Unit::ML)
                     ),
                     new MeasuredIngredient(
                         new Ingredient('ingredient 2'),
-                        IngredientAmount::fromValues(50, 'ml')
+                        Amount::fromValues(50, Unit::ML)
                     )
                 ],
                 'test method'
