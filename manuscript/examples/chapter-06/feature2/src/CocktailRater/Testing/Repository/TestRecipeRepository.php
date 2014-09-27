@@ -18,24 +18,22 @@ final class TestRecipeRepository implements RecipeRepository
 
     // leanpub-start-insert
     /** @var int */
-    private $newId = 1;
+    private $newId = 0;
     // leanpub-end-insert
 
     public function store(Recipe $recipe)
     {
         // leanpub-start-insert
-        $key = $recipe->getId()
-            ? (string) $recipe->getId()
-            : 'new id' . $this->newId++;
+        $id = 'new id ' . ++$this->newId;
 
-        $this->recipes[$key] = $recipe;
+        $this->recipes[$id] = $recipe;
         // leanpub-end-insert
     }
 
     // leanpub-start-insert
     public function findById(RecipeId $id)
     {
-        $key = (string) $id;
+        $key = $id->getValue();
 
         if (!array_key_exists($key, $this->recipes)) {
             throw NoSuchEntityException::invalidId('Recipe', $id);
@@ -53,4 +51,12 @@ final class TestRecipeRepository implements RecipeRepository
     public function clear()
     {
     }
+
+    // leanpub-start-insert
+    /** @return RecipeId */
+    public function getLastInsertId()
+    {
+        return new RecipeId('new id ' . $this->newId);
+    }
+    // leanpub-end-insert
 }

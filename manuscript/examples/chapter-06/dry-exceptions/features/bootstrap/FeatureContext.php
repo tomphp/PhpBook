@@ -81,6 +81,10 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function iRequestAListOfRecipes()
     {
+        // leanpub-start-insert
+        $this->storeRecipes();
+        // leanpub-end-insert
+
         $query = new ListRecipesQuery();
         $handler = new ListRecipesHandler($this->recipeRepository);
 
@@ -103,17 +107,10 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function theresARecipeForByUserWithStars($name, $user, $rating)
     {
-        $this->recipeRepository->store(
-            new Recipe(
-                $name,
-                new Rating($rating),
-                new User(new Username($user)),
-                // leanpub-start-insert
-                [],
-                ''
-                // leanpub-end-insert
-            )
-        );
+        // leanpub-start-insert
+        $this->recipes[$name]['username'] = $user;
+        $this->recipes[$name]['rating'] = $rating;
+        // leanpub-end-insert
     }
 
     /**
@@ -137,46 +134,31 @@ class FeatureContext implements SnippetAcceptingContext
 
     // leanpub-start-insert
     /**
-     * @When I request to view recipe :id
+     * @When I request to view recipe using a bad id
      */
-    public function iRequestToViewRecipe($id)
+    public function iRequestToViewRecipeUsingABadId()
     {
-        foreach ($this->recipes as $name => $properties) {
-            $measuredIngredients = array_map(
-                function ($ingredient) {
-                    return new MeasuredIngredient(
-                        new Ingredient($ingredient['name']),
-                        new IngredientAmount(
-                            $ingredient['amount'],
-                            new Unit($ingredient['unit'])
-                        )
-                    );
-                },
-                $properties['ingredients']
-            );
-
-            $this->recipeRepository->store(
-                new Recipe(
-                    $name,
-                    new Rating($properties['rating']),
-                    User::fromValues($properties['username']),
-                    // leanpub-start-insert
-                    $measuredIngredients,
-                    $properties['method'],
-                    new RecipeId($properties['id'])
-                    // leanpub-end-insert
-                )
-            );
-        }
-
         try {
-            $query = new ViewRecipeQuery($id);
+            $query = new ViewRecipeQuery('bad id');
             $handler = new ViewRecipeHandler($this->recipeRepository);
 
             $this->result = $handler->handle($query);
         } catch (ApplicationException $e) {
             $this->error = $e;
         }
+    }
+
+    /**
+     * @When I request to view recipe for :name
+     */
+    public function iRequestToViewRecipeFor($name)
+    {
+        $this->storeRecipes();
+
+        $query = new ViewRecipeQuery($this->recipes[$name]['id']);
+        $handler = new ViewRecipeHandler($this->recipeRepository);
+
+        $this->result = $handler->handle($query);
     }
 
     /**
@@ -189,30 +171,6 @@ class FeatureContext implements SnippetAcceptingContext
             $this->error,
             'Expected an invalid id error.'
         );
-    }
-
-    /**
-     * @Given there's a recipe for :name with id :id
-     */
-    public function thereSARecipeForWithId($name, $id)
-    {
-        $this->recipes[$name]['id'] = $id;
-    }
-
-    /**
-     * @Given the recipe for :name was submitted by user :username
-     */
-    public function theRecipeForWasSubmittedByUser($name, $username)
-    {
-        $this->recipes[$name]['username'] = $username;
-    }
-
-    /**
-     * @Given the recipe for :name is rated with :rating stars
-     */
-    public function theRecipeForIsRatedWithStars($name, $rating)
-    {
-        $this->recipes[$name]['rating'] = $rating;
     }
 
     /**
@@ -264,6 +222,48 @@ class FeatureContext implements SnippetAcceptingContext
             $table->getHash(),
             $this->getResultField('measuredIngredients')
         );
+    }
+
+    private function storeRecipes()
+    {
+        foreach ($this->recipes as $name => &$properties) {
+            $ingredients = isset($properties['ingredients'])
+                ? $properties['ingredients']
+                : [];
+
+            $measuredIngredients = array_map(
+                function ($ingredient) {
+                    return new MeasuredIngredient(
+                        new Ingredient($ingredient['name']),
+                        new IngredientAmount(
+                            $ingredient['amount'],
+                            new Unit($ingredient['unit'])
+                        )
+                    );
+                },
+                $ingredients
+            );
+
+            $method = isset($properties['method'])
+                ? $properties['method']
+                : '';
+
+            $this->recipeRepository->store(
+                new Recipe(
+                    $name,
+                    new Rating($properties['rating']),
+                    User::fromValues($properties['username']),
+                    // leanpub-start-insert
+                    $measuredIngredients,
+                    $method
+                    // leanpub-end-insert
+                )
+            );
+
+            $properties['id'] = $this->recipeRepository
+                                     ->getLastInsertId()
+                                     ->getValue();
+        }
     }
 
     /** @return mixed */

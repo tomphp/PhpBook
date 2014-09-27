@@ -11,20 +11,6 @@ use CocktailRater\Domain\RecipeId;
 
 class RecipeSpec extends ObjectBehavior
 {
-    function it_stores_the_identity()
-    {
-        $this->beConstructedWith(
-            'test recipe',
-            new Rating(3),
-            User::fromValues('test user'),
-            [],
-            '',
-            new RecipeId('test id')
-        );
-
-        $this->getId()->shouldBeLike(new RecipeId('test id'));
-    }
-
     function it_is_higher_rated_than_a_recipe_with_a_lower_rating()
     {
         $this->beConstructedWith(

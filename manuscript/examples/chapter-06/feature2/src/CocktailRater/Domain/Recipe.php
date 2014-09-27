@@ -3,15 +3,9 @@
 namespace CocktailRater\Domain;
 
 use Assert\Assertion;
-use CocktailRater\Domain\Recipe;
 
 final class Recipe
 {
-    // leanpub-start-insert
-    /** @var RecipeId */
-    private $id;
-    // leanpub-end-insert
-
     /** @var string */
     private $name;
 
@@ -32,8 +26,7 @@ final class Recipe
         Rating $rating,
         User $user,
         array $measuredIngredients,
-        $method,
-        RecipeId $id = null
+        $method
     ) {
     // leanpub-end-insert
         Assertion::string($name);
@@ -49,19 +42,10 @@ final class Recipe
         $this->rating              = $rating;
         $this->user                = $user;
         // leanpub-start-insert
-        $this->id                  = $id;
         $this->method              = $method;
         $this->measuredIngredients = $measuredIngredients;
         // leanpub-end-insert
     }
-
-    // leanpub-start-insert
-    /** @return RecipeId */
-    public function getId()
-    {
-        return $this->id;
-    }
-    // leanpub-end-insert
 
     /** @return string */
     public function getName()
