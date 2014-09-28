@@ -15,6 +15,12 @@ final class Recipe
     /** @var User */
     private $user;
 
+    /** @var MeasuredIngredient[] */
+    private $measuredIngredients;
+
+    /** @var string */
+    private $method;
+
     /**
      * @param string               $name
      * @param MeasuredIngredient[] $measuredIngredients
@@ -40,36 +46,6 @@ final class Recipe
         $this->method              = $method;
         $this->measuredIngredients = $measuredIngredients;
     }
-
-//   /** @return string */
-//   public function getName()
-//   {
-//       return $this->name;
-//   }
-//
-//   /** @return Rating */
-//   public function getRating()
-//   {
-//       return $this->rating;
-//   }
-//
-//   /** @return User */
-//   public function getUser()
-//   {
-//       return $this->user;
-//   }
-//
-//   /** @return string */
-//   public function getMethod()
-//   {
-//       return $this->method;
-//   }
-//
-//   /** @return MeasuredIngredient[] */
-//   public function getMeasuredIngredients()
-//   {
-//       return $this->measuredIngredients;
-//   }
 
     public function isHigherRatedThan(Recipe $other)
     {

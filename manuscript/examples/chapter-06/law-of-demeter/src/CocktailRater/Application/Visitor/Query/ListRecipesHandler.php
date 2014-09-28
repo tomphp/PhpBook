@@ -18,18 +18,12 @@ final class ListRecipesHandler
     /** @return ListRecipesResult */
     public function handle(ListRecipesQuery $query)
     {
-        $result = new ListRecipesResult();
+        $result = new ListRecipesResultData();
 
         foreach ($this->getAllRecipesSortedByRating() as $recipe) {
             // leanpub-start-insert
-            $details = $recipe->getDetails();
+            $result->addRecipe($recipe->getDetails());
             // leanpub-end-insert
-
-            $result->addRecipe(
-                $details->getName(),
-                $details->getRating(),
-                $details->getUsername()
-            );
         }
 
         return $result;

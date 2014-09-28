@@ -15,6 +15,12 @@ final class Recipe
     /** @var User */
     private $user;
 
+    /** @var MeasuredIngredient[] */
+    private $measuredIngredients;
+
+    /** @var string */
+    private $method;
+
     // leanpub-start-insert
     /**
      * @param string               $name

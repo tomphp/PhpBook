@@ -266,8 +266,8 @@ class User
 
 However, if you're going to do this for more that 2 or 3 values the interface
 is going to start to get pretty bloated. Another way might be to add a method
-to the `Recipe` class to return all it's values as an array or *data transfer
-object*. There are other ways you could do this but for this project let's use
+to the `Recipe` class to return all it's values as an array or *Data Transfer
+Object*. There are other ways you could do this but for this project let's use
 a combination of these 2 methods. If only 1 or 2 getters are required we'll
 consider using them, otherwise well using a *read* method to return a DTO (I
 prefer objects to arrays because the content is defined and it can be immutable
@@ -277,10 +277,179 @@ properties might be appropriate for your project).
 ### Exposing Recipe Values
 
 With this in mind, let's expose the contents of the `Recipe` class via a DTO.
+We do this by creating 2 DTO classes, one for `Recipe` and one for `User`:
 
-### Interface Segregation Principle
+<<[src/CocktailRater/Domain/RecipeDetails.php](examples/chapter-06/law-of-demeter/src/CocktailRater/Domain/RecipeDetails.php)
 
-### More LoD
+<<[src/CocktailRater/Domain/UserDetails.php](examples/chapter-06/law-of-demeter/src/CocktailRater/Domain/UserDetails.php)
+
+And add the following method to `User` and `Recipe`:
+
+{title="CocktailRater/Domain/Recipe.php", lang="php"}
+~~~~~~~~
+    /** @return RecipeDetails */
+    public function getDetails()
+    {
+        return new RecipeDetails(
+            $this->name,
+            $this->user->getDetails(),
+            $this->rating->getValue(),
+            $this->method,
+            array_map(
+                function (MeasuredIngredient $ingredient) {
+                    return [
+                        'name'   => $ingredient->getIngredient()->getName(),
+                        'amount' => $ingredient->getAmount()->getValue(),
+                        'unit'   => $ingredient->getAmount()
+                                               ->getUnit()
+                                               ->getValue()
+                    ];
+                },
+                $this->measuredIngredients
+            )
+        );
+    }
+~~~~~~~~
+
+{title="CocktailRater/Domain/User.php", lang="php"}
+~~~~~~~~
+    /** @return UserDetails */
+    public function getDetails()
+    {
+        return new UserDetails($this->username->getValue());
+    }
+~~~~~~~~
+
+Then we can update our query handlers to use these like so:
+
+{title="CocktailRater/Application/Visitor/ListRecipesHandler.php", lang="php"}
+~~~~~~~~
+    /** @return ListRecipesResult */
+    public function handle(ListRecipesQuery $query)
+    {
+        $result = new ListRecipesResult();
+
+        foreach ($this->getAllRecipesSortedByRating() as $recipe) {
+            // leanpub-start-insert
+            $details = $recipe->getDetails();
+            // leanpub-end-insert
+
+            $result->addRecipe(
+                $details->getName(),
+                $details->getRating(),
+                $details->getUsername()
+            );
+        }
+
+        return $result;
+    }
+~~~~~~~~
+
+{title="CocktailRater/Application/Visitor/ViewRecipeHandler.php", lang="php"}
+~~~~~~~~
+    /**
+     * @return ViewRecipeResult
+     *
+     * @throws InvalidIdException
+     */
+    public function handle(ViewRecipeQuery $query)
+    {
+        $recipe = $this->findRecipe($query);
+        // leanpub-start-insert
+        $details = $recipe->getDetails();
+        // leanpub-end-insert
+
+        return new ViewRecipeResult(
+            // leanpub-start-insert
+            $details->getName(),
+            $details->getUsername(),
+            $details->getRating(),
+            $details->getMethod(),
+            $details->getMeasuredIngredients()
+            // leanpub-end-insert
+        );
+    }
+~~~~~~~~
+
+At this point we can also remove `getUsername` from the `User` class and
+`getName`, `getRating`, `getUser`, `getMethod` and `getMeasuredIngredients`
+from the `Recipe` class.
+
+Already this is looking a whole lot neater but we're still violating the *law
+of demeter* at 2 levels in the *handlers*. Firstly, we're calling `getDetails`
+on a `Recipe` which is not actually an *immediate friend* of the handler (since
+is is fetched from a repository). Secondly, we're calling the *get* methods on
+the details returned from `$recipe`. Considering, this is happening just at the
+application layer in our handler classes I don't really think this is the
+biggest crime and could be left as it is. That said, let's still try and tidy
+it up completely.
+
+First up let's try and get rid of all the calls to the *getters* on the details
+objects. We can do this by simply handing in the details DTO to the result
+class constructor, the problem with this is that is adds a dependency on the
+*domain model* from anywhere that a result object is used (since the result
+object knows about the details object in the domain). When using a language
+like Java, C++ or C# this becomes something that really needs to be considered
+as separate packages need to be able to be compiled independently, however,
+with PHP doesn't work like that (maybe one day it will). Even so, it's probably
+still good practice to work this way and since we don't want other layers
+talking to the application to create *result* objects let's make the *results*
+into *interfaces* and have real result DTOs which can know about the *details*
+DTO. This way the dependency from outside is on the interface and therefore
+it's decoupled form the *domain*.
+
+Now we have this:
+
+<<[src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-06/law-of-demeter/src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php)
+
+<<[src/CocktailRater/Application/Visitor/Query/ViewRecipeResult.php](examples/chapter-06/law-of-demeter/src/CocktailRater/Application/Visitor/Query/ViewRecipeResult.php)
+
+<<[src/CocktailRater/Application/Visitor/Query/ListRecipesResultData.php](examples/chapter-06/law-of-demeter/src/CocktailRater/Application/Visitor/Query/ListRecipesResultData.php)
+
+<<[src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php](examples/chapter-06/law-of-demeter/src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php)
+
+{title="CocktailRater/Application/Visitor/ListRecipesHandler.php", lang="php"}
+~~~~~~~~
+    /** @return ListRecipesResult */
+    public function handle(ListRecipesQuery $query)
+    {
+        $result = new ListRecipesResultData();
+
+        foreach ($this->getAllRecipesSortedByRating() as $recipe) {
+            // leanpub-start-insert
+            $result->addRecipe($recipe->getDetails());
+            // leanpub-end-insert
+        }
+
+        return $result;
+    }
+~~~~~~~~
+
+{title="CocktailRater/Application/Visitor/ViewRecipeHandler.php", lang="php"}
+~~~~~~~~
+    /**
+     * @return ViewRecipeResult
+     *
+     * @throws InvalidIdException
+     */
+    public function handle(ViewRecipeQuery $query)
+    {
+        // leanpub-start-insert
+        return new ViewRecipeResultData(
+            $this->findRecipe($query)->getDetails()
+        );
+        // leanpub-end-insert
+    }
+~~~~~~~~
+
+That's almost it now, the handlers are much neater but we've still not quite
+conformed to the *Law of Demeter*. ...
+
+### Is this Taking it too far?
+
+## The Ingredients Collection
+
+## Forgotten Types
 
 ## DRY - Don't Repeat Yourself
 

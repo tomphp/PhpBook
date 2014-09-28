@@ -23,12 +23,6 @@ final class User
         $this->username = $username;
     }
 
-//   /** @return Username */
-//   public function getUsername()
-//   {
-//       return $this->username;
-//   }
-
     /** @return UserDetails */
     public function getDetails()
     {

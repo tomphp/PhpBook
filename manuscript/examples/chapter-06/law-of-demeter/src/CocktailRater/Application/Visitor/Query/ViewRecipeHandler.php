@@ -3,9 +3,9 @@
 namespace CocktailRater\Application\Visitor\Query;
 
 use CocktailRater\Application\Exception\InvalidIdException;
-use CocktailRater\Domain\RecipeId;
 use CocktailRater\Domain\MeasuredIngredient;
 use CocktailRater\Domain\Recipe;
+use CocktailRater\Domain\RecipeId;
 use CocktailRater\Domain\Repository\Exception\NoSuchEntityException;
 use CocktailRater\Domain\Repository\RecipeRepository;
 
@@ -26,20 +26,11 @@ final class ViewRecipeHandler
      */
     public function handle(ViewRecipeQuery $query)
     {
-        $recipe = $this->findRecipe($query);
         // leanpub-start-insert
-        $details = $recipe->getDetails();
-        // leanpub-end-insert
-
-        return new ViewRecipeResult(
-            // leanpub-start-insert
-            $details->getName(),
-            $details->getUsername(),
-            $details->getRating(),
-            $details->getMethod(),
-            $details->getMeasuredIngredients()
-            // leanpub-end-insert
+        return new ViewRecipeResultData(
+            $this->findRecipe($query)->getDetails()
         );
+        // leanpub-end-insert
     }
 
     /**
@@ -47,7 +38,7 @@ final class ViewRecipeHandler
      *
      * @throws InvalidIdException
      */
-    private function findRecipe($query)
+    private function findRecipe(ViewRecipeQuery $query)
     {
         try {
             return $this->repository->findById(new RecipeId($query->getId()));

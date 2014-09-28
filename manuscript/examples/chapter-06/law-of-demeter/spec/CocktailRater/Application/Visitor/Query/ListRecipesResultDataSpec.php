@@ -4,8 +4,11 @@ namespace spec\CocktailRater\Application\Visitor\Query;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use CocktailRater\Domain\RecipeDetails;
+use CocktailRater\Domain\Rating;
+use CocktailRater\Domain\UserDetails;
 
-class ListRecipesResultSpec extends ObjectBehavior
+class ListRecipesResultDataSpec extends ObjectBehavior
 {
     function it_starts_with_an_empty_list_of_recipes()
     {
@@ -14,8 +17,25 @@ class ListRecipesResultSpec extends ObjectBehavior
 
     function it_can_add_recipes_details()
     {
-        $this->addRecipe('recipe 1', 3.0, 'user a');
-        $this->addRecipe('recipe 2', 5.0, 'user b');
+        $this->addRecipe(
+            new RecipeDetails(
+                'recipe 1',
+                new UserDetails('user a'),
+                3.0,
+                '',
+                []
+            )
+        );
+
+        $this->addRecipe(
+            new RecipeDetails(
+                'recipe 2',
+                new UserDetails('user b'),
+                5.0,
+                '',
+                []
+            )
+        );
 
         $this->getRecipes()->shouldReturn([
             [
