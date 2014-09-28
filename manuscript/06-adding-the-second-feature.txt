@@ -55,11 +55,11 @@ This time the *query* contains the *ID* of the recipe to be viewed.
 
 <<[src/CocktailRater/Application/Visitor/Query/ViewRecipeHandler.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeHandler.php)
 
-The *handler* makes a new request `findById` to the repository. There's also
-some pretty ugly chaining of function calls to get the values. We'll do
-something about that soon.
+The *handler* makes a new request `findById` to the repository.
 
 <<[src/CocktailRater/Application/Visitor/Query/ViewRecipeResult.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeResult.php)
+
+<<[src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php)
 
 There's nothing really special in the *result*, it's just the collection of
 data.
@@ -80,6 +80,8 @@ There has been a few new fields added to the `Recipe` class. This has lead to
 a few more *value objects* being created also:
 
 <<[src/CocktailRater/Domain/MeasuredIngredient.php](examples/chapter-06/feature2/src/CocktailRater/Domain/MeasuredIngredient.php)
+
+<<[src/CocktailRater/Domain/Method.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Method.php)
 
 <<[src/CocktailRater/Domain/Ingredient.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Ingredient.php)
 
@@ -197,29 +199,10 @@ And updating these ones:
     }
 ~~~~~~~~
 
-I also added this named constructor to `Amount` to make things a little bit
-tidier:
-
-{title="src/CocktailRater/Domain/Amount.php", lang="php"}
-~~~~~~~~
-    /**
-     * @param float  $value
-     * @param string $unit
-     *
-     * @return Amount
-     */
-    public static function fromValues($value, $unit)
-    {
-        return new self($value, new Unit($unit));
-    }
-~~~~~~~~
-
 Even though we have only done this for the benefit of the `FeatureContext` it
 could definitely be useful later on.
 
 ## The Ingredients Collection
-
-## Forgotten Types
 
 ## DRY - Don't Repeat Yourself
 
@@ -229,8 +212,10 @@ the same piece of code more than once, then extract it out into a
 function, method, class or anything else which may be appropriate.
 
 I've already applied this principle in some places, for example the
-`getResultField` method in the `FeatureContext`. However, let's find another
-place to apply it.
+`getResultField` method in the `FeatureContext`. However, let's find some other
+places to apply it.
+
+### Exceptions
 
 We've definitely got some repetition in some of the exception
 class, take a look at these:
@@ -278,14 +263,11 @@ D> *"A recipe with ID '123' could not be found for user with ID '456'."*
 D>
 D> This is much more helpful.
 
+### Value Objects
+
 Things:
 * REMOVE ID FROM ACCEPTANCE TEST
-* DRY and exception traits
 * Problems in Feature Context
-* Builder pattern
-* Too many getters
-* LoD and possible solutions - ISP/Extracted Object/Presenter
-
 
 ## Some Thoughts
 

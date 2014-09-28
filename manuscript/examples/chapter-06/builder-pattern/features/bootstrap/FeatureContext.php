@@ -4,22 +4,28 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+// leanpub-start-insert
 use CocktailRater\Application\Exception\ApplicationException;
+// leanpub-end-insert
 use CocktailRater\Application\Visitor\Query\ListRecipes;
 use CocktailRater\Application\Visitor\Query\ListRecipesHandler;
 use CocktailRater\Application\Visitor\Query\ListRecipesQuery;
 use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
+// leanpub-start-insert
 use CocktailRater\Application\Visitor\Query\ViewRecipeHandler;
 use CocktailRater\Application\Visitor\Query\ViewRecipeQuery;
-// leanpub-start-insert
 use CocktailRater\Domain\Builder\RecipeBuilder;
-// leanpub-end-insert
+use CocktailRater\Domain\RecipeId;
 use CocktailRater\Domain\Ingredient;
 use CocktailRater\Domain\Amount;
 use CocktailRater\Domain\MeasuredIngredient;
+// leanpub-end-insert
+use CocktailRater\Domain\CocktailName;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
-use CocktailRater\Domain\RecipeId;
+// leanpub-start-insert
+use CocktailRater\Domain\Method;
+// leanpub-end-insert
 use CocktailRater\Domain\Unit;
 use CocktailRater\Domain\User;
 use CocktailRater\Domain\Username;
@@ -37,11 +43,13 @@ class FeatureContext implements SnippetAcceptingContext
     /** @var mixed */
     private $result;
 
+    // leanpub-start-insert
     /** @var ApplicationException */
     private $error;
 
     /** @var array */
     private $recipes = [];
+    // leanpub-end-insert
 
     /**
      * Initializes context.
@@ -60,7 +68,9 @@ class FeatureContext implements SnippetAcceptingContext
     public function beforeScenario()
     {
         $this->recipeRepository = new TestRecipeRepository();
+        // leanpub-start-insert
         $this->error = null;
+        // leanpub-end-insert
     }
 
     /**
@@ -76,7 +86,9 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function iRequestAListOfRecipes()
     {
+        // leanpub-start-insert
         $this->storeRecipes();
+        // leanpub-end-insert
 
         $query = new ListRecipesQuery();
         $handler = new ListRecipesHandler($this->recipeRepository);
@@ -127,6 +139,7 @@ class FeatureContext implements SnippetAcceptingContext
         );
     }
 
+    // leanpub-start-insert
     /**
      * @When I request to view recipe using a bad id
      */
@@ -173,15 +186,19 @@ class FeatureContext implements SnippetAcceptingContext
     public function theRecipeForHasMethod($name, PyStringNode $method)
     {
         // leanpub-start-insert
-        $this->getRecipeBuilder($name)->setMethod($method->getRaw());
+        $this->getRecipeBuilder($name)->setMethod(
+            new Method($method->getRaw())
+        );
         // leanpub-end-insert
     }
 
     /**
      * @Given the recipe for :name has measured ingredients:
      */
-    public function theRecipeForHasMeasuredIngredients($name, TableNode $ingredients)
-    {
+    public function theRecipeForHasMeasuredIngredients(
+        $name,
+        TableNode $ingredients
+    ) {
         // leanpub-start-insert
         $builder = $this->getRecipeBuilder($name);
 
@@ -216,15 +233,15 @@ class FeatureContext implements SnippetAcceptingContext
     /**
      * @Then I should see a list of measured ingredients containing:
      */
-    public function iShouldSeeAListOfMeasuredIngredientsContaining(TableNode $table)
-    {
+    public function iShouldSeeAListOfMeasuredIngredientsContaining(
+        TableNode $table
+    ) {
         Assert::assertEquals(
             $table->getHash(),
             $this->getResultField('measuredIngredients')
         );
     }
 
-    // leanpub-start-insert
     /**
      * @param string $name
      *
@@ -234,12 +251,11 @@ class FeatureContext implements SnippetAcceptingContext
     {
         if (!isset($this->recipes[$name])) {
             $this->recipes[$name]['builder'] = new RecipeBuilder();
-            $this->recipes[$name]['builder']->setName($name);
+            $this->recipes[$name]['builder']->setName(new CocktailName($name));
         }
 
         return $this->recipes[$name]['builder'];
     }
-    // leanpub-end-insert
 
     private function storeRecipes()
     {
@@ -256,6 +272,7 @@ class FeatureContext implements SnippetAcceptingContext
         // leanpub-end-insert
     }
 
+
     /** @return mixed */
     private function getResultField($name)
     {
@@ -263,4 +280,5 @@ class FeatureContext implements SnippetAcceptingContext
 
         return $this->result->$getter();
     }
+    // leanpub-end-insert
 }

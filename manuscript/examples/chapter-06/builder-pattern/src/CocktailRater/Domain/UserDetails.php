@@ -4,18 +4,17 @@ namespace CocktailRater\Domain;
 
 final class UserDetails
 {
-    /** @var string */
+    /** @var Username */
     private $username;
 
-    /** @param string $username */
-    public function __construct($username)
+    public function __construct(Username $username)
     {
         $this->username = $username;
     }
 
-    /** @return string */
+    /** @return Username */
     public function getUsername()
     {
-        return $this->username;
+        return $this->username->getValue();
     }
 }

@@ -2,70 +2,20 @@
 
 namespace CocktailRater\Application\Visitor\Query;
 
-final class ViewRecipeResult
+interface ViewRecipeResult
 {
-    /** @var string */
-    private $name;
-
-    /** @var string */
-    private $username;
-
-    /** @var float */
-    private $rating;
-
-    /** @var string */
-    private $method;
-
-    /** @var array */
-    private $measuredIngredients;
-
-    /**
-     * @param string $name
-     * @param string $username
-     * @param float  $rating
-     * @param string $method
-     */
-    public function __construct(
-        $name,
-        $username,
-        $rating,
-        $method,
-        array $measuredIngredients
-    ) {
-        $this->name                = $name;
-        $this->username            = $username;
-        $this->rating              = $rating;
-        $this->method              = $method;
-        $this->measuredIngredients = $measuredIngredients;
-    }
+    /** @return string */
+    public function getName();
 
     /** @return string */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /** @return string */
-    public function getUsername()
-    {
-        return $this->username;
-    }
+    public function getUsername();
 
     /** @return float */
-    public function getRating()
-    {
-        return $this->rating;
-    }
+    public function getRating();
 
     /** @return string */
-    public function getMethod()
-    {
-        return $this->method;
-    }
+    public function getMethod();
 
     /** @return array */
-    public function getMeasuredIngredients()
-    {
-        return $this->measuredIngredients;
-    }
+    public function getMeasuredIngredients();
 }

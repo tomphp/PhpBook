@@ -2,16 +2,18 @@
 
 namespace CocktailRater\Domain\Builder;
 
-use CocktailRater\Domain\Ingredient;
 use CocktailRater\Domain\Amount;
+use CocktailRater\Domain\CocktailName;
+use CocktailRater\Domain\Ingredient;
 use CocktailRater\Domain\MeasuredIngredient;
+use CocktailRater\Domain\Method;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
 use CocktailRater\Domain\User;
 
 class RecipeBuilder
 {
-    /** @var string */
+    /** @var CocktailName */
     private $name;
 
     /** @var Rating */
@@ -20,14 +22,19 @@ class RecipeBuilder
     /** @var User */
     private $user;
 
-    /** @var string */
-    private $method = '';
+    /** @var Method */
+    private $method;
 
     /** @var MeasuredIngredient[] */
     private $ingredients = [];
 
+    public function __construct()
+    {
+        $this->method = new Method('');
+    }
+
     /** @param string name */
-    public function setName($name)
+    public function setName(CocktailName $name)
     {
         $this->name = $name;
     }
@@ -43,7 +50,7 @@ class RecipeBuilder
     }
 
     /** @param string name */
-    public function setMethod($method)
+    public function setMethod(Method $method)
     {
         $this->method = $method;
     }

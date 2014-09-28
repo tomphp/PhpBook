@@ -4,7 +4,7 @@ namespace CocktailRater\Domain;
 
 use Assert\Assertion;
 
-final class RecipeId
+final class CocktailName
 {
     /** @var string */
     private $value;
@@ -19,11 +19,6 @@ final class RecipeId
 
     /** @return string */
     public function getValue()
-    {
-        return $this->value;
-    }
-
-    public function __toString()
     {
         return $this->value;
     }

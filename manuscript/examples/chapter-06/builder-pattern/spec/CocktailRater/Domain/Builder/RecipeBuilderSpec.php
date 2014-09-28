@@ -2,9 +2,11 @@
 
 namespace spec\CocktailRater\Domain\Builder;
 
-use CocktailRater\Domain\Ingredient;
 use CocktailRater\Domain\Amount;
+use CocktailRater\Domain\CocktailName;
+use CocktailRater\Domain\Ingredient;
 use CocktailRater\Domain\MeasuredIngredient;
+use CocktailRater\Domain\Method;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
 use CocktailRater\Domain\Unit;
@@ -16,10 +18,10 @@ class RecipeBuilderSpec extends ObjectBehavior
 {
     function it_builds_a_Recipe()
     {
-        $this->setName('test recipe');
+        $this->setName(new CocktailName('test recipe'));
         $this->setRating(new Rating(3));
         $this->setUser(User::fromValues('test user'));
-        $this->setMethod('test method');
+        $this->setMethod(new Method('test method'));
         $this->addIngredient(
             Amount::fromValues(10, Unit::ML),
             new Ingredient('ingredient 1')
@@ -31,7 +33,7 @@ class RecipeBuilderSpec extends ObjectBehavior
 
         $this->build()->shouldBeLike(
             new Recipe(
-                'test recipe',
+                new CocktailName('test recipe'),
                 new Rating(3),
                 User::fromValues('test user'),
                 [
@@ -44,7 +46,7 @@ class RecipeBuilderSpec extends ObjectBehavior
                         Amount::fromValues(50, Unit::ML)
                     )
                 ],
-                'test method'
+                new Method('test method')
             )
         );
     }
