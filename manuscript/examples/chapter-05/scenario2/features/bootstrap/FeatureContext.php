@@ -9,6 +9,7 @@ use CocktailRater\Application\Visitor\Query\ListRecipesHandler;
 use CocktailRater\Application\Visitor\Query\ListRecipesQuery;
 use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
 // leanpub-start-insert
+use CocktailRater\Domain\CocktailName;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
 use CocktailRater\Domain\User;
@@ -85,7 +86,7 @@ class FeatureContext implements SnippetAcceptingContext
         // leanpub-start-insert
         $this->recipeRepository->store(
             new Recipe(
-                $name,
+                new CocktailName($name),
                 new Rating($rating),
                 new User(new Username($user))
             )

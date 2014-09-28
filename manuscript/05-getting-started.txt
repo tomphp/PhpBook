@@ -12,7 +12,7 @@ A brief description of the application we are going to build is as follows:
 > rating*, but they must *register* with a *username*, *email* and *password*
 > in order to *rate* or *add* a *recipe*.
 >
-> A *recipe* consists of the *name*, the *method* and the list of *measured
+> A *recipe* consists of the *cocktail name*, the *method* and the list of *measured
 > ingredients* consisting of the *ingredient* and *amount*. It also must keep
 > track of the *user* who submitted it.
 > 
@@ -345,6 +345,7 @@ use CocktailRater\Application\Visitor\Query\ListRecipesHandler;
 use CocktailRater\Application\Visitor\Query\ListRecipesQuery;
 use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
 // leanpub-start-insert
+use CocktailRater\Domain\CocktailName;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
 use CocktailRater\Domain\User;
@@ -368,7 +369,7 @@ class FeatureContext implements SnippetAcceptingContext
         // leanpub-start-insert
         $this->recipeRepository->store(
             new Recipe(
-                $name,
+                new CocktailName($name),
                 new Rating($rating),
                 new User(new Username($user))
             )
@@ -430,7 +431,22 @@ namespace CocktailRater\Domain;
 final class Recipe
 {
     /** @param string $name */
-    public function __construct($name, Rating $rating, User $user)
+    public function __construct(CocktailName $name, Rating $rating, User $user)
+    {
+    }
+}
+~~~~~~~~
+
+{title="src/CocktailRater/Domain/CocktailName.php", lang="php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Domain;
+
+final class CocktailName
+{
+    /** @var string $value */
+    public function __construct($value)
     {
     }
 }
@@ -543,6 +559,8 @@ classes in the *domain model*:
 
 <<[src/CocktailRater/Domain/Recipe.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Recipe.php)
 
+<<[src/CocktailRater/Domain/CocktailName.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/CocktailName.php)
+
 <<[src/CocktailRater/Domain/Rating.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Rating.php)
 
 <<[src/CocktailRater/Domain/User.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/User.php)
@@ -631,18 +649,18 @@ We also need to add new methods to both the `Recipe` and `Rating` classes:
 namespace CocktailRater\Domain;
 
 use Assert\Assertion;
-// leanpub-start-insert
-use CocktailRater\Domain\Recipe;
-// leanpub-end-insert
 
 final class Recipe
 {
     // ...
 
+    // leanpub-start-insert
+    /** @return bool */
     public function isHigherRatedThan(Recipe $other)
     {
         return $this->rating->isHigherThan($other->rating);
     }
+    // leanpub-end-insert
 }
 ~~~~~~~~
 
@@ -669,31 +687,198 @@ final class Rating
 
 That's it, the first feature is done!
 
-## Some Thoughts
+## Tidying Up
 
-What we have implemented so far is pretty basic. We will also evolve it
-somewhat over the next few chapters and in that process I think the various
-design decisions should become clearer. For now the only thing I want to
-discuss is the `ListRecipesResult` class.
+Now the feature is complete let's take a little look and see if there's
+anything we can do to make the code a bit better.
 
-I choose to create this `ListRecipesResult` as a container or *DTO* (*Data
-Transfer Object*) to wrap up the values returned from the query. We could
-have also simply returned an *associative array* containing the values or
-an instance of PHP's `stdClass` with them as properties. Either of these
-options would have involved less code and work so why create the object?
+The main thing which needs to be improved here is chaining of methods in the
+*query handler*.  We have created have ugly lines of code like this:
 
-Any of the approaches I've just mentioned would work fine and there is no right
-or wrong, it's just a design decision. The reason I've chosen this approach is
-because this is the API which code interacting with the *domain* will go
-though. For this reason I feel that the object serves as clear documentation to
-the UI programmers as to what values will be return. For this extra bit of
-descriptiveness in the API I feel it's work the additional class.
+~~~~~~~~
+$recipe->getUser()->getUsername()->getValue()
+~~~~~~~~
+
+Big chains of method calls like this violate the [Law of
+Demeter](http://en.wikipedia.org/wiki/Law_of_Demeter) which states *you should
+only talk to your immediate friends*. What this means is you can **only** call
+methods and access properties only of objects which are properties of the
+current class, which are parameters to the current method, or have been created
+inside the method. This law is pretty much stating the same thing as the
+*one dot per line* rule of [Object Calisthenics](#object-calisthenics). Note
+that PHP request the use of `$this->` to methods and properties so it's actual
+*two arrows per line*.
+
+So how to solve it? Well on approach might be to ask the top level class
+(*aggregate*) to ask the next level down to return the value and so on like so:
+
+~~~~~~~~
+class Recipe
+{
+    // ...
+
+    public function getUsername()
+    {
+        return $this->user->getUsernameValue();
+    }
+}
+
+class User
+{
+    // ...
+
+    public function getUsernameValue()
+    {
+        return $this->username->getValue();
+    }
+}
+~~~~~~~~
+
+However, if you're going to do this for more that 2 or 3 values the interface
+is going to start to get pretty bloated. Another way might be to add a method
+to the `Recipe` class to return all it's values as an array or *Data Transfer
+Object*. There are other ways you could do this but for this project let's use
+a combination of these 2 methods. If only 1 or 2 getters are required we'll
+consider using them, otherwise well use a *read* method to return a DTO (I
+prefer objects to arrays because the content is defined and it can be immutable
+- even though it's extra code. However, using an array or object with public
+properties might be appropriate for your project).
+
+### Exposing Recipe Values
+
+With this in mind, let's expose the contents of the `Recipe` class via a DTO.
+We do this by creating 2 DTO classes, one for `Recipe` and one for `User`:
+
+<<[src/CocktailRater/Domain/RecipeDetails.php](examples/chapter-05/scenario3-tidied/src/CocktailRater/Domain/RecipeDetails.php)
+
+<<[src/CocktailRater/Domain/UserDetails.php](examples/chapter-05/scenario3-tidied/src/CocktailRater/Domain/UserDetails.php)
+
+And add the following method to `User` and `Recipe`:
+
+{title="CocktailRater/Domain/Recipe.php", lang="php"}
+~~~~~~~~
+    /** @return RecipeDetails */
+    public function getDetails()
+    {
+        return new RecipeDetails(
+            $this->name
+            $this->user->getDetails(),
+            $this->rating
+        );
+    }
+~~~~~~~~
+
+{title="CocktailRater/Domain/User.php", lang="php"}
+~~~~~~~~
+    /** @return UserDetails */
+    public function getDetails()
+    {
+        return new UserDetails($this->username);
+    }
+~~~~~~~~
+
+Then we can update our query handler to use these like so:
+
+{title="CocktailRater/Application/Visitor/ListRecipesHandler.php", lang="php"}
+~~~~~~~~
+    /** @return ListRecipesResult */
+    public function handle(ListRecipesQuery $query)
+    {
+        $result = new ListRecipesResult();
+
+        foreach ($this->getAllRecipesSortedByRating() as $recipe) {
+            // leanpub-start-insert
+            $details = $recipe->getDetails();
+            // leanpub-end-insert
+
+            $result->addRecipe(
+                $details->getName(),
+                $details->getRating(),
+                $details->getUsername()
+            );
+        }
+
+        return $result;
+    }
+~~~~~~~~
+
+At this point we can also remove `getUsername` from the `User` class and
+`getName`, `getRating` and `getUser` from the `Recipe` class.
+
+Already this is looking a whole lot neater but we're still violating the *law
+of demeter* at 2 levels in the *handler*. Firstly, we're calling `getDetails`
+on a `Recipe` objects which are not a *immediate friends* of the handler (since
+they fetched from a repository). Secondly, we're calling the *get* methods on
+the details object returned from the `Recipe` objects. Considering this is
+happening just at the application layer in our handler classes I don't really
+think this is the biggest crime and could be left as it is. That said, let's
+still try and tidy it up some more.
+
+To do this let's get rid of all the calls to the *getters* on the details
+objects.  We can do this by simply handing in the details DTO to the result
+class constructor. The problem with this is that is adds a dependency on the
+*domain model* from anywhere that a result object is used. When using a
+language like Java, C++ or C# this becomes something that really needs to be
+fixed as separate packages need to be able to be compiled and deployed
+independently, however, PHP doesn't work like that (maybe one day it will).
+Even so, it's probably still good practice to work this way, also since we
+don't want any other layers which talk to the application to create *result*
+objects let's make the *result* into an *interface*. Then we can have a
+concrete result DTO which can know about the *details* DTO and because the
+dependency from outside is on the interface only it's decoupled form the
+*domain*.
+
+Now we have this:
+
+<<[src/CocktailRater/Application/Visitor/Query/ListRecipesResultData.php](examples/chapter-05/scenario3-tidied/src/CocktailRater/Application/Visitor/Query/ListRecipesResultData.php)
+
+<<[src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php](examples/chapter-05/scenario3-tidied/src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php)
+
+{title="CocktailRater/Application/Visitor/ListRecipesHandler.php", lang="php"}
+~~~~~~~~
+    /** @return ListRecipesResult */
+    public function handle(ListRecipesQuery $query)
+    {
+        // leanpub-start-insert
+        return new ListRecipesResultData(
+            array_map(function (Recipe $recipe) {
+                return $recipe->getDetails();
+            },
+            $this->getAllRecipesSortedByRating())
+        );
+        // leanpub-end-insert
+    }
+~~~~~~~~
+
+That's almost it now, the handler is much neater but we've still not quite
+conformed to the *Law of Demeter* because it still gets the recipe from the
+*repository*. In most circumstances, particularly in the *domain model* I'm
+very diligent about obeying the *Law of Demeter*, however, in this circumstance
+I feel we've done enough. A good exercise is to consider how to obey it
+completely in the handler but for for now I'm going to leave it as it is.
+
+### Have we gone too far?
+
+You might be thinking to yourself that this is all a bit excessive. We have an
+*aggregate* which returns a DTO which is then copied into another DTO which
+looks almost the same. We have an extra interface to describe the *result* DTO.
+Isn't simply passing back the *details* DTO from the handler be sufficient? Or,
+is that even too much and the *details* DTO is overkill and a simple
+associative array would have done. You may even be thinking this looks far too
+much like Java.
+
+If you are thinking all this you are right, none of this is necessary but it
+depends on the scale of the project, how many people are going to be working
+with the code, the growth expectancy of the project and even the budget. What
+we've done here is apply best practices and made the code as explicit and self
+documented as possible and future developers and our future selves will thank
+us for this.
 
 ## What Next?
 
 So far we've managed to get the first feature's tests to pass. However, we've
 done it in quite an isolated way by considering this single *query* on it's
-own. In the next chapter we'll quickly add the second feature then we can 
+own. In the next chapter we'll quickly add the second feature then we can
 analyse the two to find similarities. We'll then use this knowledge to
-*refactor* what we have into a more generic form. After that we'll try to display
-the application's output on a page.
+*refactor* what we have into a more generic form. After that we'll try to
+display the application's output on a page.

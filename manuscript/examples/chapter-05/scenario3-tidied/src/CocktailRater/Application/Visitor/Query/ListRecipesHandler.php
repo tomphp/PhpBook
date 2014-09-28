@@ -3,9 +3,7 @@
 namespace CocktailRater\Application\Visitor\Query;
 
 use CocktailRater\Domain\Repository\RecipeRepository;
-// leanpub-start-insert
 use CocktailRater\Domain\Recipe;
-// leanpub-end-insert
 
 final class ListRecipesHandler
 {
@@ -20,22 +18,16 @@ final class ListRecipesHandler
     /** @return ListRecipesResult */
     public function handle(ListRecipesQuery $query)
     {
-        $result = new ListRecipesResult();
-
         // leanpub-start-insert
-        foreach ($this->getAllRecipesSortedByRating() as $recipe) {
+        return new ListRecipesResultData(
+            array_map(function (Recipe $recipe) {
+                return $recipe->getDetails();
+            },
+            $this->getAllRecipesSortedByRating())
+        );
         // leanpub-end-insert
-            $result->addRecipe(
-                $recipe->getName()->getValue(),
-                $recipe->getRating()->getValue(),
-                $recipe->getUser()->getUsername()->getValue()
-            );
-        }
-
-        return $result;
     }
 
-    // leanpub-start-insert
     private function getAllRecipesSortedByRating()
     {
         $recipes = $this->repository->findAll();
@@ -46,5 +38,4 @@ final class ListRecipesHandler
 
         return $recipes;
     }
-    // leanpub-end-insert
 }

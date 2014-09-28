@@ -26,7 +26,7 @@ final class ListRecipesHandler
 
         foreach ($this->repository->findAll() as $recipe) {
             $result->addRecipe(
-                $recipe->getName(),
+                $recipe->getName()->getValue(),
                 $recipe->getRating()->getValue(),
                 $recipe->getUser()->getUsername()->getValue()
             );

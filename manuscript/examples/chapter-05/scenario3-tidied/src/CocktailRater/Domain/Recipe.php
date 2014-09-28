@@ -4,7 +4,6 @@ namespace CocktailRater\Domain;
 
 final class Recipe
 {
-    // leanpub-start-insert
     /** @var CocktailName */
     private $name;
 
@@ -13,35 +12,30 @@ final class Recipe
 
     /** @var User */
     private $user;
-    // leanpub-end-insert
 
     /** @param string $name */
     public function __construct(CocktailName $name, Rating $rating, User $user)
     {
-        // leanpub-start-insert
         $this->name   = $name;
         $this->rating = $rating;
         $this->user   = $user;
-        // leanpub-end-insert
+    }
+
+    /** @return bool */
+    public function isHigherRatedThan(Recipe $other)
+    {
+        return $this->rating->isHigherThan($other->rating);
     }
 
     // leanpub-start-insert
-    /** @return CocktailName */
-    public function getName()
+    /** @return RecipeDetails */
+    public function getDetails()
     {
-        return $this->name;
-    }
-
-    /** @return Rating */
-    public function getRating()
-    {
-        return $this->rating;
-    }
-
-    /** @return User */
-    public function getUser()
-    {
-        return $this->user;
+        return new RecipeDetails(
+            $this->name,
+            $this->user->getDetails(),
+            $this->rating
+        );
     }
     // leanpub-end-insert
 }

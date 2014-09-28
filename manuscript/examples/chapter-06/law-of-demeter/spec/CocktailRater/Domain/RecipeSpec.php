@@ -2,16 +2,16 @@
 
 namespace spec\CocktailRater\Domain;
 
+use CocktailRater\Domain\Amount;
+use CocktailRater\Domain\Ingredient;
+use CocktailRater\Domain\MeasuredIngredient;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
+use CocktailRater\Domain\RecipeId;
+use CocktailRater\Domain\Unit;
 use CocktailRater\Domain\User;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use CocktailRater\Domain\RecipeId;
-use CocktailRater\Domain\MeasuredIngredient;
-use CocktailRater\Domain\Amount;
-use CocktailRater\Domain\Unit;
-use CocktailRater\Domain\Ingredient;
 
 class RecipeSpec extends ObjectBehavior
 {
