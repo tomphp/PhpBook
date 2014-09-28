@@ -36,9 +36,9 @@ Now the feature context needs to be updated, here what I've come up with:
 
 <<[features/bootstrap/FeatureContext.php](examples/chapter-06/feature2/features/bootstrap/FeatureContext.php)
 
-This has got a little bit complex because we're building the `Recipe` objects
-over a sequence of steps. Since the `Recipe` is takes most of it's values via
-the constructor we have to store up the details until we have them all and can
+This has got a bit complex because we're building the `Recipe` objects over a
+sequence of steps. Since the `Recipe` is takes most of its values via the
+constructor we have to store up the details until we have them all and can
 create the object in `iRequestToViewRecipeFor`. Also, once a `Recipe` is stored
 we save the ID. The `FeatureContext` definitely needs to be tidied up a bit but
 before we look at doing that lets see the actual implementation.
@@ -80,6 +80,14 @@ There has been a few new fields added to the `Recipe` class. This has lead to
 a few more *value objects* being created also:
 
 <<[src/CocktailRater/Domain/MeasuredIngredient.php](examples/chapter-06/feature2/src/CocktailRater/Domain/MeasuredIngredient.php)
+
+<<[src/CocktailRater/Domain/MeasuredIngredientDetails.php](examples/chapter-06/feature2/src/CocktailRater/Domain/MeasuredIngredientDetails.php)
+
+Because a `MeasuredIngredient` only has 3 values which we want to display at
+the moment I chose to use getters rather than create a dedicated class. We
+create an *interface* from them though as this could change at some point and
+depending on the interface means there'll be fewer changes required if this
+happens.
 
 <<[src/CocktailRater/Domain/Method.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Method.php)
 
@@ -127,7 +135,7 @@ method:
     // leanpub-end-insert
 ~~~~~~~~
 
-And updating these ones:
+And updating these:
 
 {title="features/bootstrap/FeatureContext.php", lang="php"}
 ~~~~~~~~
@@ -204,9 +212,17 @@ could definitely be useful later on.
 
 ## The Ingredients Collection
 
+Inside `Recipe` we have an array of `MeasuredIngredient` objects. If you 
+remember back to the section on [Object Calisthenics](#object-calisthenics)
+you remember the rule *First Class Collections*, this tells us not to use
+arrays in our classes but rather create collection classes to encapsulate them.
+Let's do that here, it's not much effort and it may be useful later on:
+
+todo ... collection code
+
 ## DRY - Don't Repeat Yourself
 
-DRY is a simple software principle which I've not mentioned yet and the name
+DRY is a simple software principle which I've not mentioned yet, its name
 pretty much sums it up. Applying DRY simply means if you find yourself typing
 the same piece of code more than once, then extract it out into a
 function, method, class or anything else which may be appropriate.
@@ -217,8 +233,8 @@ places to apply it.
 
 ### Exceptions
 
-We've definitely got some repetition in some of the exception
-class, take a look at these:
+We've definitely got some repetition in some exception class, take a look at
+these:
 
 todo ... exception code.
 
@@ -240,8 +256,10 @@ todo ... tidy exceptions code.
 
 D> ## Exception Messages
 D>
-D> Since we've put all this effort into creating nice exception message let's
-D> quickly talk about them. Exception messages should not be designed to
+D> Since we've put all this effort into creating nice exception messages, let's
+D> quickly talk about them.
+D>
+D> Exception messages should not be designed to
 D> display to the users of the application, they should be caught before they
 D> get to the UI, logged, then a user friendly message displayed on screen.
 D> The exception messages are for the developers, they are logged so problems
@@ -256,7 +274,7 @@ D>
 D> *"A recipe with ID '123' was not found."*
 D>
 D> But is this a good exception message? Not really as there's some missing
-D> context here, they user know's who they are but to someone reading that
+D> context here, the user knows who they are but to someone reading that
 D> message in a log it is unclear. A better message might say:
 D>
 D> *"A recipe with ID '123' could not be found for user with ID '456'."*
@@ -267,6 +285,7 @@ D> This is much more helpful.
 
 Things:
 * REMOVE ID FROM ACCEPTANCE TEST
+* IngredientName
 * Problems in Feature Context
 
 ## Some Thoughts

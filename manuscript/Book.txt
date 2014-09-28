@@ -7,5 +7,6 @@ section1.txt
 section2.txt
 05-getting-started.txt
 06-adding-the-second-feature.txt
-07-creating-a-simple-ui.txt
-08-phing.txt
+07-common-query-system.txt
+08-creating-a-simple-ui.txt
+09-phing.txt

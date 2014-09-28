@@ -13,6 +13,6 @@ class AmountSpec extends ObjectBehavior
         $this->beConstructedThrough('fromValues', [10, Unit::ML]);
 
         $this->getValue()->shouldReturn(10);
-        $this->getUnit()->shouldBeLike(new Unit(Unit::ML));
+        $this->getUnit()->shouldReturn(Unit::ML);
     }
 }

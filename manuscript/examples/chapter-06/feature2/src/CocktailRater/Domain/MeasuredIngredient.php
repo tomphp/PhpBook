@@ -2,7 +2,7 @@
 
 namespace CocktailRater\Domain;
 
-final class MeasuredIngredient
+final class MeasuredIngredient implements MeasuredIngredientDetails
 {
     /** @var Ingredient */
     private $ingredient;
@@ -18,15 +18,18 @@ final class MeasuredIngredient
         $this->amount     = $amount;
     }
 
-    /** @return Ingredient */
-    public function getIngredient()
+    public function getName()
     {
-        return $this->ingredient;
+        return $this->ingredient->getName();
     }
 
-    /** @return Amount */
     public function getAmount()
     {
-        return $this->amount;
+        return $this->amount->getValue();
+    }
+
+    public function getUnit()
+    {
+        return $this->amount->getUnit();
     }
 }

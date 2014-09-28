@@ -36,9 +36,9 @@ final class Amount
         return $this->value;
     }
 
-    /** @return Unit */
+    /** @return string */
     public function getUnit()
     {
-        return $this->unit;
+        return $this->unit->getValue();
     }
 }

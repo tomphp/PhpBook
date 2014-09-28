@@ -2,9 +2,7 @@
 
 namespace CocktailRater\Domain;
 
-// leanpub-start-insert
 use Assert\Assertion;
-// leanpub-end-insert
 
 final class RecipeDetails
 {
@@ -21,31 +19,30 @@ final class RecipeDetails
     /** @var Method */
     private $method;
 
-    /** @var MeasuredIngredient[] */
+    /** @var MeasuredIngredientDetails[] */
     private $measuredIngredients;
     // leanpub-end-insert
 
+    /** @param MeasuredIngredientDetails[] $measuredIngredients */
     public function __construct(
         CocktailName $name,
         UserDetails $user,
-        // leanpub-start-insert
         Rating $rating,
         Method $method,
         array $measuredIngredients
-        // leanpub-end-insert
     ) {
+        // leanpub-end-insert
         Assertion::allIsInstanceOf(
             $measuredIngredients,
-            MeasuredIngredient::class
+            MeasuredIngredientDetails::class
         );
+        // leanpub-end-insert
 
         $this->name                = $name;
         $this->user                = $user;
         $this->rating              = $rating;
-        // leanpub-start-insert
         $this->method              = $method;
         $this->measuredIngredients = $measuredIngredients;
-        // leanpub-end-insert
     }
 
     /** @return string */
@@ -66,7 +63,6 @@ final class RecipeDetails
         return $this->rating->getValue();
     }
 
-    // leanpub-start-insert
     /** @return string */
     public function getMethod()
     {
@@ -77,17 +73,16 @@ final class RecipeDetails
     public function getMeasuredIngredients()
     {
         return array_map(
-            function (MeasuredIngredient $ingredient) {
+            function (MeasuredIngredientDetails $ingredient) {
                 return [
-                    'name'   => $ingredient->getIngredient()->getName(),
-                    'amount' => $ingredient->getAmount()->getValue(),
-                    'unit'   => $ingredient->getAmount()
-                                           ->getUnit()
-                                           ->getValue()
+                    // leanpub-start-insert
+                    'name'   => $ingredient->getName(),
+                    'amount' => $ingredient->getAmount(),
+                    'unit'   => $ingredient->getUnit()
+                    // leanpub-end-insert
                 ];
             },
             $this->measuredIngredients
         );
     }
-    // leanpub-end-insert
 }
