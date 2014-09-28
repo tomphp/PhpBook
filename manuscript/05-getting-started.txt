@@ -832,8 +832,6 @@ Now we have this:
 
 <<[src/CocktailRater/Application/Visitor/Query/ListRecipesResultData.php](examples/chapter-05/scenario3-tidied/src/CocktailRater/Application/Visitor/Query/ListRecipesResultData.php)
 
-<<[src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php](examples/chapter-05/scenario3-tidied/src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php)
-
 {title="CocktailRater/Application/Visitor/ListRecipesHandler.php", lang="php"}
 ~~~~~~~~
     /** @return ListRecipesResult */

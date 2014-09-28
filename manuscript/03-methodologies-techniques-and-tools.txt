@@ -1555,7 +1555,7 @@ can find a neater way which again produces code which is easier to read.
 
 Wrap All Primitives And Strings
 
-: This pretty much means use [value objects](#value-objects) instead of
+: This pretty much means use [value objects](#value-objects-and-immutability) instead of
 *scalar* types in PHP. As I've already said, this is particularly useful in PHP
 when combine with *typehinting*. Always question the use of a scalar property
 in a domain object.
@@ -1574,7 +1574,7 @@ of `.` and the `$this->` must be inside classes to access things in class
 scope. What this rule actually means is don't call methods on objects return
 from other methods creating a chain of method calls like so:
 `$this->getX()->doY()->doZ()`. This rule ties in very tightly with the [Law of
-Demeter](#http://en.wikipedia.org/wiki/Law_of_Demeter).
+Demeter](http://en.wikipedia.org/wiki/Law_of_Demeter).
 
 Don't Abbreviate
 
@@ -1597,7 +1597,7 @@ No Getters/Setters/Properties
 : The idea here is to tell the class to perform and action and let it get on
 with it rather that getting values out, changing them and setting them again -
 often referred to as [tell, don't
-ask](#http://martinfowler.com/bliki/TellDontAsk.html). Sometimes a getter or
+ask](http://martinfowler.com/bliki/TellDontAsk.html). Sometimes a getter or
 setter is needed but always try your best to find a better way.
 
 I can't say I stick to all of these rules 100% of the time but by trying to

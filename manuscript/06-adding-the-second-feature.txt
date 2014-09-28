@@ -171,8 +171,10 @@ And updating these:
     /**
      * @Given the recipe for :name has measured ingredients:
      */
-    public function theRecipeForHasMeasuredIngredients($name, TableNode $ingredients)
-    {
+    public function theRecipeForHasMeasuredIngredients(
+        $name,
+        TableNode $ingredients
+    ) {
         // leanpub-start-insert
         $builder = $this->getRecipeBuilder($name);
 
