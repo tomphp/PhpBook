@@ -19,8 +19,12 @@ use CocktailRater\Domain\Ingredient;
 use CocktailRater\Domain\Amount;
 use CocktailRater\Domain\MeasuredIngredient;
 // leanpub-end-insert
+use CocktailRater\Domain\CocktailName;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
+// leanpub-start-insert
+use CocktailRater\Domain\Method;
+// leanpub-end-insert
 use CocktailRater\Domain\Unit;
 use CocktailRater\Domain\User;
 use CocktailRater\Domain\Username;
@@ -250,12 +254,12 @@ class FeatureContext implements SnippetAcceptingContext
 
             $this->recipeRepository->store(
                 new Recipe(
-                    $name,
+                    new CocktailName($name),
                     new Rating($properties['rating']),
                     User::fromValues($properties['username']),
                     // leanpub-start-insert
                     $measuredIngredients,
-                    $method
+                    new Method($method)
                     // leanpub-end-insert
                 )
             );

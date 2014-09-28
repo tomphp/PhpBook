@@ -10,6 +10,19 @@ final class Amount
     /** @var Unit */
     private $unit;
 
+    // leanpub-start-insert
+    /**
+     * @param float  $value
+     * @oaram string $unit
+     *
+     * @return Amount
+     */
+    public static function fromValues($value, $unit)
+    {
+        return new self($value, new Unit($unit));
+    }
+    // leanpub-end-insert
+
     /** @param float $value */
     public function __construct($value, Unit $unit)
     {

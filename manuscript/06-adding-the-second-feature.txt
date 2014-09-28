@@ -204,7 +204,7 @@ tidier:
 ~~~~~~~~
     /**
      * @param float  $value
-     * @oaram string $unit
+     * @param string $unit
      *
      * @return Amount
      */
