@@ -550,7 +550,7 @@ At this point only the last line of the scenario should be failing. We've got
 the template of the model laid out so we just need to fill in the details. To
 start with let's take a look at how the query handler will work:
 
-<<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Repository/RecipeRepository.php)
+<<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario2/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
 
 It's quite simple, it fetches all recipes from the repository, adds the details
 of each one to the result object and returns it. This does however mean we've
