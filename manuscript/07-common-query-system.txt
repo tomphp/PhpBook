@@ -1,1 +1,6 @@
 # Common Query System
+
+We're going to take a short break from adding features here and take analyse
+what we have created so far. We have 2 *queries* implemented and they have a
+lot in common with each other. In this chapter we'll combine them to create a
+common querying mechanism.
