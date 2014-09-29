@@ -699,10 +699,10 @@ $ php run.php
 
 Ta da!
 
-Composer also supports PSR-4, to do this simply use `psr-4` in the
-`composer.json` instead. When doing this everything in the `src` folder will
-have the prefix (`ComposerExample`) applied to the namespace so the
-`ComposerExample` directory level would have to be removed.
+Composer also supports PSR-4, to use it instead simply use `psr-4` in the
+`composer.json`. When doing this everything in the `src` folder will have the
+prefix (`ComposerExample`) applied to the namespace so the `ComposerExample`
+directory level would have to be removed.
 
 #### Adding a Dependency
 
