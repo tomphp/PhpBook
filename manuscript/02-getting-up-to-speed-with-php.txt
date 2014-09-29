@@ -562,12 +562,12 @@ FQCN is mirrored in the folder structure up to the class name.
 
 PSR-4 improves on the PSR-0 standard. It removes some old, obsoleted features
 and allows a namespace prefix to be defined. If your whole application exists
-under a single namespace remove the need of having a directory for that folder.
+under a single namespace this remove the need of having a directory for that
+namespace.
 
-Using the previous example, if the prefix `MyApp` is used then the `Contact`
-class definition can remain exactly the same but the fill can instead be stored
-in `/home/tom/projects/AutoloadExample/src/Entity/Contact.php`, removing the
-`MyApp` directory under `src`.
+Using the previous example: if the prefix `MyApp` is chosen then the `Contact`
+class definition can remain exactly the same but the file is instead stored
+in `/home/tom/projects/AutoloadExample/src/Entity/Contact.php`.
 
 ## Composer
 

@@ -254,9 +254,11 @@ final class TestRecipeRepository
 }
 ~~~~~~~~
 
-You may have noticed the use of the `final` keyword. For now I'm just going to
-say that I add this to my classes by default, this is not required but is my
-preference, I'll explain the reason for this [a bit later on](#final-keyword).
+I> Final
+I>
+I> You may have noticed the use of the `final` keyword. For now I'm just going to
+I> say that I add this to my classes by default, this is not required but is my
+I> preference, I'll explain the reason for this [a bit later on](#final-keyword).
 
 Next up let's create the `ListRecipesQuery`. A query class will contain the
 parameters for the query, in this case there are none so the class simply looks
@@ -837,6 +839,8 @@ dependency from outside is on the interface only it's decoupled form the
 *domain*.
 
 Now we have this:
+
+<<[src/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario3-tidied/src/Application/Visitor/Query/ListRecipesResult.php)
 
 <<[src/Application/Visitor/Query/ListRecipesResultData.php](examples/chapter-05/scenario3-tidied/src/Application/Visitor/Query/ListRecipesResultData.php)
 
