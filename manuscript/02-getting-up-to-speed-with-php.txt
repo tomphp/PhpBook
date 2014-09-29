@@ -519,7 +519,7 @@ Composer which can take care of that for you.
 However, if you do want to look into autoloading in more detail you can read
 about it in the [manual](http://php.net/manual/en/language.oop5.autoload.php).
 
-## PSR-0 - Autoloading Standard
+### PSR-0 - Autoloading Standard
 
 Before talking about Composer I'd like to first introduce PSR-0. PSR-0 is a
 standard which was designed to make it easy to find the files where given
@@ -558,10 +558,16 @@ Whatever comes before the root namespace in the file name (in this case
 `/home/tom/projects/AutoloadExample/src`) is not important, so long as the 
 FQCN is mirrored in the folder structure up to the class name.
 
-I>## Example File Locations
-I>
-I> From this point on in the book I will not mention file names when displaying
-I> code examples unless the file name does not match the PSR-0 standard.
+### PSR-4 - Improved Autoloading Standard
+
+PSR-4 improves on the PSR-0 standard. It removes some old, obsoleted features
+and allows a namespace prefix to be defined. If your whole application exists
+under a single namespace remove the need of having a directory for that folder.
+
+Using the previous example, if the prefix `MyApp` is used then the `Contact`
+class definition can remain exactly the same but the fill can instead be stored
+in `/home/tom/projects/AutoloadExample/src/Entity/Contact.php`, removing the
+`MyApp` directory under `src`.
 
 ## Composer
 
@@ -692,6 +698,11 @@ $ php run.php
 ~~~~~~~~
 
 Ta da!
+
+Composer also supports PSR-4, to do this simply use `psr-4` in the
+`composer.json` instead. When doing this everything in the `src` folder will
+have the prefix (`ComposerExample`) applied to the namespace so the
+`ComposerExample` directory level would have to be removed.
 
 #### Adding a Dependency
 

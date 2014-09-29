@@ -224,6 +224,8 @@ Let's do that here, it's not much effort and it may be useful later on:
 
 todo ... collection code
 
+...
+
 ## DRY - Don't Repeat Yourself
 
 DRY is a simple software principle which I've not mentioned yet, its name
