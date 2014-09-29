@@ -58,6 +58,9 @@ Then add the following `composer.json`
 
 <<[composer.json](examples/chapter-05/scenario1/composer.json)
 
+We're using a PSR-4 autoloader here so everything can exist in a
+`CocktailRater` namespace but we can avoid creating an extra directory for it.
+
 I> ### PHPSpec Version
 I>
 I> You may have noticed that the PHPSpec requirement is for a development
@@ -72,14 +75,19 @@ Now run Composer to install the test tools:
 $ composer install
 ~~~~~~~~
 
-Next up we can quickly configure PHPSpec to format its output using the
-*pretty* formatter by default so that we don't need to put it on the command
-line every time we run it. To do this create a file called `phpspec.yml` with
-the following contents:
+Next up we need to tell PHPSpec about the PSR-4 prefix. We can also configure
+it to format its output using the *pretty* formatter by default so that we
+don't need to put it on the command line every time we run it. To do this
+create a file called `phpspec.yml` with the following contents:
 
 {title="phpspec.yml", format="yaml"}
 ~~~~~~~~
 formatter.name: pretty
+
+suites:
+    default:
+        namespace: CocktailRater
+        psr4_prefix: CocktailRater
 ~~~~~~~~
 
 Finally, initialise Behat ready to start development:
@@ -230,7 +238,7 @@ referenced classes which don't exist, to fix this lets add the classes.
 The first line of the test requires the *repository* and that it has a method
 called `clear` so to start with let's create that:
 
-{title="src/CocktailRater/Testing/Repository/TestRecipeRepository.php", lang="php"}
+{title="src/Testing/Repository/TestRecipeRepository.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -254,7 +262,7 @@ Next up let's create the `ListRecipesQuery`. A query class will contain the
 parameters for the query, in this case there are none so the class simply looks
 like this:
 
-<<[src/CocktailRater/Application/Visitor/Query/ListRecipesQuery.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesQuery.php)
+<<[src/Application/Visitor/Query/ListRecipesQuery.php](examples/chapter-05/scenario1/src/Application/Visitor/Query/ListRecipesQuery.php)
 
 I've chosen to add `Visitor` to the namespace since these are queries which
 will be made by *visitors*.
@@ -270,7 +278,7 @@ a class called `CocktailRater\Application\Visitor\Query\ListRecipesResult`.
 
 Without further ado, here it is:
 
-<<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
+<<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario1/src/Application/Visitor/Query/ListRecipesHandler.php)
 
 At this point we've created all the classes that were referenced from the
 `FeatureContext` but this last one has just introduced 2 more: the
@@ -278,9 +286,9 @@ At this point we've created all the classes that were referenced from the
 also (this is what I was referring to when I said we'd work from the *outside
 in*):
 
-<<[src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario1/src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php)
+<<[src/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario1/src/Application/Visitor/Query/ListRecipesResult.php)
 
-<<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario1/src/CocktailRater/Domain/Repository/RecipeRepository.php)
+<<[src/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario1/src/Domain/Repository/RecipeRepository.php)
 
 The `ListRecipesResult` class simply returns an empty list from
 `getRecipes`, this is all it needs to do for now.
@@ -295,7 +303,7 @@ a `RecipeRepository` to be provided to the constructor but, in the
 `FeatureContext` we've provided a `TestRecipeRepository`. To make this work we
 need to make the test repository implement the interface:
 
-{title="src/CocktailRater/Testing/Repository/TestRecipeRepository.php", lang="php"}
+{title="src/Testing/Repository/TestRecipeRepository.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -422,7 +430,7 @@ I> example code for the book if you want to study them.
 
 Let's start off by adding the new classes to the model:
 
-{title="src/CocktailRater/Domain/Recipe.php", lang="php"}
+{title="src/Domain/Recipe.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -437,7 +445,7 @@ final class Recipe
 }
 ~~~~~~~~
 
-{title="src/CocktailRater/Domain/CocktailName.php", lang="php"}
+{title="src/Domain/CocktailName.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -452,7 +460,7 @@ final class CocktailName
 }
 ~~~~~~~~
 
-{title="src/CocktailRater/Domain/Rating.php", lang="php"}
+{title="src/Domain/Rating.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -467,7 +475,7 @@ final class Rating
 }
 ~~~~~~~~
 
-{title="src/CocktailRater/Domain/User.php", lang="php"}
+{title="src/Domain/User.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -482,7 +490,7 @@ final class User
 }
 ~~~~~~~~
 
-{title="src/CocktailRater/Domain/Username.php", lang="php"}
+{title="src/Domain/Username.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -499,7 +507,7 @@ final class Username
 
 We also need to add the `store` method to the repository interface:
 
-{title="src/CocktailRater/Domain/Repository/RecipeRepository.php", lang="php"}
+{title="src/Domain/Repository/RecipeRepository.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -519,7 +527,7 @@ interface RecipeRepository
 
 This also means we need to add the method to the `TestRecipeRepository`:
 
-{title="src/CocktailRater/Testing/Repository/TestRecipeRepository.php", lang="php"}
+{title="src/Testing/Repository/TestRecipeRepository.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -550,22 +558,22 @@ At this point only the last line of the scenario should be failing. We've got
 the template of the model laid out so we just need to fill in the details. To
 start with let's take a look at how the query handler will work:
 
-<<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario2/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
+<<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario2/src/Application/Visitor/Query/ListRecipesHandler.php)
 
 It's quite simple, it fetches all recipes from the repository, adds the details
 of each one to the result object and returns it. This does however mean we've
 got a bit of work to do to get it all working. First up let's update the
 classes in the *domain model*:
 
-<<[src/CocktailRater/Domain/Recipe.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Recipe.php)
+<<[src/Domain/Recipe.php](examples/chapter-05/scenario2/src/Domain/Recipe.php)
 
-<<[src/CocktailRater/Domain/CocktailName.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/CocktailName.php)
+<<[src/Domain/CocktailName.php](examples/chapter-05/scenario2/src/Domain/CocktailName.php)
 
-<<[src/CocktailRater/Domain/Rating.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Rating.php)
+<<[src/Domain/Rating.php](examples/chapter-05/scenario2/src/Domain/Rating.php)
 
-<<[src/CocktailRater/Domain/User.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/User.php)
+<<[src/Domain/User.php](examples/chapter-05/scenario2/src/Domain/User.php)
 
-<<[src/CocktailRater/Domain/Username.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Username.php)
+<<[src/Domain/Username.php](examples/chapter-05/scenario2/src/Domain/Username.php)
 
 In the *domain model* we've started to make use of Benjamin Eberlei's
 *[Assert](https://github.com/beberlei/assert)* library. To do this we need to
@@ -610,21 +618,21 @@ The appropriate exception to be throw here is PHP SPL's `OutOfBoundsException`.
 However, rather than throw it directly we've extended it so that it can be
 tracked down as coming from our application. Let's take a quick look at it:
 
-<<[src/CocktailRater/Domain/Exception/OutOfBoundsException.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Exception/OutOfBoundsException.php)
+<<[src/Domain/Exception/OutOfBoundsException.php](examples/chapter-05/scenario2/src/Domain/Exception/OutOfBoundsException.php)
 
 Again you'll notice the use of a *named constructor*, I think this is a really
 neat way to keep the exception messages neat and tidy and in a relevant place.
 
 Next let's quickly update the `ListRecipesResult` class:
 
-<<[src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario2/src/CocktailRater/Application/Visitor/Query/ListRecipesResult.php)
+<<[src/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario2/src/Application/Visitor/Query/ListRecipesResult.php)
 
 Finally, we need to update the functionality of the repository to return the
 list of recipes stored:
 
-<<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario2/src/CocktailRater/Domain/Repository/RecipeRepository.php)
+<<[src/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario2/src/Domain/Repository/RecipeRepository.php)
 
-<<[src/CocktailRater/Testing/Repository/TestRecipeRepository.php](examples/chapter-05/scenario2/src/CocktailRater/Testing/Repository/TestRecipeRepository.php)
+<<[src/Testing/Repository/TestRecipeRepository.php](examples/chapter-05/scenario2/src/Testing/Repository/TestRecipeRepository.php)
 
 As you can see, we've created an in-memory test repository. This is good enough
 for what we need so far.
@@ -638,11 +646,11 @@ scenario already passes, the only thing which fails is the order in which
 the recipes are listed. To fix this we can go straight into the 
 `ListRecipesHandler` and sort the recipes there:
 
-<<[src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario3/src/CocktailRater/Application/Visitor/Query/ListRecipesHandler.php)
+<<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario3/src/Application/Visitor/Query/ListRecipesHandler.php)
 
 We also need to add new methods to both the `Recipe` and `Rating` classes:
 
-{title="src/CocktailRater/Domain/Recipe.php", lang="php"}
+{title="src/Domain/Recipe.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -664,7 +672,7 @@ final class Recipe
 }
 ~~~~~~~~
 
-{title="src/CocktailRater/Domain/Rating.php", lang="php"}
+{title="src/Domain/Rating.php", lang="php"}
 ~~~~~~~~
 <?php
 
@@ -749,9 +757,9 @@ properties might be appropriate for your project).
 With this in mind, let's expose the contents of the `Recipe` class via a DTO.
 We do this by creating 2 DTO classes, one for `Recipe` and one for `User`:
 
-<<[src/CocktailRater/Domain/RecipeDetails.php](examples/chapter-05/scenario3-tidied/src/CocktailRater/Domain/RecipeDetails.php)
+<<[src/Domain/RecipeDetails.php](examples/chapter-05/scenario3-tidied/src/Domain/RecipeDetails.php)
 
-<<[src/CocktailRater/Domain/UserDetails.php](examples/chapter-05/scenario3-tidied/src/CocktailRater/Domain/UserDetails.php)
+<<[src/Domain/UserDetails.php](examples/chapter-05/scenario3-tidied/src/Domain/UserDetails.php)
 
 And add the following method to `User` and `Recipe`:
 
@@ -830,7 +838,7 @@ dependency from outside is on the interface only it's decoupled form the
 
 Now we have this:
 
-<<[src/CocktailRater/Application/Visitor/Query/ListRecipesResultData.php](examples/chapter-05/scenario3-tidied/src/CocktailRater/Application/Visitor/Query/ListRecipesResultData.php)
+<<[src/Application/Visitor/Query/ListRecipesResultData.php](examples/chapter-05/scenario3-tidied/src/Application/Visitor/Query/ListRecipesResultData.php)
 
 {title="CocktailRater/Application/Visitor/ListRecipesHandler.php", lang="php"}
 ~~~~~~~~

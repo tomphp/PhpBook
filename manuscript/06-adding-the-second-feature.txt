@@ -49,39 +49,39 @@ I'm just going to show you all the code now, there is a fair bit of it but it
 should all be self explanatory. I'll explain a couple of small bits and then
 well look at ways we can improve it.
 
-<<[src/CocktailRater/Application/Visitor/Query/ViewRecipeQuery.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeQuery.php)
+<<[src/Application/Visitor/Query/ViewRecipeQuery.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeQuery.php)
 
 This time the *query* contains the *ID* of the recipe to be viewed.
 
-<<[src/CocktailRater/Application/Visitor/Query/ViewRecipeHandler.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeHandler.php)
+<<[src/Application/Visitor/Query/ViewRecipeHandler.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeHandler.php)
 
 The *handler* makes a new request `findById` to the repository.
 
-<<[src/CocktailRater/Application/Visitor/Query/ViewRecipeResult.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeResult.php)
+<<[src/Application/Visitor/Query/ViewRecipeResult.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeResult.php)
 
-<<[src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php](examples/chapter-06/feature2/src/CocktailRater/Application/Visitor/Query/ViewRecipeResultData.php)
+<<[src/Application/Visitor/Query/ViewRecipeResultData.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeResultData.php)
 
 There's nothing really special in the *result*, it's just the collection of
 data.
 
-<<[src/CocktailRater/Domain/Repository/RecipeRepository.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Repository/RecipeRepository.php)
+<<[src/Domain/Repository/RecipeRepository.php](examples/chapter-06/feature2/src/Domain/Repository/RecipeRepository.php)
 
-<<[src/CocktailRater/Testing/Repository/TestRecipeRepository.php](examples/chapter-06/feature2/src/CocktailRater/Testing/Repository/TestRecipeRepository.php)
+<<[src/Testing/Repository/TestRecipeRepository.php](examples/chapter-06/feature2/src/Testing/Repository/TestRecipeRepository.php)
 
 The repository now has the concept of an ID, in the test repository we just
 generation an incremental one and provide and extra method so the test suite
 can retrieve the last one.
 
-<<[src/CocktailRater/Domain/RecipeId.php](examples/chapter-06/feature2/src/CocktailRater/Domain/RecipeId.php)
+<<[src/Domain/RecipeId.php](examples/chapter-06/feature2/src/Domain/RecipeId.php)
 
-<<[src/CocktailRater/Domain/Recipe.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Recipe.php)
+<<[src/Domain/Recipe.php](examples/chapter-06/feature2/src/Domain/Recipe.php)
 
 There has been a few new fields added to the `Recipe` class. This has lead to
 a few more *value objects* being created also:
 
-<<[src/CocktailRater/Domain/MeasuredIngredient.php](examples/chapter-06/feature2/src/CocktailRater/Domain/MeasuredIngredient.php)
+<<[src/Domain/MeasuredIngredient.php](examples/chapter-06/feature2/src/Domain/MeasuredIngredient.php)
 
-<<[src/CocktailRater/Domain/MeasuredIngredientDetails.php](examples/chapter-06/feature2/src/CocktailRater/Domain/MeasuredIngredientDetails.php)
+<<[src/Domain/MeasuredIngredientDetails.php](examples/chapter-06/feature2/src/Domain/MeasuredIngredientDetails.php)
 
 Because a `MeasuredIngredient` only has 3 values which we want to display at
 the moment I chose to use getters rather than create a dedicated class. We
@@ -89,15 +89,15 @@ create an *interface* from them though as this could change at some point and
 depending on the interface means there'll be fewer changes required if this
 happens.
 
-<<[src/CocktailRater/Domain/Method.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Method.php)
+<<[src/Domain/Method.php](examples/chapter-06/feature2/src/Domain/Method.php)
 
-<<[src/CocktailRater/Domain/Ingredient.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Ingredient.php)
+<<[src/Domain/Ingredient.php](examples/chapter-06/feature2/src/Domain/Ingredient.php)
 
-<<[src/CocktailRater/Domain/IngredientName.php](examples/chapter-06/feature2/src/CocktailRater/Domain/IngredientName.php)
+<<[src/Domain/IngredientName.php](examples/chapter-06/feature2/src/Domain/IngredientName.php)
 
-<<[src/CocktailRater/Domain/Amount.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Amount.php)
+<<[src/Domain/Amount.php](examples/chapter-06/feature2/src/Domain/Amount.php)
 
-<<[src/CocktailRater/Domain/Unit.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Unit.php)
+<<[src/Domain/Unit.php](examples/chapter-06/feature2/src/Domain/Unit.php)
 
 These are all pretty plain but it's worth taking a quick look a `Unit`. This is
 basically how to achieve an *enumeration* in PHP. It's basically a value object
@@ -112,7 +112,7 @@ the [builder design pattern](http://en.wikipedia.org/wiki/Builder_pattern).
 
 First of all let's create a `RecipeBuilder`:
 
-<<[src/CocktailRater/Domain/Builder/RecipeBuilder.php](examples/chapter-06/builder-pattern/src/CocktailRater/Domain/Builder/RecipeBuilder.php)
+<<[src/Domain/Builder/RecipeBuilder.php](examples/chapter-06/builder-pattern/src/Domain/Builder/RecipeBuilder.php)
 
 Now we can use the builder in the `FeatureContext` but adding the following
 method:
@@ -293,7 +293,6 @@ Things:
 * REMOVE ID FROM ACCEPTANCE TEST
 * Problems in Feature Context
 * PSR-4
-* MeasuredIngredient::fromValues()
 
 ## Some Thoughts
 
