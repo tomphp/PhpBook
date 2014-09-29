@@ -9,16 +9,24 @@ final class Ingredient
     /** @var string */
     private $name;
 
-    public function __construct($name)
+    /**
+     * @param string $name
+     *
+     * @return Ingredient
+     */
+    public static function fromValues($name)
     {
-        Assertion::string($name);
+        return new self(new IngredientName($name));
+    }
 
+    public function __construct(IngredientName $name)
+    {
         $this->name = $name;
     }
 
     /** @return string */
     public function getName()
     {
-        return $this->name;
+        return $this->name->getValue();
     }
 }

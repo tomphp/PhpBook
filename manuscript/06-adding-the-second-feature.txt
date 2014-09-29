@@ -93,6 +93,8 @@ happens.
 
 <<[src/CocktailRater/Domain/Ingredient.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Ingredient.php)
 
+<<[src/CocktailRater/Domain/IngredientName.php](examples/chapter-06/feature2/src/CocktailRater/Domain/IngredientName.php)
+
 <<[src/CocktailRater/Domain/Amount.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Amount.php)
 
 <<[src/CocktailRater/Domain/Unit.php](examples/chapter-06/feature2/src/CocktailRater/Domain/Unit.php)
@@ -184,7 +186,7 @@ And updating these:
                     $ingredient['amount'],
                     $ingredient['unit']
                 ),
-                new Ingredient($ingredient['name'])
+                Ingredient::fromValues($ingredient['name'])
             );
         }
         // leanpub-end-insert
@@ -287,8 +289,9 @@ D> This is much more helpful.
 
 Things:
 * REMOVE ID FROM ACCEPTANCE TEST
-* IngredientName
 * Problems in Feature Context
+* PSR-4
+* MeasuredIngredient::fromValues()
 
 ## Some Thoughts
 

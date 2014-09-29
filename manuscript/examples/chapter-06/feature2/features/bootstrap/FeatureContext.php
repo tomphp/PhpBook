@@ -238,7 +238,7 @@ class FeatureContext implements SnippetAcceptingContext
             $measuredIngredients = array_map(
                 function ($ingredient) {
                     return new MeasuredIngredient(
-                        new Ingredient($ingredient['name']),
+                        Ingredient::fromValues($ingredient['name']),
                         new Amount(
                             $ingredient['amount'],
                             new Unit($ingredient['unit'])

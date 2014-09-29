@@ -24,11 +24,11 @@ class RecipeBuilderSpec extends ObjectBehavior
         $this->setMethod(new Method('test method'));
         $this->addIngredient(
             Amount::fromValues(10, Unit::ML),
-            new Ingredient('ingredient 1')
+            Ingredient::fromValues('ingredient 1')
         );
         $this->addIngredient(
             Amount::fromValues(50, Unit::ML),
-            new Ingredient('ingredient 2')
+            Ingredient::fromValues('ingredient 2')
         );
 
         $this->build()->shouldBeLike(
@@ -38,11 +38,11 @@ class RecipeBuilderSpec extends ObjectBehavior
                 User::fromValues('test user'),
                 [
                     new MeasuredIngredient(
-                        new Ingredient('ingredient 1'),
+                        Ingredient::fromValues('ingredient 1'),
                         Amount::fromValues(10, Unit::ML)
                     ),
                     new MeasuredIngredient(
-                        new Ingredient('ingredient 2'),
+                        Ingredient::fromValues('ingredient 2'),
                         Amount::fromValues(50, Unit::ML)
                     )
                 ],

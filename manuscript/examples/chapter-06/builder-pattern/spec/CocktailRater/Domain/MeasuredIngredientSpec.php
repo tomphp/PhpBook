@@ -12,7 +12,7 @@ class MeasuredIngredientSpec extends ObjectBehavior
     function it_provides_details()
     {
         $this->beConstructedWith(
-            new Ingredient('test name'),
+            Ingredient::fromValues('test name'),
             Amount::fromValues(10, Unit::ML)
         );
 

@@ -33,7 +33,7 @@ class RecipeSpec extends ObjectBehavior
             new Rating(self::RECIPE_RATING),
             User::fromValues(self::RECIPE_USERNAME),
             new MeasuredIngredients([new MeasuredIngredient(
-                new Ingredient(self::INGREDIENT_NAME),
+                Ingredient::fromValues(self::INGREDIENT_NAME),
                 Amount::fromValues(self::INGREDIENT_AMOUNT, self::INGREDIENT_UNIT)
             )]),
             new Method(self::RECIPE_METHOD)

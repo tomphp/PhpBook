@@ -27,7 +27,7 @@ class ListRecipesResultDataSpec extends ObjectBehavior
                 new Method('method 1'),
                 [
                     new MeasuredIngredient(
-                        new Ingredient('ingredient 1'),
+                        Ingredient::fromValues('ingredient 1'),
                         Amount::fromValues(4, Unit::ML)
                     )
                 ]

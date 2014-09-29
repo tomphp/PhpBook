@@ -208,7 +208,7 @@ class FeatureContext implements SnippetAcceptingContext
                     $ingredient['amount'],
                     $ingredient['unit']
                 ),
-                new Ingredient($ingredient['name'])
+                Ingredient::fromValues($ingredient['name'])
             );
         }
         // leanpub-end-insert
