@@ -357,23 +357,23 @@ I> `use TheTrait { TheTrait::methodName as traitMethodName; }`
 
 First up, let's add the new traits:
 
-<<[src/Domain/SingleValue.php](examples/chapter-06/src/Domain/SingleValue.php)
+<<[src/Domain/SingleValue.php](examples/chapter-06/dry/src/Domain/SingleValue.php)
 
-<<[src/Domain/StringValue.php](examples/chapter-06/src/Domain/StringValue.php)
+<<[src/Domain/StringValue.php](examples/chapter-06/dry/src/Domain/StringValue.php)
 
 Now we can refactor our single value value objects:
 
-<<[src/Domain/CocktailName.php](examples/chapter-06/src/Domain/CocktailName.php)
+<<[src/Domain/CocktailName.php](examples/chapter-06/dry/src/Domain/CocktailName.php)
 
-<<[src/Domain/IngredientName.php](examples/chapter-06/src/Domain/IngredientName.php)
+<<[src/Domain/IngredientName.php](examples/chapter-06/dry/src/Domain/IngredientName.php)
 
-<<[src/Domain/Method.php](examples/chapter-06/src/Domain/Method.php)
+<<[src/Domain/Method.php](examples/chapter-06/dry/src/Domain/Method.php)
 
-<<[src/Domain/Rating.php](examples/chapter-06/src/Domain/Rating.php)
+<<[src/Domain/Rating.php](examples/chapter-06/dry/src/Domain/Rating.php)
 
-<<[src/Domain/RecipeId.php](examples/chapter-06/src/Domain/RecipeId.php)
+<<[src/Domain/RecipeId.php](examples/chapter-06/dry/src/Domain/RecipeId.php)
 
-<<[src/Domain/Username.php](examples/chapter-06/src/Domain/Username.php)
+<<[src/Domain/Username.php](examples/chapter-06/dry/src/Domain/Username.php)
 
 We've successfully removed lots of repetition here!
 
@@ -382,13 +382,13 @@ We've successfully removed lots of repetition here!
 We've also got some repetition in some exception classes, we can also tidy them
 up with a similar use of *traits*:
 
-<<[src/Domain/ExceptionFactory.php](examples/chapter-06/src/Domain/ExceptionFactory.php)
+<<[src/Domain/ExceptionFactory.php](examples/chapter-06/dry/src/Domain/ExceptionFactory.php)
 
-<<[src/Domain/OutOfBoundsException.php](examples/chapter-06/src/Domain/OutOfBoundsException.php)
+<<[src/Domain/OutOfBoundsException.php](examples/chapter-06/dry/src/Domain/OutOfBoundsException.php)
 
-<<[src/Domain/Repository/NoSuchEntityException.php](examples/chapter-06/src/Domain/Repository/NoSuchEntityException.php)
+<<[src/Domain/Repository/NoSuchEntityException.php](examples/chapter-06/dry/src/Domain/Repository/NoSuchEntityException.php)
 
-<<[src/Applicatin/Exception/InvalidIdException.php](examples/chapter-06/src/Applicatin/Exception/InvalidIdException.php)
+<<[src/Applicatin/Exception/InvalidIdException.php](examples/chapter-06/dry/src/Applicatin/Exception/InvalidIdException.php)
 
 D> ## Exception Messages
 D>
