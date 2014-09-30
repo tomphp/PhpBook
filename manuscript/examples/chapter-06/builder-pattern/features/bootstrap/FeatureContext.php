@@ -43,13 +43,8 @@ class FeatureContext implements SnippetAcceptingContext
     /** @var mixed */
     private $result;
 
-    // leanpub-start-insert
-    /** @var ApplicationException */
-    private $error;
-
     /** @var array */
     private $recipes = [];
-    // leanpub-end-insert
 
     /**
      * Initializes context.
@@ -68,9 +63,6 @@ class FeatureContext implements SnippetAcceptingContext
     public function beforeScenario()
     {
         $this->recipeRepository = new TestRecipeRepository();
-        // leanpub-start-insert
-        $this->error = null;
-        // leanpub-end-insert
     }
 
     /**
@@ -139,22 +131,6 @@ class FeatureContext implements SnippetAcceptingContext
         );
     }
 
-    // leanpub-start-insert
-    /**
-     * @When I request to view recipe using a bad id
-     */
-    public function iRequestToViewRecipeUsingABadId()
-    {
-        try {
-            $query = new ViewRecipeQuery('bad id');
-            $handler = new ViewRecipeHandler($this->recipeRepository);
-
-            $this->result = $handler->handle($query);
-        } catch (ApplicationException $e) {
-            $this->error = $e;
-        }
-    }
-
     /**
      * @When I request to view recipe for :name
      */
@@ -166,18 +142,6 @@ class FeatureContext implements SnippetAcceptingContext
         $handler = new ViewRecipeHandler($this->recipeRepository);
 
         $this->result = $handler->handle($query);
-    }
-
-    /**
-     * @Then I should see an invalid id error
-     */
-    public function iShouldSeeAnInvalidIdError()
-    {
-        Assert::assertInstanceOf(
-            'CocktailRater\Application\Exception\InvalidIdException',
-            $this->error,
-            'Expected an invalid id error.'
-        );
     }
 
     /**
@@ -280,5 +244,4 @@ class FeatureContext implements SnippetAcceptingContext
 
         return $this->result->$getter();
     }
-    // leanpub-end-insert
 }

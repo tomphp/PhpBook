@@ -290,9 +290,7 @@ D> This is much more helpful.
 ### Value Objects
 
 Things:
-* REMOVE ID FROM ACCEPTANCE TEST
 * Problems in Feature Context
-* PSR-4
 
 ## Some Thoughts
 
