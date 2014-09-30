@@ -226,7 +226,7 @@ you'll remember the rule *First Class Collections*, this tells us not to use
 arrays in our classes but rather create collection classes to encapsulate them.
 Let's do that here, it's not much effort and it may be useful later on:
 
-<<[src/Domain/MeasuredIngredients.php](examples/chapter-06/builder-pattern/src/Domain/MeasuredIngredients.php)
+<<[src/Domain/MeasuredIngredients.php](examples/chapter-06/measured-ingredient-collection/src/Domain/MeasuredIngredients.php)
 
 Since our `MeasuredIngredients` class implements `MeasuredIngredientDetails`,
 the `getDetails` method currently just returns the list of `MeasuredIngredient`
