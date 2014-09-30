@@ -7,7 +7,7 @@ Let's take a look at the story card for the next feature:
 > * Displays name, rating, user, and the method
 > * Displays ingredients with quantities and units
 
-As before I shall provide the following acceptance tests:
+As before I shall provide the acceptance tests:
 
 <<[features/visitors-can-view-a-recipe.feature](examples/chapter-06/feature2/features/visitors-can-view-a-recipe.feature)
 
@@ -18,36 +18,37 @@ and decisions made in each step.
 
 In this chapter we want to implement the second feature which requires a very
 similar process to that in the previous chapter so I'll cover it in less
-detail.  Once we have this done we're going to spend a bit time analysing what
-we have created so far and try refactor it a bit to apply some principles and
-get it as tidy as possible.
+detail. Once we have this done we're going to spend a bit time analysing what
+we have created so far and try refactor it a bit, apply some principles and get
+it as tidy as possible.
 
 ## The FeatureContext
 
-First up let's quickly append the new *snippet* templates to the feature context
-by run:
+First up let's quickly append the new *snippet* templates to the feature
+context by running:
 
 {lang="console"}
 ~~~~~~~~
 $ behat --append-snippets
 ~~~~~~~~
 
-Now the feature context needs to be updated, here what I've come up with:
+Now the feature context needs to be updated, here's what I've come up with:
 
 <<[features/bootstrap/FeatureContext.php](examples/chapter-06/feature2/features/bootstrap/FeatureContext.php)
 
 This has got a bit complex because we're building the `Recipe` objects over a
-sequence of steps. Since the `Recipe` is takes most of its values via the
-constructor we have to store up the details until we have them all and can
+sequence of steps. Since the `Recipe` is immutable and takes of its values via
+the constructor we have to store the details until we have them all and can
 create the object in `iRequestToViewRecipeFor`. Also, once a `Recipe` is stored
-we save the ID. The `FeatureContext` definitely needs to be tidied up a bit but
-before we look at doing that lets see the actual implementation.
+we save the allocated ID. The `FeatureContext` definitely needs to be tidied up
+a bit but before we look at doing that lets see the actual implementation which
+makes this pass.
 
 ## The Implementation
 
 I'm just going to show you all the code now, there is a fair bit of it but it
-should all be self explanatory. I'll explain a couple of small bits and then
-well look at ways we can improve it.
+should all be pretty self explanatory. I'll point out a couple of small bits
+and then well look at ways we can improve it.
 
 <<[src/Application/Visitor/Query/ViewRecipeQuery.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeQuery.php)
 
@@ -55,7 +56,7 @@ This time the *query* contains the *ID* of the recipe to be viewed.
 
 <<[src/Application/Visitor/Query/ViewRecipeHandler.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeHandler.php)
 
-The *handler* makes a new request `findById` to the repository.
+The *handler* makes a new request called `findById` to the repository.
 
 <<[src/Application/Visitor/Query/ViewRecipeResult.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeResult.php)
 
@@ -68,26 +69,26 @@ data.
 
 <<[src/Testing/Repository/TestRecipeRepository.php](examples/chapter-06/feature2/src/Testing/Repository/TestRecipeRepository.php)
 
-The repository now has the concept of an ID, in the test repository we just
-generation an incremental one and provide and extra method so the test suite
-can retrieve the last one.
+The repository now has the concept of a recipe ID, in the test repository we
+just generation an incremental one and provide and extra method so the test
+suite can retrieve the last generated one.
 
 <<[src/Domain/RecipeId.php](examples/chapter-06/feature2/src/Domain/RecipeId.php)
 
 <<[src/Domain/Recipe.php](examples/chapter-06/feature2/src/Domain/Recipe.php)
 
-There has been a few new fields added to the `Recipe` class. This has lead to
+We've added a few new fields added to the `Recipe` class. This has lead to
 a few more *value objects* being created also:
 
 <<[src/Domain/MeasuredIngredient.php](examples/chapter-06/feature2/src/Domain/MeasuredIngredient.php)
 
 <<[src/Domain/MeasuredIngredientDetails.php](examples/chapter-06/feature2/src/Domain/MeasuredIngredientDetails.php)
 
-Because a `MeasuredIngredient` only has 3 values which we want to display at
-the moment I chose to use getters rather than create a dedicated class. We
-create an *interface* from them though as this could change at some point and
-depending on the interface means there'll be fewer changes required if this
-happens.
+Because a `MeasuredIngredient` currently only has 3 values which need to be
+displayed I chose to use getters rather than create a dedicated details class.
+We create an *interface* containing them though as this could change at some
+point and depending on the interface means there'll be fewer changes required
+if this happens.
 
 <<[src/Domain/Method.php](examples/chapter-06/feature2/src/Domain/Method.php)
 
@@ -101,12 +102,15 @@ happens.
 
 These are all pretty plain but it's worth taking a quick look a `Unit`. This is
 basically how to achieve an *enumeration* in PHP. It's basically a value object
-which accepts a finite set of values, each defined as a constant of the class.
-You create a *unit* of millilitres like this: `new Unit(Unit::ML)`.
+which accepts a finite set of values, each defined as a class constant. Using
+this you would create a *unit* of millilitres like this: `new Unit(Unit::ML)`.
+
+That's it, the test passes now and the feature has been implemented. Next up,
+let's try and improve the code.
 
 ## The Builder Pattern
 
-The issue I'd like to tackle is the complex building the `Recipe` in the
+The first issue I'd like to tackle is the complex building the `Recipe` in the
 `FeatureContext`. I think a nice way to tidy this up a bit would be to use
 the [builder design pattern](http://en.wikipedia.org/wiki/Builder_pattern).
 
@@ -211,24 +215,113 @@ And updating these:
     }
 ~~~~~~~~
 
-Even though we have only done this for the benefit of the `FeatureContext` it
+Even though we have only done this for the benefit of the `FeatureContext`, it
 could definitely be useful later on.
 
 ## The Ingredients Collection
 
-Inside `Recipe` we have an array of `MeasuredIngredient` objects. If you 
+Inside `Recipe` we have an array of `MeasuredIngredient` objects. If think
 remember back to the section on [Object Calisthenics](#object-calisthenics)
-you remember the rule *First Class Collections*, this tells us not to use
+you'll remember the rule *First Class Collections*, this tells us not to use
 arrays in our classes but rather create collection classes to encapsulate them.
 Let's do that here, it's not much effort and it may be useful later on:
 
-todo ... collection code
+<<[src/Domain/MeasuredIngredients.php](examples/chapter-06/builder-pattern/src/Domain/MeasuredIngredients.php)
 
-...
+Since our `MeasuredIngredients` class implements `MeasuredIngredientDetails`,
+the `getDetails` method currently just returns the list of `MeasuredIngredient`
+objects. I've used a docblock `@return` comment here to indicate that the
+actual intent here is to return a list of `MeasuredIngredientDetails`.  This
+means the methods outside of this interface should not me accessed on the
+objects returned from `getDetails`. In a strongly typed language this would be
+enforced but sadly, in PHP it currently is not.
+
+We also need to update the `Recipe` and `RecipeBuilder` classes to use this
+new collection class:
+
+{title="src/Domain/Recipe.php", lang="php"}
+~~~~~~~~
+<?php
+
+// ...
+
+final class Recipe
+{
+    // ...
+
+    // leanpub-start-insert
+    /** @var MeasuredIngredient[] */
+    private $measuredIngredients;
+    // leanpub-end-insert
+
+    // ...
+
+    // leanpub-start-insert
+    public function __construct(
+        CocktailName $name,
+        Rating $rating,
+        User $user,
+        MeasuredIngredients $measuredIngredients,
+        Method $method
+    ) {
+    // leanpub-end-insert
+        $this->name                = $name;
+        $this->rating              = $rating;
+        $this->user                = $user;
+        $this->method              = $method;
+        $this->measuredIngredients = $measuredIngredients;
+    }
+
+    // ...
+
+    /** @return RecipeDetails */
+    public function getDetails()
+    {
+        return new RecipeDetails(
+            $this->name,
+            $this->user->getDetails(),
+            $this->rating,
+            $this->method,
+            // leanpub-start-insert
+            $this->measuredIngredients->getDetails()
+            // leanpub-end-insert
+        );
+    }
+}
+~~~~~~~~
+
+{title="src/Domain/Builder/RecipeBuilder.php", lang="php"}
+~~~~~~~~
+<?php
+
+// ...
+// leanpub-start-insert
+use CocktailRater\Domain\MeasuredIngredients;
+// leanpub-end-insert
+
+class RecipeBuilder
+{
+    // ...
+
+    /** @return Recipe */
+    public function build()
+    {
+        return new Recipe(
+            $this->name,
+            $this->rating,
+            $this->user,
+            // leanpub-start-insert
+            new MeasuredIngredients($this->ingredients),
+            // leanpub-end-insert
+            $this->method
+        );
+    }
+}
+~~~~~~~~
 
 ## DRY - Don't Repeat Yourself
 
-DRY is a simple software principle which I've not mentioned yet, its name
+DRY is a simple software principle which I've not yet mentioned and its name
 pretty much sums it up. Applying DRY simply means if you find yourself typing
 the same piece of code more than once, then extract it out into a
 function, method, class or anything else which may be appropriate.
@@ -237,28 +330,65 @@ I've already applied this principle in some places, for example the
 `getResultField` method in the `FeatureContext`. However, let's find some other
 places to apply it.
 
-### Exceptions
+### Value Objects
 
-We've definitely got some repetition in some exception class, take a look at
-these:
-
-todo ... exception code.
-
-To tidy this up let's use one of PHP's newer features, *traits*:
+One place we seem to have a lot of repetition is in our single value value
+objects. We can use traits here to tidy them up, let's take a look.
 
 I> ### Traits
 I>
-I> PHP recently introduced `traits`. These are a way to include common bits
-I> of code into multiple classes, almost in a copy & paste style. Traits in
-I> PHP should be used to remove the repetition of small bit of code rather
-I> than performing complex tasks, they should be extracted to dedicated
-I> classes.
+I> PHP recently introduced `traits` in version 5.4. These are a way to include
+I> common bits of code into multiple classes, almost in a copy & paste style.
+I> Traits in PHP should be used to remove the repetition of small bit of code
+I> rather than performing complex tasks. Such tasks should be extracted into
+I> dedicated classes.
 I>
 I> You define the *methods* and *properties* in your `trait`, you can then use
 I> those methods and properties in any class by including `use TraitName;` in
 I> the body of the class.
+I>
+I> One other thing I'll mention about traits is that because classes `use` them
+I> rather than `extend` them then `parent` is not available to call a method
+I> in the `trait` which has been *overridden*. If you do want to *override*
+I> a method and call the version in the `trait` from the class you will need
+I> to rename the method from the trait. You can do this like so:
+I>
+I> `use TheTrait { TheTrait::methodName as traitMethodName; }`
 
-todo ... tidy exceptions code.
+First up, let's add the new traits:
+
+<<[src/Domain/SingleValue.php](examples/chapter-06/src/Domain/SingleValue.php)
+
+<<[src/Domain/StringValue.php](examples/chapter-06/src/Domain/StringValue.php)
+
+Now we can refactor our single value value objects:
+
+<<[src/Domain/CocktailName.php](examples/chapter-06/src/Domain/CocktailName.php)
+
+<<[src/Domain/IngredientName.php](examples/chapter-06/src/Domain/IngredientName.php)
+
+<<[src/Domain/Method.php](examples/chapter-06/src/Domain/Method.php)
+
+<<[src/Domain/Rating.php](examples/chapter-06/src/Domain/Rating.php)
+
+<<[src/Domain/RecipeId.php](examples/chapter-06/src/Domain/RecipeId.php)
+
+<<[src/Domain/Username.php](examples/chapter-06/src/Domain/Username.php)
+
+We've successfully removed lots of repetition here!
+
+### Exceptions
+
+We've also got some repetition in some exception classes, we can also tidy them
+up with a similar use of *traits*:
+
+<<[src/Domain/ExceptionFactory.php](examples/chapter-06/src/Domain/ExceptionFactory.php)
+
+<<[src/Domain/OutOfBoundsException.php](examples/chapter-06/src/Domain/OutOfBoundsException.php)
+
+<<[src/Domain/Repository/NoSuchEntityException.php](examples/chapter-06/src/Domain/Repository/NoSuchEntityException.php)
+
+<<[src/Applicatin/Exception/InvalidIdException.php](examples/chapter-06/src/Applicatin/Exception/InvalidIdException.php)
 
 D> ## Exception Messages
 D>
@@ -268,9 +398,9 @@ D>
 D> Exception messages should not be designed to
 D> display to the users of the application, they should be caught before they
 D> get to the UI, logged, then a user friendly message displayed on screen.
-D> The exception messages are for the developers, they are logged so problems
-D> and bugs can be tracked down. Therfore, make your exception messages contain
-D> as much context as necessary to understand the context.
+D> The exception messages are for the developers, they should be logged so problems
+D> and bugs can be tracked down. With this in mind, make your exception messages contain
+D> as much context as necessary for the developer to understand the problem.
 D>
 D> ### Example
 D>
@@ -279,7 +409,7 @@ D> reasonable message to display to the user might be:
 D>
 D> *"A recipe with ID '123' was not found."*
 D>
-D> But is this a good exception message? Not really as there's some missing
+D> But is this a good exception message? Actually it's not really as there's some missing
 D> context here, the user knows who they are but to someone reading that
 D> message in a log it is unclear. A better message might say:
 D>
@@ -287,11 +417,19 @@ D> *"A recipe with ID '123' could not be found for user with ID '456'."*
 D>
 D> This is much more helpful.
 
-### Value Objects
-
-Things:
-* Problems in Feature Context
+Applying DRY certainly doesn't have to involve using *traits*, in fact they are
+used pretty rarely in comparison to *methods* and *classes*. It just happen
+that they were well suited to our 2 examples.
 
 ## Some Thoughts
 
-Lots of test refactoring.
+In this chapter we've tidied up the code we've written without paying any real
+attention to the application architecture as a whole. This is always a useful
+and essential process to maintain a healthy code base. It's also worth pointing
+out that this doesn't (and isn't generally) done as a separate task, as you get
+used to spotting these patterns they will be things which you'll be apply as
+your developing the code.
+
+In the next chapter we'll take a look at the structure of what we have and see
+if we can apply a little bit more refactoring to generalise the similarities
+between out *queries* and the way the are *handled*.

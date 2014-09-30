@@ -3,11 +3,6 @@ Feature: A visitor can view a recipe
     As a visitor
     I need to be able see a recipe and all it's measured ingredients
 
-    Scenario: Requesting a recipe by an ID which does not exist
-        Given there are no recipes
-        When I request to view recipe using a bad id
-        Then I should see an invalid id error
-
     Scenario: Viewing a recipe
         Given there's a recipe for "Mojito" by user "tom" with 5 stars
         And the recipe for "Mojito" has method:

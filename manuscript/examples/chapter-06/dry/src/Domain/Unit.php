@@ -6,13 +6,16 @@ use Assert\Assertion;
 
 final class Unit
 {
+    // leanpub-start-input
+    use StringValue {
+        StringValue::__construct as private initStringValue;
+    }
+    // leanpub-end-input
+
     const ML    = 'ml';
     const FL_OZ = 'fl oz';
     const TSP   = 'tsp';
     const COUNT = '';
-
-    /** @var string */
-    private $value;
 
     /** @param string $value */
     public function __construct($value)
@@ -22,12 +25,8 @@ final class Unit
             [self::ML, self::FL_OZ, self::TSP, self::COUNT]
         );
 
-        $this->value = $value;
-    }
-
-    /** @return string */
-    public function getValue()
-    {
-        return $this->value;
+        // leanpub-start-input
+        $this->initStringValue($value);
+        // leanpub-end-input
     }
 }

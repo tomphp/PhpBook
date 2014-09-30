@@ -4,22 +4,17 @@ namespace CocktailRater\Domain;
 
 use Assert\Assertion;
 
-final class Username
+trait StringValue
 {
-    /** @var string */
-    private $value;
+    use SingleValue {
+        SingleValue::__construct as private initSingleValue;
+    }
 
     /** @param string $value */
     public function __construct($value)
     {
         Assertion::string($value);
 
-        $this->value = $value;
-    }
-
-    /** @param */
-    public function getValue()
-    {
-        return $this->value;
+        $this->initSingleValue($value);
     }
 }

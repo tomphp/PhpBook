@@ -7,8 +7,9 @@ use CocktailRater\Domain\Exception\OutOfBoundsException;
 
 final class Rating
 {
-    /** @var float */
-    private $value;
+    use SingleValue {
+        SingleValue::__construct as private initSingleValue;
+    }
 
     /**
      * @var float $value
@@ -21,13 +22,7 @@ final class Rating
 
         $this->assertValueIsWithinRange($value);
 
-        $this->value = (float) $value;
-    }
-
-    /** @return float */
-    public function getValue()
-    {
-        return $this->value;
+        $this->initSingleValue((float) $value);
     }
 
     /**

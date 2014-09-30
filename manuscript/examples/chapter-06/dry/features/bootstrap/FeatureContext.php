@@ -14,13 +14,18 @@ use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
 // leanpub-start-insert
 use CocktailRater\Application\Visitor\Query\ViewRecipeHandler;
 use CocktailRater\Application\Visitor\Query\ViewRecipeQuery;
+use CocktailRater\Domain\Builder\RecipeBuilder;
 use CocktailRater\Domain\RecipeId;
 use CocktailRater\Domain\Ingredient;
 use CocktailRater\Domain\Amount;
 use CocktailRater\Domain\MeasuredIngredient;
 // leanpub-end-insert
+use CocktailRater\Domain\CocktailName;
 use CocktailRater\Domain\Rating;
 use CocktailRater\Domain\Recipe;
+// leanpub-start-insert
+use CocktailRater\Domain\Method;
+// leanpub-end-insert
 use CocktailRater\Domain\Unit;
 use CocktailRater\Domain\User;
 use CocktailRater\Domain\Username;
@@ -38,13 +43,8 @@ class FeatureContext implements SnippetAcceptingContext
     /** @var mixed */
     private $result;
 
-    // leanpub-start-insert
-    /** @var ApplicationException */
-    private $error;
-
     /** @var array */
     private $recipes = [];
-    // leanpub-end-insert
 
     /**
      * Initializes context.
@@ -63,9 +63,6 @@ class FeatureContext implements SnippetAcceptingContext
     public function beforeScenario()
     {
         $this->recipeRepository = new TestRecipeRepository();
-        // leanpub-start-insert
-        $this->error = null;
-        // leanpub-end-insert
     }
 
     /**
@@ -108,8 +105,10 @@ class FeatureContext implements SnippetAcceptingContext
     public function theresARecipeForByUserWithStars($name, $user, $rating)
     {
         // leanpub-start-insert
-        $this->recipes[$name]['username'] = $user;
-        $this->recipes[$name]['rating'] = $rating;
+        $builder = $this->getRecipeBuilder($name);
+
+        $builder->setUser(User::fromValues($user));
+        $builder->setRating(new Rating($rating));
         // leanpub-end-insert
     }
 
@@ -132,22 +131,6 @@ class FeatureContext implements SnippetAcceptingContext
         );
     }
 
-    // leanpub-start-insert
-    /**
-     * @When I request to view recipe using a bad id
-     */
-    public function iRequestToViewRecipeUsingABadId()
-    {
-        try {
-            $query = new ViewRecipeQuery('bad id');
-            $handler = new ViewRecipeHandler($this->recipeRepository);
-
-            $this->result = $handler->handle($query);
-        } catch (ApplicationException $e) {
-            $this->error = $e;
-        }
-    }
-
     /**
      * @When I request to view recipe for :name
      */
@@ -162,39 +145,37 @@ class FeatureContext implements SnippetAcceptingContext
     }
 
     /**
-     * @Then I should see an invalid id error
-     */
-    public function iShouldSeeAnInvalidIdError()
-    {
-        Assert::assertInstanceOf(
-            'CocktailRater\Application\Exception\InvalidIdException',
-            $this->error,
-            'Expected an invalid id error.'
-        );
-    }
-
-    /**
      * @Given the recipe for :name has method:
      */
     public function theRecipeForHasMethod($name, PyStringNode $method)
     {
-        $this->recipes[$name]['method'] = $method->getRaw();
+        // leanpub-start-insert
+        $this->getRecipeBuilder($name)->setMethod(
+            new Method($method->getRaw())
+        );
+        // leanpub-end-insert
     }
 
     /**
      * @Given the recipe for :name has measured ingredients:
      */
-    public function theRecipeForHasMeasuredIngredients($name, TableNode $ingredients)
-    {
-        $this->recipes[$name]['ingredients'] = [];
+    public function theRecipeForHasMeasuredIngredients(
+        $name,
+        TableNode $ingredients
+    ) {
+        // leanpub-start-insert
+        $builder = $this->getRecipeBuilder($name);
 
         foreach ($ingredients->getHash() as $ingredient) {
-            $this->recipes[$name]['ingredients'][] = [
-                'name'   => $ingredient['name'],
-                'amount' => $ingredient['amount'],
-                'unit'   => $ingredient['unit']
-            ];
+            $builder->addIngredient(
+                Amount::fromValues(
+                    $ingredient['amount'],
+                    $ingredient['unit']
+                ),
+                Ingredient::fromValues($ingredient['name'])
+            );
         }
+        // leanpub-end-insert
     }
 
     /**
@@ -216,55 +197,45 @@ class FeatureContext implements SnippetAcceptingContext
     /**
      * @Then I should see a list of measured ingredients containing:
      */
-    public function iShouldSeeAListOfMeasuredIngredientsContaining(TableNode $table)
-    {
+    public function iShouldSeeAListOfMeasuredIngredientsContaining(
+        TableNode $table
+    ) {
         Assert::assertEquals(
             $table->getHash(),
             $this->getResultField('measuredIngredients')
         );
     }
 
+    /**
+     * @param string $name
+     *
+     * @return RecipeBuilder
+     */
+    private function getRecipeBuilder($name)
+    {
+        if (!isset($this->recipes[$name])) {
+            $this->recipes[$name]['builder'] = new RecipeBuilder();
+            $this->recipes[$name]['builder']->setName(new CocktailName($name));
+        }
+
+        return $this->recipes[$name]['builder'];
+    }
+
     private function storeRecipes()
     {
-        foreach ($this->recipes as $name => &$properties) {
-            $ingredients = isset($properties['ingredients'])
-                ? $properties['ingredients']
-                : [];
+        // leanpub-start-insert
+        foreach ($this->recipes as $name => &$recipeSpec) {
+            $recipe = $recipeSpec['builder']->build();
 
-            $measuredIngredients = array_map(
-                function ($ingredient) {
-                    return new MeasuredIngredient(
-                        new Ingredient($ingredient['name']),
-                        new Amount(
-                            $ingredient['amount'],
-                            new Unit($ingredient['unit'])
-                        )
-                    );
-                },
-                $ingredients
-            );
+            $this->recipeRepository->store($recipe);
 
-            $method = isset($properties['method'])
-                ? $properties['method']
-                : '';
-
-            $this->recipeRepository->store(
-                new Recipe(
-                    $name,
-                    new Rating($properties['rating']),
-                    User::fromValues($properties['username']),
-                    // leanpub-start-insert
-                    $measuredIngredients,
-                    $method
-                    // leanpub-end-insert
-                )
-            );
-
-            $properties['id'] = $this->recipeRepository
+            $recipeSpec['id'] = $this->recipeRepository
                                      ->getLastInsertId()
                                      ->getValue();
         }
+        // leanpub-end-insert
     }
+
 
     /** @return mixed */
     private function getResultField($name)
@@ -273,5 +244,4 @@ class FeatureContext implements SnippetAcceptingContext
 
         return $this->result->$getter();
     }
-    // leanpub-end-insert
 }

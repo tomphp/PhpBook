@@ -2,22 +2,18 @@
 
 namespace CocktailRater\Domain;
 
-use Assert\Assertion;
-
-final class RecipeId
+trait SingleValue
 {
-    /** @var string */
-    private $value;
+    /** @var mixed */
+    protected $value;
 
-    /** @param string $value */
+    /** @param mixed $value */
     public function __construct($value)
     {
-        Assertion::string($value);
-
         $this->value = $value;
     }
 
-    /** @return string */
+    /** @return mixed */
     public function getValue()
     {
         return $this->value;
@@ -25,6 +21,6 @@ final class RecipeId
 
     public function __toString()
     {
-        return $this->value;
+        return (string) $this->value;
     }
 }

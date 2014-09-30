@@ -26,25 +26,8 @@ final class ViewRecipeHandler
      */
     public function handle(ViewRecipeQuery $query)
     {
-        $recipe = $this->findRecipe($query);
-
-        return new ViewRecipeResult(
-            $recipe->getName(),
-            $recipe->getUser()->getUsername()->getValue(),
-            $recipe->getRating()->getValue(),
-            $recipe->getMethod(),
-            array_map(
-                function (MeasuredIngredient $ingredient) {
-                    return [
-                        'name'   => $ingredient->getIngredient()->getName(),
-                        'amount' => $ingredient->getAmount()->getValue(),
-                        'unit'   => $ingredient->getAmount()
-                                               ->getUnit()
-                                               ->getValue()
-                    ];
-                },
-                $recipe->getMeasuredIngredients()
-            )
+        return new ViewRecipeResultData(
+            $this->findRecipe($query)->getDetails()
         );
     }
 

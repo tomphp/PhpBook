@@ -8,10 +8,19 @@ use CocktailRater\Domain\Username;
 
 class UserSpec extends ObjectBehavior
 {
-    function it_can_be_created_from_values()
-    {
-        $this->beConstructedThrough('fromValues', ['test_user']);
+    const TEST_USER = 'test_user';
 
-        $this->getUsername()->shouldBeLike(new Username('test_user'));
+    function let()
+    {
+        $this->beConstructedThrough('fromValues', [self::TEST_USER]);
+    }
+
+    function it_returns_UserDetails()
+    {
+        $details = $this->getDetails();
+
+        $details->shouldBeAnInstanceOf('CocktailRater\Domain\UserDetails');
+
+        $details->getUsername()->shouldReturn('test_user');
     }
 }

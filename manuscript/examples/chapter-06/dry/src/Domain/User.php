@@ -23,9 +23,9 @@ final class User
         $this->username = $username;
     }
 
-    /** @return Username */
-    public function getUsername()
+    /** @return UserDetails */
+    public function getDetails()
     {
-        return $this->username;
+        return new UserDetails($this->username);
     }
 }
