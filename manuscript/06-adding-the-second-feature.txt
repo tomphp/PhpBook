@@ -382,13 +382,13 @@ We've successfully removed lots of repetition here!
 We've also got some repetition in some exception classes, we can also tidy them
 up with a similar use of *traits*:
 
-<<[src/Domain/ExceptionFactory.php](examples/chapter-06/dry/src/Domain/ExceptionFactory.php)
+<<[src/Domain/Exception/ExceptionFactory.php](examples/chapter-06/dry/src/Domain/Exception/ExceptionFactory.php)
 
-<<[src/Domain/OutOfBoundsException.php](examples/chapter-06/dry/src/Domain/OutOfBoundsException.php)
+<<[src/Domain/Exception/OutOfBoundsException.php](examples/chapter-06/dry/src/Domain/Exception/OutOfBoundsException.php)
 
-<<[src/Domain/Repository/NoSuchEntityException.php](examples/chapter-06/dry/src/Domain/Repository/NoSuchEntityException.php)
+<<[src/Domain/Repository/Exception/NoSuchEntityException.php](examples/chapter-06/dry/src/Domain/Repository/Exception/NoSuchEntityException.php)
 
-<<[src/Applicatin/Exception/InvalidIdException.php](examples/chapter-06/dry/src/Applicatin/Exception/InvalidIdException.php)
+<<[src/Application/Exception/InvalidIdException.php](examples/chapter-06/dry/src/Application/Exception/InvalidIdException.php)
 
 D> ## Exception Messages
 D>
