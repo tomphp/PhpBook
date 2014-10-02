@@ -6,4 +6,4 @@ topics briefly; the idea is to give you enough information on each topic for
 you to progress through this book, however, each topic is pretty deep so I
 don't want to try and cover any of them completely. Many of them also have
 great books covering that topic exclusively and I encourage you to learn more
-on each of them yourself.
+about each of them yourself.

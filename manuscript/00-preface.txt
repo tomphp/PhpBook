@@ -24,12 +24,12 @@ Principals](#the-solid-principles), [Test Driven Development](#tdd) and
 [Behaviour Driven Development](#bdd). If these are all new to you, then this
 will be quite a ride.
 
-I do not intend on covering any of these topics extensively, there are already
+I do not intend to cover any of these topics extensively. There are already
 many great books and resources covering all of them already and written by far
 cleverer people than myself. Therefore, I encourage you to read and learn more
 about all these subjects further. This book should, however, provide a great
 introduction to many of these methodologies, techniques and tools and show you
-how to quickly get started using them with PHP.
+how to get started quickly using them with PHP.
 
 This book aims to introduce you to what you need to start building a well
 designed, manageable and extensible, medium size PHP application. The approach
@@ -56,8 +56,8 @@ this book but hopefully it will still be helpful.
 ## Getting in Contact
 
 I'd love to hear from you! Whether it's about something in the book which you
-didn't understand, think I could improve or didn't agree with; or if you'd like
-to share how you do things differently; or even just to talk about software
+didn't understand, think I could improve or didn't agree with, or if you'd like
+to share how you do things differently, or even just to talk about software
 design in general then please get in touch.
 
 You can find me on:

@@ -2,8 +2,8 @@
 
 First up I will be using a Linux system in all my examples, therefore most of
 the content in terms of using the command line and configuration should
-translate directly if your are a Mac OS X user. If you are a Windows user
-things may be a bit different but shouldn't be too hard to work out.
+translate directly if you're a Mac OS X user. If you're a Windows user things
+may be a bit different but shouldn't be too hard to work out.
 
 ## Requirements
 
@@ -18,21 +18,21 @@ Install PHP and SQLite on Ubuntu easily by running:
 $ sudo apt-get install php5-cli php5-sqlite
 ~~~~~~~~
 
-When working in a web environment I will be using a tool called Vagrant which
+When working in a web environment I will be using a tool called Vagrant, which
 runs the development environment in a virtual machine on the computer. This
 removes the need to set up and configure a webserver (and database servers)
-directly on the development computer. This is the way I would recommend doing
-working, However, if you do want to manually set up the relevant webserver &
+directly on the development computer. This is the way I would recommend
+working. However, if you do want to manually set up the relevant webserver and
 database servers on your development machine then you can do that, but you'll
 have to work that out yourself.
 
 ## Vagrant
 
-Vagrant is a neat little tool, it allows many developers working on the same
-project to easily run a local copy of the project's environment without having
-to install all the project's dependencies on their development machines. It does
-this by building and running a virtual machine from a config file included in the
-project.
+Vagrant is a neat little tool. It allows many developers working on the same
+project to run a local copy of the project's environment easily without having
+to install all the project's dependencies on their development machines. It
+does this by building and running a virtual machine from a config file included
+in the project.
 
 Vagrant itself simply instructs a virtualisation provider on what type of
 virtual machine to create and then uses a configuration automation system to
@@ -57,27 +57,29 @@ I recommend that you install both Vagrant and VirtualBox by downloading the
 distribution packages directly from their websites so you get the current
 versions.
 
-With Ansible you need to make sure you have an up to date version, on Ubuntu I
-tend to install it via
-[Rodney Quillo's PPA](https://launchpad.net/~rquillo/+archive/ubuntu/ansible)
-which as it's more up to date than the version in the Software Center.
+With Ansible, you need to make sure you have an up to date version. On Ubuntu I
+tend to install it via [Rodney Quillo's
+PPA](https://launchpad.net/~rquillo/+archive/ubuntu/ansible) since it's more
+up to date than the version in the Software Center.
 
 ### Creating a Vagrant Config for PHP Development
 
-Once you have Vagrant, VirtualBox and Ansible installed its time to build a
+Once you have Vagrant, VirtualBox and Ansible installed, it's time to build a
 Vagrant configuration.
 
-It's not hard to build a Vagrant config file by hand or to build the config
-automation scripts. However, it is a bit tedious, takes some learning and is
+It's not hard to build a Vagrant config file by hand, or to build the config
+automation scripts. However, it is a bit tedious, takes some learning, and is
 not really something this book intends to cover. Luckily there are some
 fantastic online tools available which make this process a lot easier. Since we
-want to build a PHP development environment and we're going to use Ansible,
-let's use [Phansible](http://www.phansible.com/) to create our config for us.
+want to build a PHP development environment and we're going to use Ansible.  We
+will use a fantastic tool called [Phansible](http://www.phansible.com/) to
+create our config for us.
 
-First of all open http://www.phansible.com/ in your browser.
+#### Phansible
 
-You will see a form asking questions about the development environment that you
-want to create, for this example choose the following options:
+First, open http://www.phansible.com/ in your browser. You will see a form
+asking questions about the development environment that you want to create. For
+this example choose the following options:
 
 | Options          | Value                         |
 |------------------|-------------------------------|
@@ -87,32 +89,31 @@ want to create, for this example choose the following options:
 | Memory           | 512                           |
 | Shared Folder    | ./                            |
 | Webserver        | Apache + PHP5                 |
-| PHP Version      | 5.5                           |
+| PHP Version      | 5.6                           |
 
-You can use a different local IP address if you want but remember it as we will
-need to know what it is shortly.
+You can use a different local IP address if you want, but remember it, since
+we'll need to use it shortly.
 
-Ignore the **Database** and **Package** settings for now and finally choose an
+Ignore the **Database** and **Package** settings for now, and finally choose an
 appropriate **Timezone**.
 
-Next click the **Generate** button at the bottom and save the generated `.zip`
-file to your hard drive.
-
-I saved my file to `/home/tom/Downloads/phansible_VagrantExample.zip`.
+Next, click the **Generate** button at the bottom of the form, and save the
+generated `.zip` file to your hard drive. I saved my file to
+`/home/tom/Downloads/phansible_VagrantExample.zip`.
 
 #### Creating the Project
 
-Now we have the Vagrant configuration generated let's create a PHP project and
-add the Vagrant configuration to it.
+Now that we have generated the Vagrant configuration, let's create a PHP
+project and add the Vagrant configuration to it.
 
-At your terminal `cd` to where ever you want to create your project:
+At your terminal, `cd` to where ever you want to create your project:
 
 {lang="console"}
 ~~~~~~~~
 $ cd /home/tom/Projects
 ~~~~~~~~
 
-Next create a directory for your new project and `cd` into it:
+Next, create a directory for your new project, and `cd` into it:
 
 {lang="console"}
 ~~~~~~~~
@@ -120,12 +121,12 @@ $ mkdir VagrantExample
 $ cd VagrantExample
 ~~~~~~~~
 
-Now create a file inside this directory called `index.php` and with your
-favourite IDE or text editor and add the following content:
+Now create a file inside this directory called `index.php`, and add the
+following content, using your favourite IDE or text editor:
 
 <<[index.php](examples/chapter-01/VagrantExample/index.php)
 
-Next unpack the contents of the Vagrant configuration `.zip` file that we
+Next, unpack the contents of the Vagrant configuration `.zip` file that we
 downloaded from the Phansible website earlier,
 
 {lang="console"}
@@ -141,8 +142,8 @@ connected to the Internet, run:
 $ vagrant up
 ~~~~~~~~
 
-This may take some time and you may be prompted to enter your password to allow
-Vagrant to `sudo` to update some config files, but just be patient.
+This may take some time, and you may be prompted to enter your password to
+allow Vagrant to `sudo` to update some config files. Just be patient.
 
 When it is done, open your browser and enter the IP address we selected earlier
 into the location bar like so:
@@ -150,20 +151,18 @@ into the location bar like so:
 `http://192.168.5.1/`
 
 If all has gone to plan you should see `Hello wonderful World!` displayed on
-the page! Success, we have created a PHP development environment for our
-project without installing and configuring a webserver on our local machine.
+the page! Success! - we have created a PHP development environment for our
+project without installing or configuring a webserver on our local machine.
 
 Once you have marvelled in the glory of Vagrant you can shut down the virtual
-machine by running:
+machine by running the following command at your terminal:
 
 {lang="console"}
 ~~~~~~~~
 $ vagrant halt
 ~~~~~~~~
 
-at your terminal.
-
-E>## Shutting Down
+E> ## Shutting Down
 E>
 E> I have found that if I forget to shutdown my virtual machines on before I try
 E> to shut down my computer it hangs during the shut down process. If you have a
