@@ -18,13 +18,13 @@ Install PHP and SQLite on Ubuntu easily by running:
 $ sudo apt-get install php5-cli php5-sqlite
 ~~~~~~~~
 
-Where we are using it in a web environment I will be using a tool called
-Vagrant, it allows you to run your development environment in a virtual machine
-on your computer. This removes the need to set up and configure a webserver (or
-database servers) directly on your computer and therefore is the way I would
-recommend doing it. However, if you do want to set up the relevant webserver &
-database servers on your development machine manually, then you can do that but
-you will have to work that out yourself.
+When working in a web environment I will be using a tool called Vagrant which
+runs the development environment in a virtual machine on the computer. This
+removes the need to set up and configure a webserver (and database servers)
+directly on the development computer. This is the way I would recommend doing
+working, However, if you do want to manually set up the relevant webserver &
+database servers on your development machine then you can do that, but you'll
+have to work that out yourself.
 
 ## Vagrant
 
@@ -82,7 +82,7 @@ want to create, for this example choose the following options:
 | Options          | Value                         |
 |------------------|-------------------------------|
 | Operating System | Ubuntu Trusty Tahr (14.04) 64 |
-| Name             | Vagrant Example               |
+| Name             | VagrantExample                |
 | IP Address       | 192.168.5.1                   |
 | Memory           | 512                           |
 | Shared Folder    | ./                            |

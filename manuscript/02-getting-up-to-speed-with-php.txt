@@ -100,7 +100,7 @@ rename the one you're importing with the `as` keyword like so:
 ~~~~~~~~
 <?php
 
-namespace MyApp\Form\Contact;
+namespace MyApp\Form;
 
 use MyApp\Entity\Contact as ContactEntity;
 
@@ -165,7 +165,7 @@ $x = 12.5; // now $x contains a float
 
 $y = fn(123); // $p in fn() contains an integer and $y contains an integer
 
-$y = fn(fals); // $p in fn() contains a boolean and $y contains a boolean
+$y = fn(false); // $p in fn() contains a boolean and $y contains a boolean
 
 $c = new C1(); // $c contains a C1 instance
 
@@ -366,13 +366,15 @@ Stop the webserver again by pressing `CTRL+C` in the terminal.
 
 ### Front Controllers using Apache
 
-In order to use a front controller with Apache you need to tell Apache where to
+In order to use a front controller with Apache you need to tell it where to
 find the PHP script to use for the application entry point. As of Apache
-version `2.2.16` you can do this by simply adding:
+version `2.2.16` you can do this by simply adding the following to the
+`.htaccess` file in your document root:
 
-`FallbackResource /index.php`
-
-to your `.htaccess` file in your document root.
+{title=".htaccess"}
+~~~~~~~~
+FallbackResource /index.php
+~~~~~~~~
 
 ## Standards
 
