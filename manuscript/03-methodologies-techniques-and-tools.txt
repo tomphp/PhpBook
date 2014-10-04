@@ -3,34 +3,34 @@
 In this chapter I want to introduce the methodologies, techniques and tools
 incorporated in this book. None of these are exclusive to PHP and therefore
 they are worth learning about regardless of which language you're developing
-in. Also, none of these are brand new to PHP, in fact any serious PHP
+in. Also, none of these are brand new to PHP - in fact any serious PHP
 development company will be using at least some, if not all of these already.
 While some of these are new and have been developed in recent years, many of
-them have been developed over the last 1, 2 or more decades.
+them have been developed over the last one, two or more decades.
 
-As in the previous chapter I don't want to go into any real depth with any of
-these topics, I just want to give a short introduction or primer on each
-subject. These should provide enough of an understanding to work through this
-book. As always I do encourage you dig deeper into each of the subjects
-yourself, I will provide references for each topic of which are good places to
-start looking when you want to do this.
+As in the previous chapter, I don't want to go into any real depth with any of
+these topics. I just want to give a short introduction or primer on each
+subject. This should provide enough of an understanding to work through this
+book, but as always, I do encourage you dig deeper into each of the subjects
+yourself. I will provide references for each topic of good places to
+start looking when you want to learn more.
 
 ## Object Oriented Programming (OOP) {#oop}
 
 Sometimes I think there is a misconception that if you use classes in your code
-then you are doing OOP. This is not the case, OOP is an approach to modelling
+then you are doing OOP. This is not the case. OOP is an approach to modelling
 which involves grouping your business model down into objects, then grouping
 the related data and behaviours (methods) of these objects in your code as
-*classes*. This style of programming can even be done in languages which have no
-concepts of classes, also classes can be used ways which really don't represent
-good OO code.
+*classes*. This style of programming can even be done in languages which have
+no concepts of classes, and classes can be used ways which really don't
+represent good OO code.
 
-This is not a book on OO design but we will be using it extensively and I will
-be explaining my choices for doing the things I do. As a result, coming in cold
-to the subject you will probably get a good feel for OOP from this book alone,
-but even so I think this is a subject which you should study in more detail.
-If you do already have some experience of OOP but you're not an expert then I
-hope you will really have a lot to gain from this book.
+This is not a book on OO design but we will be using it extensively. I will be
+explaining my choices for doing the things I do and as a result, if you're
+coming in cold to the subject you will probably get a good feel for OOP from
+this book alone. Even so I think this is a subject which you should study
+in more detail. If you do already have some experience of OOP, but you're not
+an expert, then I hope you will really have a lot to gain from this book.
 
 Before moving on I just want to quickly cover a couple of OO topics:
 
@@ -38,10 +38,10 @@ Before moving on I just want to quickly cover a couple of OO topics:
 
 Objects consist of *state* (their *properties*) and a *public interface* (all
 **public** *methods* and *properties*). Generally there are rules as to what
-are the valid values for any object's state. Encapsulation is making state
-private so that it can only be changed via the public interface's methods.
+are the valid values for any object's *state*. Encapsulation is making state
+private so that it can only be changed via the *public interface's* methods.
 
-The point I want to make here is that you should design your public methods so
+The point I want to make here is: that you should design your public methods so
 that there is no way that the object can be put into an invalid state.
 
 Let's look at a couple of examples:
@@ -81,9 +81,9 @@ class EmailAddress
 }
 ~~~~~~~~
 
-In the example above we chose the simple rule that *anything with an `@` symbol
-in it could be an email address*, obviously in production code this would need
-to be more well defined.
+In the example above we chose the simple rule that *"anything with an `@`
+symbol in it could be an email address"*. Obviously in production code this
+would need to be more well defined.
 
 If you study the code above you will find that there is no way that you can
 create an instance of `EmailAddress` with an email address which does not
@@ -92,9 +92,9 @@ contain an `@` symbol. This is good design!
 #### Example 2
 
 Now consider implementing a collection of words which maintains a count of how
-many words it contains. This collection class will have 2 properties; *the list
+many words it contains. This collection class will have 2 properties: *the list
 of words* and *the count*. In order to add words to the collection we must add
-the word to the list and increment the count. Firstly let's do this with 2
+the word to the list and increment the count. First let's try this with 2
 separate methods:
 
 {title="Bad state consistency example", lang=php}
@@ -134,7 +134,7 @@ class WordCollection
 }
 ~~~~~~~~
 
-Now you can probably see what's wrong with that straight away but let me
+Now you can probably see what's wrong with that straight away, but let me
 explain for completeness. Take the following code:
 
 {lang=php}
@@ -147,8 +147,8 @@ $collection->addWord('hello');
 $collection->incrementCounter();
 ~~~~~~~~
 
-It looks OK and `$collection` is left in a valid state right? But is it always
-in a valid state? Look again:
+It looks OK and `$collection` is left in a valid state at the end right? But is
+it always in a valid state? Look again:
 
 {lang=php}
 ~~~~~~~~
@@ -171,12 +171,12 @@ $collection->incrementCounter();
 // counter = 1
 ~~~~~~~~
 
-there's a point in the middle where the state of the object is invalid, we
+There's a point in the middle where the state of the object is invalid, we
 do fix it in the next line of code but what if a developer forgot to increment
 the counter? It could lead to a nasty bug!
 
-The solution is simple; design the class so it can never be put into an invalid
-state:
+The solution is simple - design the class so it can never be put into an
+invalid state:
 
 {title="Good state consistency example", lang=php}
 ~~~~~~~~
@@ -217,15 +217,14 @@ SORTED!
 
 ### Inheritance vs. Composition
 
-Inheritance is a very useful and powerful tool in OOP but it is often misused.
+Inheritance is a very useful and powerful tool in OOP but it's often misused.
 The most common misuse of inheritance is using it to bring common functionality
 into 2 unrelated classes.
 
 An example could be:
 
-A bird and an aeroplane both fly so it might seem
-reasonable to inherit both a `Bird` class and an `Aeroplane` class from a
-`FlyingThing` superclass:
+A bird and an aeroplane both fly, so it might seem reasonable to inherit both a
+`Bird` class and an `Aeroplane` class from a `FlyingThing` superclass:
 
 {title="Misused Inheritance", lang=php}
 ~~~~~~~~
@@ -252,20 +251,20 @@ class Aeroplane extends FlyingThing
 
 There are a few reasons why this is a problem:
 
-Firstly we only have single inheritance in PHP which means we can't extend from
-more than one super class. Birds can communicate with each other and
-aeroplanes (well the pilots) can communicate with each other. If we wanted to
-add a `CommunicatingThing` class then we couldn't inherit from it as well as
-`FlyingThing` without creating a horrible `CommunicatingFlyingThing` class
-instead.
+Firstly, we only have single inheritance in PHP which means we can't extend
+from more than one super class. Birds can communicate with each other and
+aeroplanes (well the pilots) can communicate with each other too. If we wanted
+to add a `CommunicatingThing` class then we couldn't inherit from it as well as
+`FlyingThing` (without creating a horrible `CommunicatingFlyingThing` class
+instead).
 
 Next up, birds start flying by *flapping their wings* whereas an aeroplane is
-propelled be its engines. Now we have 2 different types of `FlyingThing`.
-The same goes for communicating; birds do it by *tweeting* and aeroplanes do it
+*propelled by its engines*. Now we have 2 different types of `FlyingThing`.
+The same goes for communicating: birds do it by *tweeting* and aeroplanes do it
 by *radio*.
 
-Finally we've categorised birds and aeroplanes, which are 2 very different
-things, together as *flying things* and *communicating things* which we've
+Finally, we've categorised birds and aeroplanes, which are 2 very different
+things, together as *flying things* and *communicating things* - which we've
 had to make up. A much more sensible category for an aeroplane might be a
 *vehicle*, and for a bird maybe an *animal*.
 
@@ -274,8 +273,8 @@ So how to fix it? So far we've been talking about *is a* relationships; *a bird
 also have *has a* relationships. What might be better would be if we said *"a
 bird **has a** flight system"* or *"an aeroplane **has a** communication
 system"*. When talking about **has a** relationships we are talking about
-composition. With this in mind Let's take a look at a better example of how to
-model this:
+*composition*. With this in mind Let's take a look at a better example of how
+to model this:
 
 {title="Using composition", lang=php}
 ~~~~~~~~
@@ -411,25 +410,24 @@ class Aeroplane
 }
 ~~~~~~~~
 
-The general rule here is:
-
-First of all determine if you are really modelling an **is a** relationship or
-a **has a** relationship. Don't bend your model to fit your code, rather make
-your code fit the model. When done properly you should find you use inheritance
-pretty rarely.
+The general rule here is: determine if you are really modelling an
+**is a** relationship or a **has a** relationship. Don't bend your model to fit
+your code, rather make your code fit the model. When done properly you should
+find you actually use inheritance pretty rarely.
 
 ## Design Patterns {#design-patterns}
 
-Design Patterns are tried and tested solutions to various problems programmers
-often face. There's several common design patterns which are very well known,
-these are called things like the *visitor pattern* and the *strategy pattern*.
+*Design Patterns* are tried and tested solutions to various problems
+programmers often face. There's several common design patterns which are very
+well known, these are called things like the *visitor pattern* and the
+*strategy pattern*.
 
 The de facto resource on this subject is the book titled *Design Patterns:
 Elements of Reusable Object-Oriented Software* by the Gang of
 Four[^the-gang-of-four]. Robert C. Martin says this book is *"probably the most
-important book in software engineering written in the last 30 years"*. This
-book is definitely a *must read* for all programmers, however, you can also
-find all the common design patterns listed and explained on
+important book in software engineering which has been written in the last 30
+years"*. This book is definitely a *must read* for all programmers. However,
+you can also find all the common design patterns listed and explained on
 [Wikipedia](http://en.wikipedia.org/wiki/Software_design_pattern#Classification_and_list).
 
 If you'd prefer to learn about Design Patterns from a PHP point of view then
@@ -438,18 +436,17 @@ Brandon Savage has written a book on the subject called
 
 I'm not going to go into any more details on design patterns here, I just
 wanted you to know what they are for now. As we work though this book we will
-be using various design patterns. As they come up I shall point out which one we
-are using and explain the choice to do so.
+be using various design patterns, and as they come up I shall point out which
+one we are using and explain the choice to do so.
 
 [^gang-of-four]: Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides.
 
 ## Value Objects & Immutability {#value-objects-and-immutability}
 
-When we say something is immutable we mean that its value is fixed and can not
-be changed. This means a class is either *mutable* or *immutable* depending on
-whether its public interface contains methods which change its internal state.
-
-Let's see an example of each:
+When we say something is *immutable* we mean that its value is fixed and can
+not be changed. This means a class is either *mutable* or *immutable* depending
+on whether its public interface contains methods which change its internal
+state. Let's see an example of each:
 
 {title="Mutable email address class", lang=php}
 ~~~~~~~~
@@ -505,24 +502,25 @@ We call *immutable* classes *value objects*. This is because an instance
 of a given class represents a value and only that value. In the same way that we
 can say 5 will always be 5, we can say that an `ImmutableEmailAddress` object
 containing the email address `bill@microsoft.com` will always contain the email
-address `bill@microsoft.com`, therefore this object represents the *value* of
+address `bill@microsoft.com` - therefore this object represents the *value* of
 that email address.
 
-Value objects should be used to classify anything which can be classified:
+Value objects are used to make the type of things explicit and should be used
+to classify anything which can be classified:
 
 ### An Example
 
-Instead of using a *float* for temperate use a `Temperature` value object, even
-if it simply contains a single *float* value. You might however also want to
-store the unit (Fahrenheit or Celsius) in the `Temperature` object - a value
-object can contain more than 1 scalar value. Also, the unit of temperature is 
-classifiable itself - therefore, make that a value object too.
+Instead of using a *float* for temperate use a `Temperature` value object -
+even if it simply contains a single *float* value. You might however also want
+to store the unit (Fahrenheit or Celsius) in the `Temperature` object - a value
+object can contain more than 1 scalar value. Also, the unit of temperature is
+classifiable itself, therefore make that a value object too.
 
-Your value objects should also only be able to be created with valid values, we
+Your value objects should only be able to be created with valid values, we
 don't want anyone to be able to create a temperature of *"30 degrees
 **hotness**"*. This should be enforced in the class definition!
 
-For completeness let's look a good implementation of what we've just discussed:
+For completeness, let's look a good implementation of what we've just discussed:
 
 {title="Temperature; a good use of value objects", lang=php}
 ~~~~~~~~
@@ -595,7 +593,7 @@ There are several benefits to using value objects:
 
 #### Confidence
 
-With a value object you know that it can't change unexpectedly; using our
+With a value object you know that it can't change unexpectedly. Using our
 `MutableEmailAddress` class from earlier consider the following code:
 
 {title="Unexpected change of value", lang=php}
@@ -633,15 +631,15 @@ last 3 lines of code would work as expected.
 If we create a function that takes a `Temperature` as an argument we can be
 sure that the value we get is a valid `Temperature`. We don't need to write any
 defensive code to check that the unit is valid or that degrees are specified as
-a floating point value because all that was taken care of in the class
+a floating point value, because all that has been  taken care of in the class
 definitions of our value objects.
 
 #### Documentation 
 
-When you open a file and look at the code it's much easier to know the type of
-a variable that was typehinted in the method argument list. This is really a
-benefit of typehints rather than of value objects however, by using value
-objects abundantly you will have more types to typehint for.
+When you open a file and look at the code, it's much easier to know the type of
+a parameter that was [typehinted](#typehints) in the method argument list. This
+is really a benefit of typehints rather than of value objects. However, by using
+value objects abundantly you will have more types to typehint for.
 
 ## Entities
 
@@ -650,11 +648,11 @@ applications. Unlike [value objects](#value-objects-and-immutability) they are
 *mutable*. They are also the objects which are often persisted and make up the
 ongoing state of the application.
 
-*Entities* have *identities*, they can have all their properties changed but
+*Entities* have *identities*. They can have all their properties changed but
 they continue to maintain the same identity through out their lifetime. A
 simple analogy of an entity object is a person, they can change their name but
 they are still the same person. This means that the equality of entities
-determined by the equality of their *identities*. Unlike *value objects* the
+determined by the equality of their *identities* - unlike *value objects* the
 equality of their other properties are not important when determining equality.
 
 Here's a simple example of what a simple entity class make look like:
@@ -716,7 +714,7 @@ class Customer
 
 ## Dependency Injection (DI) & Inversion of Control (IoC) {#dependency-injection}
 
-*Dependency injection* is simply explained by saying; if you have a class that
+*Dependency Injection* is simply explained by saying: if you have a class that
 relies on another class, rather than letting it create that other class
 internally, *inject* the dependency into it.
 
@@ -782,7 +780,7 @@ class Bar
     /**
      * The Foo must be injected into the instances of Bar.
      *
-     * It is also possible to inject and subtype of Foo.
+     * It is also possible to inject a subtype of Foo.
      */
     public function __construct(Foo $fooer)
     {
@@ -800,10 +798,10 @@ That's it, *Dependency Injection* is as easy as that, but why do it?
 
 ### Substituting Behaviour
 
-Well first up, by injecting dependencies you're promoting the development of
-flexible & reusable code, because not only can you inject the dependent type
-but also any subtype. This makes it possible to extend your code without
-actually modifying it by simply injecting a different subtype of a dependency.
+By injecting dependencies you're promoting the development of flexible and
+reusable code. Since you can not only can you inject the dependent type but
+also any subtype. This makes it possible to extend your code without actually
+modifying it - by simply injecting a different subtype of a dependency.
 
 {#email-printer-example}
 #### Example
@@ -871,11 +869,11 @@ $printer->print($address);
 ~~~~~~~~
 
 This works great! But then we're told we need to print out the email address on
-a webpage as a `mailto` link. Since we've injected our `EmailAddressRenderer`
+a web page as a `mailto` link. Since we've injected our `EmailAddressRenderer`
 into the printer rather than letting the printer create it, we can now inject
 anything which implements the `EmailAddressRenderer` interface.
 
-Let's add the HTMLRenderer:
+Let's add a `HTMLRenderer`:
 
 {title="HTML email address renderer", lang=php}
 ~~~~~~~~

@@ -454,7 +454,7 @@ provide an extra level of *documentation* to people reading the code; it helps
 them to understand it quicker. They also help IDEs provide auto completion
 functionality while you're writing the code. This is great, but so far PHP has
 only gone half way - as I said earlier there are no *typehints* for function
-return values or for scalar types. Also, the type of a *variable* or *field*
+return values or for scalar types. Also, the type of a *variable* or *property*
 cannot be defined. Therefore, I've made it a habit to document these by using
 PHPdoc tags. I hope one day PHP will add more complete *typehinting*.
 
@@ -490,10 +490,10 @@ class Example
 ~~~~~~~~
 
 Docblocks allow you to add much more detail than I've shown here. You can give
-descriptions and details for the *file*, the *class*, any *variables*, *fields*
-or *parameters*, etc. But since I don't want to generate an API document for
-this codebase, I'm only using it to specify the types which cannot be specified
-directly in PHP.
+descriptions and details for the *file*, the *class*, any *variables*,
+*properties* or *parameters*, etc. But since I don't want to generate an API
+document for this codebase, I'm only using it to specify the types which cannot
+be specified directly in PHP.
 
 ## The Autoloader
 
