@@ -83,7 +83,7 @@ class EmailAddress
 
 In the example above we chose the simple rule that *anything with an `@` symbol
 in it could be an email address*, obviously in production code this would need
-to be to be more well defined.
+to be more well defined.
 
 If you study the code above you will find that there is no way that you can
 create an instance of `EmailAddress` with an email address which does not
@@ -357,9 +357,9 @@ class Aeroplane
 ~~~~~~~~
 
 What's more, once we start to realise that a bird's flight system is very
-different from an aeroplane's then we can start having different flight systems
-which can still be instructed to start flying in the same way by making use
-of an *interface*:
+different from an aeroplane's, then we can start having different flight
+systems which can still be instructed to start flying in the same way by making
+use of an *interface*:
 
 {title="Flexible flight systems", lang=php}
 ~~~~~~~~

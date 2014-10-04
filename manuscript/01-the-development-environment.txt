@@ -164,6 +164,6 @@ $ vagrant halt
 
 E> ## Shutting Down
 E>
-E> I have found that if I forget to shutdown my virtual machines on before I try
-E> to shut down my computer it hangs during the shut down process. If you have a
-E> solution to this problem I'd love to heard it!
+E> I have found that if I forget to shutdown my virtual machines before I try
+E> to shut down my computer, it hangs during the shut down process. If you have
+E> a solution to this problem I'd love to hear it!

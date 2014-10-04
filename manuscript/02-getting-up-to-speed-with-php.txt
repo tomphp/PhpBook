@@ -1,29 +1,26 @@
 # Getting up to Speed with PHP
 
-As I said previously this book assumes you are already familiar with PHP. In
-this chapter I will just quickly cover a few newer additions to PHP as well as
-some tools and techniques which you will need to know about to continue
+As I said previously, this book assumes you are already familiar with PHP. In
+this chapter I will quickly cover a few newer additions to PHP, as well as
+a few tools and techniques which you will need to know about to continue
 with this book.
 
-I don't intend to go into anything in too much depth, it will contain just
-enough information on the things we will be using and I encourage you to
+I don't intend to go into anything in too much depth. It will contain just
+enough information the things we will be using. Therefore, I encourage you to
 research them further yourself.
 
 ## Namespaces
 
-If namespaces are new to you then I think the easiest analogy I can think of is
-that they are like folders for your code. Using namespaces means you can have 2
-or more classes with the same name in different namespaces, just like you can
-have 2 or more files with the same name in different folders.
+If *namespaces* are new to you then the easiest analogy I can think of is that
+they are like folders for your code. Using them means you can have 2 or more
+classes with the same name in different *namespaces* - in the same way that you
+can have 2 or more files with the same name in different folders.
 
-Without covering all the details of PHP namespaces here I will quickly cover
+Without covering all the details of PHP namespaces here, I will quickly cover
 the aspects of them which we will be using.
 
-The full documentation for PHP namespaces can be found in the
-[manual](http://php.net/manual/en/language.namespaces.php).
-
-Firstly, in order to define a class inside a specific namespace you use the
-`namespace` statement on the first line of the file containing the class like
+Firstly, in order to define a class inside a specific namespace, you use the
+`namespace` statement on the first line of the file containing the class. Like
 so:
 
 {title="Class defined inside namespace", lang=php}
@@ -38,10 +35,10 @@ class Contact
 }
 ~~~~~~~~
 
-This defines the class `Contact` inside the `Entity` namespace which is inside
-the `MyApp` namespace. Namespaces are separated by backslashes.
+This defines the class `Contact` inside the `Entity` *namespace* which is
+inside the `MyApp` *namespace*. Namespaces are separated by backslashes.
 
-To use a class in a piece of code in the same namespace you can simply refer
+To use a class inside code which in the same namespace, you can simply refer
 to it by name:
 
 {title="Using a class defined in the current namespace", lang=php}
@@ -53,8 +50,8 @@ namespace MyApp\Entity;
 $contact = new Contact();
 ~~~~~~~~
 
-To use the class in a piece of code in a different namespace you can refer to
-it by its fully qualified class name (FQCN) like so:
+To use a class inside code in a different namespace, you can refer to
+it by its *Fully Qualified Class Name* (FQCN). Like so:
 
 {title="Referencing a class by its FQCN", lang=php}
 ~~~~~~~~
@@ -66,7 +63,7 @@ $contact = new \MyApp\Entity\Contact();
 ~~~~~~~~
 
 You can also refer to a class in a sub-namespace relative to the current
-namespace like so:
+namespace. Like so:
 
 {title="Referencing a class by its relative namespace", lang=php}
 ~~~~~~~~
@@ -77,9 +74,9 @@ namespace MyApp;
 $contact = new Entity\Contact();
 ~~~~~~~~
 
-And finally you can pull a class from a different namespace into scope with the
+Finally, you can pull a class from a different namespace into scope with the
 `use` statement. Add this at the top of the file just after the `namespace`
-statement. This is the way I prefer in most situations. Here's an example:
+statement. This is the way I prefer in most situations - here's an example:
 
 {title="The use statement", lang=php}
 ~~~~~~~~
@@ -92,9 +89,9 @@ use MyApp\Entity\Contact;
 $contact = new Contact();
 ~~~~~~~~
 
-One final thing, if you want to use a class from another namespace in a
+One final thing: if you want to use a class from one namespace in another
 namespace which already has a class with the same name in it, then you can
-rename the one you're importing with the `as` keyword like so:
+rename the one you're importing with the `as` keyword. Like so:
 
 {title="Aliasing an imported class", lang=php}
 ~~~~~~~~
@@ -115,12 +112,14 @@ class Contact
 }
 ~~~~~~~~
 
-It's all pretty simple really right? That's everything you'll need to know about
-namespaces to continue with this book.
+It's all pretty simple really right? That's everything you'll need to know
+about *namespaces* to continue with this book. However, if you do want to learn
+more about them, then the full documentation for PHP namespaces can be found in
+the [manual](http://php.net/manual/en/language.namespaces.php).
 
 ## Typehints
 
-PHP is a dynamically typed language and has a few basic, scalar types:
+PHP is a dynamically typed language. It has a few basic, scalar types:
 
 {title="Scalar types in PHP", lang=php}
 ~~~~~~~~
@@ -135,8 +134,8 @@ PHP is a dynamically typed language and has a few basic, scalar types:
 false; // boolean
 ~~~~~~~~
 
-It also has *arrays*, *callables* and any user defined classes or interfaces
-which are all also types.
+It also has *arrays*, *callables*, *resources* and any user defined *classes*
+or *interfaces*, which are all also types.
 
 Being a dynamically typed language means that a variable or function argument
 can contain any type of value at any time (this also goes for function return
@@ -172,10 +171,10 @@ $c = new C1(); // $c contains a C1 instance
 $c = new C2(); // $c contains a C2 instance
 ~~~~~~~~
 
-In contrast, in a statically typed language a variable, function argument or
+In contrast: in a statically typed language a variable, function argument or
 return value can only ever be the type it is defined to contain. If another
-type is assigned it will either be an error or it will get converted. Here's
-a C++ version of the last example:
+type is assigned it will either cause an error, or it will get converted.
+Here's a C++ version of the last example:
 
 {title="Static typing example (in C++)", lang=c++}
 ~~~~~~~~
@@ -204,15 +203,15 @@ int main() {
 }
 ~~~~~~~~
 
-Statically typed languages actually have great benefits, because you always
-know what type everything is there's never a chance of you doing something to a
-variable which you are not allowed to do to the type it contains. On the other
-hand, dynamically typed languages let you get on and do things quickly without
+Statically typed languages have great benefits. Because you always know what
+type everything is, there's never a chance of you doing something to a variable
+which is not allowed to be done the type it contains. On the other hand,
+dynamically typed languages let you get on and do things quickly and without
 having to worry about how to work with type constraints.
 
-Since static typing does have benefits PHP introduced typehints on function
-arguments. Typehints allow you to specify exactly what user defined type a
-function accepts for each parameter, it will throw an
+Since static typing does have benefits, PHP introduced *typehints* on function
+arguments. *Typehints* allow you to specify exactly what user defined type a
+function accepts for each parameter; PHP will throw an
 `InvalidArgumentException` exception if the wrong type is given:
 
 {title="PHP typehint example", lang=php}
@@ -239,14 +238,14 @@ fn(5); // error
 ~~~~~~~~
 
 Frustratingly PHP does not allow typehints for scalar types or function return
-values.
+values (yet).
 
-However even though PHP is a dynamically typed language you should still strive
-to keep your typing sensible, this means if you create a variable that contains
-a specific type try not to reuse it by assigning a new value of a different
-type to it. Also, don't call methods on objects if they are not in the
-typehinted interface, if you do it will not be an error but it's not good
-practice:
+However, even though PHP is a dynamically typed language you should still
+strive to keep your typing sensible. This means that if you create a variable
+that contains a specific type, you should try not to reuse it by assigning a
+new value of a different type to it. Also, don't call methods on objects if
+they are not in the typehinted *interface*. If you do PHP will produce be an
+error but it's really not good practice:
 
 {title="Mis-using an interface in PHP", lang=php}
 ~~~~~~~~
@@ -282,23 +281,23 @@ performAction(new FooBar());
 ~~~~~~~~
 
 Throughout this book I will be writing PHP code as if I'm writing in a
-statically typed language 90% of the time and typehint whenever possible.
-However, PHP is a dynamic language and some times it's helpful to take
+statically typed language 90% of the time - using typehint whenever possible.
+However, PHP is still a dynamic language and some times it's helpful to take
 advantage of this; whenever I do this I will point it out and explain my reason
-for choosing to do it.
+for choosing to do so.
 
 ## Front Controllers
 
-The front controller is a design pattern for web applications which involves
-creating a single entry point into your application. It requires configuring
-your webserver to redirect all requests to a single PHP script which then
-processes the request and decides what content to display.
+The front controller is a [design pattern](#design-patter) for web applications
+which involves creating a single entry point into your application. It requires
+you to configure your webserver to redirect all requests to a single PHP script
+which then processes the request and decides what content to display.
 
-Let's take a look at a little example:
+Let's take a look at an example:
 
 ### The Traditional Approach
 
-First lets look at the traditional approach of using PHP. Let's create 2 files
+First, let's look at the traditional approach of using PHP. Create 2 files
 inside an empty folder, the first one we'll call `page1.php`:
 
 <<[page1.php](examples/chapter-02/front-controller/01-traditional-approach/page1.php)
@@ -307,8 +306,8 @@ And the second one we'll call `page2.php`
 
 <<[page2.php](examples/chapter-02/front-controller/01-traditional-approach/page2.php)
 
-Next open a terminal and `cd` into the directory containing these files and use
-the following command to start up PHP's built in webserver:
+Next open a terminal and `cd` into the directory containing these files, Now,
+use the following command to start up PHP's built in webserver:
 
 {lang="console"}
 ~~~~~~~~
@@ -322,8 +321,8 @@ you will see `You are viewing page 1`. If you then go to
 When you are done, press `CTRL+C` in your terminal to stop the webserver.
 
 This is the approach that you normally first learn when starting out with
-PHP.  There's nothing wrong with this approach, but in general using a front
-controller is better so let's take a look at that.
+PHP. There's nothing wrong with this approach, but, in general using a *front
+controller* is better so let's take a look at that.
 
 ### Single Entry Point
 
@@ -332,9 +331,9 @@ containing:
 
 <<[index.php](examples/chapter-02/front-controller/02-single-entry-point/index.php)
 
-Then in the terminal again `cd` to this new directory. This time start the PHP
+Then, in the terminal `cd` to this new directory. This time start the PHP
 built in webserver with the name of the file we want to use as the application
-entry point like so:
+entry point. Like so:
 
 {lang="console"}
 ~~~~~~~~
@@ -345,13 +344,13 @@ Again open your browser and visit `http://localhost:8080/page1` and you will
 see `You are looking at: /page1`, and again go to`http://localhost:8080/page2`
 and you will see `You are looking at: /page2`.
 
-So as you can see, anything you type after the `http://localhost:8080` is
-redirected to the `index.php` file and you can use the `$_SERVER` superglobal
+So, as you can see, anything you type after the `http://localhost:8080` is
+redirected to the `index.php` file, and you can use the `$_SERVER` superglobal
 to get the actual URI requested.
 
 ### The Simplest Front Controller in the World
 
-So let's modify the `index.php` file to look like this:
+Next, let's modify the `index.php` file to look like this:
 
 <<[index.php](examples/chapter-02/front-controller/03-simple-front-controller/index.php)
 
@@ -359,7 +358,7 @@ Now if we go to our browser and go to `http://localhost:8080/page1` or
 `http://localhost:8080/page2` then they work as expected. Also, going to
 `http://localhost:8080/anything-else` now shows a 404 message.
 
-Obviously this is a pretty pointless and limiting front controller but
+Obviously this is a pretty pointless and limiting front controller, but
 hopefully you now understand the theory behind it.
 
 Stop the webserver again by pressing `CTRL+C` in the terminal.
@@ -367,8 +366,8 @@ Stop the webserver again by pressing `CTRL+C` in the terminal.
 ### Front Controllers using Apache
 
 In order to use a front controller with Apache you need to tell it where to
-find the PHP script to use for the application entry point. As of Apache
-version `2.2.16` you can do this by simply adding the following to the
+find the PHP script to be used for the application entry point. As of Apache
+version `2.2.16`, you can simply do this by adding the following to the
 `.htaccess` file in your document root:
 
 {title=".htaccess"}
@@ -378,36 +377,36 @@ FallbackResource /index.php
 
 ## Standards
 
-As a language gets more powerful it often allows many different ways and
-approaches to achieve the same thing. Each person then has their own
-preferences of how they personally like to do things.
+As a language gets more powerful it often allows many ways and approaches to
+achieve the same thing. Each person then has their own preferences of how they
+personally like to do things.
 
-On one hand this is great; it allows programmers to write their code in
-the way which best fits how they think, lay it out in they way which looks the
-most aesthetically pleasing to them, and structure it in the way which they
-find easiest to navigate.
+On one hand this is great: it allows programmers to be expressive and to write
+their code in the way which best fits how they think, lay it out in they way
+which looks the most aesthetically pleasing to them, and structure it in the
+way which they find easiest to navigate.
 
-On the other hand this becomes a total nightmare when you are working with
+On the other hand this becomes a total nightmare: when you are working with
 several libraries, all written by different programmers who each have their own
 way of doing all things. You have to learn each of the different approaches to
 efficiently navigate and understand each author's code. Also, it may make it
 tricky for some of the libraries to happily interact with each other.
 
-So for the reasons just mentioned, programmers get together in groups and
-create standards which are a nice middle ground which everyone is mostly happy
-with.  You'll often find that you might not agree with everything defined in a
-standard but by putting that to one side and accepting it you reap the benefits
-of having your code being much more consistent with all the other users of the
-standard's code; as well as any tools which have been built to work with that
-standard.
+For the reasons just mentioned, programmers get together in groups and create
+*standards*, these are a nice middle ground which everyone is *mostly happy*
+with. You'll often find that you won't agree with everything defined in a
+standard, but by putting that to one side and accepting it you reap the
+benefits of having your code being much more consistent with all the other
+users of the standard's code - as well as any tools which have been built to
+work with that standard.
 
 ### PHP-FIG
 
-Introducing PHP-FIG! PHP-FIG or the PHP Framework Interoperability Group is a group
-built up of various key people in the PHP community who have got together and
-started to build some standards for using PHP. Many PHP software projects have
-now adopted or are adopting many of these standards and I fully recommend you do
-the same.
+Introducing PHP-FIG! PHP-FIG or the *PHP Framework Interoperability Group* is a
+group built up of various key people in the PHP community who have got together
+and started to build some standards for using PHP. Many PHP software projects
+have now adopted or are adopting many of these standards. I fully recommend you
+do the same!
 
 At the time of writing this there are 5 published standards:
 
@@ -419,16 +418,17 @@ At the time of writing this there are 5 published standards:
 | PSR-3    | Logger Interface                             |
 | PSR-4    | Improved Autoloading (an extension to PSR-0) |
 
-And a couple more in discussion:
+And a 3 more in discussion:
 
-| Standard | Description       |
-|----------|-------------------|
-| PSR-5    | PHPDoc            |
-| PSR-6    | Caching Interface |
+| Standard | Description             |
+|----------|-------------------------|
+| PSR-5    | PHPDoc                  |
+| PSR-6    | Caching Interface       |
+| PSR-7    | HTTP Message Interfaces |
 
-In this book I will be using PSR-0 for all code (except in small examples)
-and PSR-2 for coding style. I will explain a bit more about these in the next 
-few sections.
+In this book I will be using PSR-0 or PSR-4 for all code (except in some small
+examples) and PSR-2 for coding style. I will explain a bit more about these in
+the next few sections.
 
 For more Information on PHP-FIG visit the [website](http://www.php-fig.org/).
 
@@ -441,24 +441,24 @@ advice and I highly recommend studying it.
 
 ## Docblocks
 
-Docblocks are comments which contain annotations which can be added to your code
-to make it possible to generate documentation about your codebase
-automatically. One such tool is [phpDocumentor](http://www.phpdoc.org/).
+*Docblocks* are comments which contain *annotations* which can be added to your
+code to make it possible to generate documentation about your codebase
+automatically. One such document generation tool is
+[phpDocumentor](http://www.phpdoc.org/). This can be fantastically useful if
+you are building a library for others to use, since you can easily generate
+great API documentation using it.
 
-This can be fantastically useful if you are building a library for others to
-use as you can generate great API documentation using it.
+There is however another use for it; we've already talked about
+[typehints](#typehints) which, by enforcing the types of function arguments,
+provide an extra level of *documentation* to people reading the code; it helps
+them to understand it quicker. They also help IDEs provide auto completion
+functionality while you're writing the code. This is great, but so far PHP has
+only gone half way - as I said earlier there are no *typehints* for function
+return values or for scalar types. Also, the type of a *variable* or *field*
+cannot be defined. Therefore, I've made it a habit to document these by using
+PHPdoc tags. I hope one day PHP will add more complete *typehinting*.
 
-There is however another use for it; we've already talked about typehints
-which, by enforcing the types of function arguments, provide an extra level of
-documentation to people reading the code and help them understand it quicker.
-It also helps IDEs provide auto completion functionality while you're writing
-the code. This is great but so far PHP has only gone half way, as I said
-earlier there are no typehints for function return values or for scalar types,
-also the type of a variable cannot be defined.  Therefore, I've made it a habit
-to document these by using PHPdoc tags. I hope one day PHP will add more
-complete typehinting.
-
-The format of docblocks are fairly standard now but there's work to fully
+The format of docblocks are fairly standard now, but there's work to fully
 standardise it with PSR-5.
 
 Here's a little example of how I'll be using docblocks in the code in this book:
@@ -489,10 +489,11 @@ class Example
 }
 ~~~~~~~~
 
-Docblocks allow you to add much more detail than I've given here. You can give
-descriptions and details for the file, the class, any variables or parameters,
-etc. But since I don't want to generate an API document for this codebase I'm
-only using it to specify the types which cannot be specified directly in PHP.
+Docblocks allow you to add much more detail than I've shown here. You can give
+descriptions and details for the *file*, the *class*, any *variables*, *fields*
+or *parameters*, etc. But since I don't want to generate an API document for
+this codebase, I'm only using it to specify the types which cannot be specified
+directly in PHP.
 
 ## The Autoloader
 
@@ -505,7 +506,7 @@ section now!
 
 The autoloader is a system in PHP where you can create a callback function that
 will be called if you try to use a class which has not yet been defined. This
-callback receives the name of the class trying to be used a parameter and the
+callback receives the name of the class trying to be used as a parameter. The
 function can then use this to lookup and require the file needed to provide the
 class definition.
 
@@ -605,8 +606,8 @@ By simply adding a few lines of JSON to your project your autoloader is set up
 and ready to go
 
 While there are plenty of people out there who will have a good reason not to
-use Composer, in my opinion if you don't have one then you should definitely be
-using it in your projects.
+use Composer, in my opinion if you don't have one, then you should definitely
+be using it in your projects.
 
 So that's a little intro on what Composer can do for you. You can find out
 about all its features and settings in the
@@ -688,7 +689,7 @@ following content:
 
 <<[src/ComposerExample/HelloApplication.php](examples/chapter-02/composer/01-autoloader/src/ComposerExample/HelloApplication.php)
 
-And finally create a class called `run.php` containing:
+And finally create a file called `run.php` containing:
 
 <<[run.php](examples/chapter-02/composer/01-autoloader/run.php)
 
@@ -865,8 +866,8 @@ on the user interface without have to understand the codebase.
 There are templating libraries for PHP such as
 [Twig](http://twig.sensiolabs.org/) and [Smarty](http://www.smarty.net/) which
 introduce their own template tags for using in your HTML templates. You can
-also use of PHP itself to do the templating but your really should maintain the
-discipline of keeping logic and view code separate; it may even be worth using
+use PHP itself to do the templating, but your really should maintain the
+discipline of keeping logic and view code separate. It may even be worth using
 different file extensions to keep it clear, `.php` for logic and `.phtml` for
 HTML templates is often used.
 
