@@ -497,30 +497,29 @@ directly in PHP.
 
 ## The Autoloader
 
-You may never have written a PHP autoloader callback, or maybe never have heard
-of one, but you may well have used it if you have build any PHP applications
-using a framework. If however you are not aware of the autoloader and are
-referencing code in different files by using PHP's `require`, `require_once`,
-`include` and `include_once` statements then you need to STOP and read this
-section now!
+You have may have never created a PHP *autoloader*, you may have never ever
+heard of one, but if you've every build an application using a recent PHP
+framework you have probably used one. However, if you're not aware of the
+autoloader and you're including all your different classes and functions by
+using PHP's `require`, `require_once`, `include` and `include_once` statements,
+then you need to STOP and read this section now!
 
 The autoloader is a system in PHP where you can create a callback function that
 will be called if you try to use a class which has not yet been defined. This
 callback receives the name of the class trying to be used as a parameter. The
-function can then use this to lookup and require the file needed to provide the
-class definition.
+function can then use the name to lookup and *require* the file needed to
+provide the class definition.
 
 In order to use an autoloader callback you can either define a function called
-`__autoload` which will provide the autoloading logic, or you can use the more
-recent and flexible `spl_autoload_register` function to register your
+`__autoload` which will provide the autoloading logic. Or, you can use the more
+recent and more flexible `spl_autoload_register` function to register your
 autoloading function.
 
-Now you know what an autoloader is there's some good news, there's no actual
+Now you know what an autoloader is there's some good news: there's no actual
 need to write the autoloader function yourself, there's a wonderful tool called
-Composer which can take care of that for you.
-
-However, if you do want to look into autoloading in more detail you can read
-about it in the [manual](http://php.net/manual/en/language.oop5.autoload.php).
+[Composer](#composer) which can take care of that for you. However, if you do
+want to look into autoloading in more detail you can read about it in the
+[manual](http://php.net/manual/en/language.oop5.autoload.php).
 
 ### PSR-0 - Autoloading Standard
 
@@ -528,12 +527,12 @@ Before talking about Composer I'd like to first introduce PSR-0. PSR-0 is a
 standard which was designed to make it easy to find the files where given
 classes are defined.
 
-The basic rules are as follows:
+The basic rules of PSR-0 are as follows:
 
-* There is exactly one class defined per file
+* There is exactly one class defined per file.
 * The file name is the same name (and case) as the name of the class defined
-inside it with `.php` appended to it
-* The file exists in directory structure which fully matches the namespace in
+inside it, with `.php` appended to it.
+* The file exists in a directory structure which fully matches the namespace in
 which the class is defined.
 
 The full PSR-0 specification can be read on the [PHP-FIG
@@ -543,7 +542,7 @@ website](http://www.php-fig.org/psr/psr-0/).
 
 A file located at
 `/home/tom/projects/AutoloadExample/src/MyApp/Entity/Contact.php` would contain
-the following code:
+the following class definition:
 
 {title="PSR-0 compliant class", lang=php}
 ~~~~~~~~
@@ -557,62 +556,62 @@ class Contact
 }
 ~~~~~~~~
 
-Whatever comes before the root namespace in the file name (in this case
+Whatever comes before the root namespace in the file path (in this case
 `/home/tom/projects/AutoloadExample/src`) is not important, so long as the 
 FQCN is mirrored in the folder structure up to the class name.
 
 ### PSR-4 - Improved Autoloading Standard
 
-PSR-4 improves on the PSR-0 standard. It removes some old, obsoleted features
-and allows a namespace prefix to be defined. If your whole application exists
-under a single namespace this remove the need of having a directory for that
-namespace.
+PSR-4 improves on the PSR-0 standard. It removes some old, obsolete features
+and allows a namespace *prefix* to be defined. If your whole application exists
+under a single namespace this remove the need of having a directory level for
+that namespace.
 
-Using the previous example: if the prefix `MyApp` is chosen then the `Contact`
-class definition can remain exactly the same but the file is instead stored
-in `/home/tom/projects/AutoloadExample/src/Entity/Contact.php`.
+Using the previous PSR-0 example: if the prefix `MyApp` is chosen then the
+`Contact` class definition can remain exactly the same, but the file is instead
+stored in `/home/tom/projects/AutoloadExample/src/Entity/Contact.php`.
 
 ## Composer
 
-Composer is a dependency manager for PHP, it allows you to specify all the
-libraries and tools that your PHP project depends on in a simple JSON file, it
+Composer is a dependency manager for PHP. It allows you to specify all the
+libraries and tools that your PHP project depends on in a simple JSON file. It
 will then fetch the correct versions of those dependencies (and all their
 dependencies) into your project.
 
-This means it's easy to distribute your project without including its 3rd party
-dependencies, while making it very easy for users or developers working on
-the project to easily install them themselves. It also makes it easy to quickly
-update to newer versions of dependencies.
+This means that it's easy to distribute your project without including its 3rd
+party dependencies. While making it very easy for users or developers working
+on the project to easily install them themselves. It also makes it easy to
+quickly update to newer versions of dependencies.
 
-Composer installs its dependencies locally to the project in a directory called
-`vendor` rather than installing them globally onto the system. This is a
-definite plus as it means you can run many projects on the same system, all
-working with different versions of their dependencies and without getting in to a
-mess.
+Composer installs the dependencies locally to the project in a directory called
+`vendor`, rather than installing them globally onto the system. This is a
+definite plus, as it means you can run many projects on the same system, all
+working with different versions of their dependencies and without getting in to
+a mess.
 
-Now this is all very interesting but you might have no intention of using any
-external libraries or tools with your new project, so is Composer still useful?
+Now this is all very interesting, but you might have no intention of using any
+external libraries or tools with your new project. So is Composer still useful?
 
 The answer is most definitely yes:
 
 * Firstly, there are lots of great development tools which can be installed via
-Composer and that you should definitely be using even if you don't intend on
-using 3rd party libraries
+Composer. You should be using these tool even if you don't intend on using 3rd
+party libraries.
 * Secondly, you may not intend on using 3rd party libraries but if you start
-off using Composer from the beginning you can always change your mind and add a
-dependency very easily
-* And thirdly, Composer provides a nice and easy to set up autoloader for PHP.
-By simply adding a few lines of JSON to your project your autoloader is set up
-and ready to go
+off using Composer from the beginning, you can always change your mind and add
+a dependency very easily later on.
+* Thirdly, Composer provides a nice and easy to set up autoloader for PHP.
+By simply adding a few lines of JSON to your project, your autoloader is set up
+and ready to go.
 
 While there are plenty of people out there who will have a good reason not to
 use Composer, in my opinion if you don't have one, then you should definitely
 be using it in your projects.
 
-So that's a little intro on what Composer can do for you. You can find out
+So, that's a little intro on what Composer can do for you. You can find out
 about all its features and settings in the
-[documentation](https://getcomposer.org/) but to save you the hassle of reading
-it all now let's have a look at a little example of the basics.
+[documentation](https://getcomposer.org/) but, to save you the hassle of
+reading it all now let's have a look at a little example of the basics.
 
 ### Composer Example
 
@@ -659,25 +658,25 @@ following content:
 
 <<[composer.json](examples/chapter-02/composer/01-autoloader/composer.json)
 
-What we have told Composer to do here is set up an autoloader to locate any
-classes in the `ComposerExample` namespace using the PSR-0 file structure
-inside a directory inside our project called `src`.
+What we have told Composer to do here is set up its autoloader, to locate any
+classes in the `ComposerExample` namespace, by using the PSR-0 file structure
+inside a directory in our project called `src`.
 
-Now tell Composer to apply these settings with the following command (remember
-you will need to adjust it if you have installed Composer locally):
+Next, tell Composer to apply these settings with the following command
+(remember you will need to adjust it if you have installed Composer locally):
 
 {lang="console"}
 ~~~~~~~~
 $ composer install
 ~~~~~~~~
 
-Once it has finished you will notice it has created a new directory called
+Once it has finished, you will notice it has created a new directory called
 `vendor` and another file called `composer.lock`. If you're are using a *source
-control system* like *git* (and you really should be!) then you should instruct
-it to ignore the `vendor` directory from the repository. The `composer.lock`
-file should be added to the repository though.
+control system* like *git* (and you really should be!), then you should
+instruct it to ignore the `vendor` directory from the repository. The
+`composer.lock` file should be added to the repository though.
 
-Next up create a directory structure for our PSR-0 classes to go:
+Next up, create a directory structure for our PSR-0 classes to go in:
 
 {lang="console"}
 ~~~~~~~~
@@ -689,7 +688,7 @@ following content:
 
 <<[src/ComposerExample/HelloApplication.php](examples/chapter-02/composer/01-autoloader/src/ComposerExample/HelloApplication.php)
 
-And finally create a file called `run.php` containing:
+Finally, create a file called `run.php` containing:
 
 <<[run.php](examples/chapter-02/composer/01-autoloader/run.php)
 
@@ -702,7 +701,7 @@ $ php run.php
 
 Ta da!
 
-Composer also supports PSR-4, to use it instead simply use `psr-4` in the
+Composer also supports PSR-4. To use it instead simply use `psr-4` in the
 `composer.json`. When doing this everything in the `src` folder will have the
 prefix (`ComposerExample`) applied to the namespace so the `ComposerExample`
 directory level would have to be removed.
@@ -710,10 +709,10 @@ directory level would have to be removed.
 #### Adding a Dependency
 
 Next let's dress it up a bit using a 3rd party library. I had a little hunt
-around for something interesting to try and I found Maxime Bouroumeau-Fuseau's
+around for something interesting to try and found Maxime Bouroumeau-Fuseau's
 ConsoleKit library.
 
-First up lets add it to the project as a dependency by updating our
+First up, let's add it to the project as a dependency by updating our
 `composer.json` file to contain the following:
 
 {title="composer.json", lang=php}
@@ -730,15 +729,15 @@ First up lets add it to the project as a dependency by updating our
 }
 ~~~~~~~~
 
-Next we tell Composer to download its new dependency by running:
+Then we tell Composer to download its new dependency by running:
 
 {lang="console"}
 ~~~~~~~~
 $ composer update
 ~~~~~~~~
 
-It should download the ConsoleKit package which will now be ready to use. Let's
-update our `ComposerExample\HelloApplication` class to look like this:
+This should download the ConsoleKit package, which will now be ready to use.
+Let's update our `ComposerExample\HelloApplication` class to look like this:
 
 <<[src/ComposerExample/HelloApplication.php](examples/chapter-02/composer/02-dependency/src/ComposerExample/HelloApplication.php)
 
@@ -754,19 +753,19 @@ $ php run.php hello
 ~~~~~~~~
 
 There we have it, we've simply added a dependency to our app and made use of
-it, leaving Composer to do all the hard work of downloading it and setting up
-the autoloader required to find it.
+it. Composer has done all the hard work of downloading it and setting up the
+autoloader required to find it.
 
 #### Adding Development Tools
 
 Composer's `require` section lets you define the requirements your project
-needs to run but it also has a `require-dev` section which is for dependencies
-which you want to use for development only (testing tools for example).
+needs to run. It also has a `require-dev` section which is for dependencies
+which you want to use for development only - testing tools for example.
 
-CodeSniffer is a tool which checks that your code follows a given coding style,
-lets add it to our project.
-
-Update the `composer.json` file to include the CodeSniffer dev dependency:
+[CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) is a tool which
+checks that your code follows a given coding style, lets add it to our project.
+To use it update the `composer.json` file to include the CodeSniffer
+development dependency:
 
 <<[composer.json](examples/chapter-02/composer/02-dependency/composer.json)
 
@@ -777,11 +776,11 @@ Once again, tell Composer to update its dependencies by running:
 $ composer update
 ~~~~~~~~
 
-After it has finished CodeSniffer is ready to be used. When Composer installs
+After it has finished, CodeSniffer is ready to be used. When Composer installs
 any tools it will install the executable files in a local directory, by default
 this directory is `vendor/bin`.
 
-We can now run CodeSniffer by running:
+We can now run CodeSniffer by with the following command:
 
 {lang="console"}
 ~~~~~~~~
@@ -791,13 +790,18 @@ $ vendor/bin/phpcs --standard=psr2 src
 If all the code in our `src` directory conforms to the PSR-2 coding style then
 CodeSniffer should have completed without and errors.
 
-To make life easier your can add `vendor/bin` to your operating system's `PATH`
+To make life easier, your can add `vendor/bin` to your operating system's `PATH`
 variable so you can execute your tools more easily. On Linux you do this by
-adding:
+adding the following to your `.bashrc` file in your home directory:
 
 `PATH=./vendor/bin:$PATH`
 
-to your `.bashrc` file in your home directory.
+After you have done this you should be able to simple run:
+
+{lang="console"}
+~~~~~~~~
+$ phpcs --standard=psr2 src
+~~~~~~~~
 
 ## Keeping Logic and Display Code Separate
 
@@ -856,20 +860,20 @@ if (count($customers)) { ?>
 <?php } ?>
 ~~~~~~~~
 
-I think we can all agree that is pretty ugly but if it's left to get out of
+I think we can all agree that is pretty ugly, but if it's left to get out of
 control it can get a lot uglier!
 
-The solution to this is to not mix your HTML & PHP code together and instead,
+The solution to this is to not mix your HTML and PHP code together and instead
 maintain a clear separation between the two. This also allows designers to work
 on the user interface without have to understand the codebase.
 
 There are templating libraries for PHP such as
 [Twig](http://twig.sensiolabs.org/) and [Smarty](http://www.smarty.net/) which
 introduce their own template tags for using in your HTML templates. You can
-use PHP itself to do the templating, but your really should maintain the
-discipline of keeping logic and view code separate. It may even be worth using
-different file extensions to keep it clear, `.php` for logic and `.phtml` for
-HTML templates is often used.
+also use PHP itself to do the templating, but if you do you really should
+maintain the discipline of keeping logic and view code separate; it may even be
+worth using different file extensions to keep it clear - `.php` for logic and
+`.phtml` for HTML templates is often used.
 
 The choice between using PHP or a dedicated templating library can often be
 down to who is going to have access to modify the view templates. If your
@@ -881,36 +885,37 @@ security of the application by adding bad PHP code into the templates.
 ## Coding Style
 
 *Coding style* is simply the way you layout and format your code. In the
-previous Standards section I talked about how they were introduced to maintain
-a consistent approach to using a programming language between many developers,
-using a coding style is one element of this.
+previous [Standards](#standards) section I talked about how they were
+introduced to maintain a consistent approach to using a programming language
+between many developers. Using a consistent coding style is one element of
+this.
 
 Coding style standards define things like:
 
-* How many spaces should be used to indent code
-* Should the opening brace for a function body goes on the same line as the
-function definition or on the line after 
-* Should variables be named using camelCase or snake_case
+* How many spaces should be used to indent code.
+* If the opening brace for a function's body goes on the same line as the
+function definition, or on the line after.
+* If variables be named using `camelCase` or `snake_case`
 * etc.
 
-As with all standards you'll unlikely find one which you agree with every bit
-of, but, rather that creating your own perfect one which no one else uses, you
-should use a well used one you like mostly.
+As with all standards, it's unlikely that you'll find one which you agree with
+every bit of. Even so, rather that creating your own perfect one which no one
+else uses, you should use a well used one you like mostly.
 
 At the moment the best one to use for PHP in my opinion is the one defined by
 PSR-2 as many people have adopted it. All application code I present in this
-book will follow the PSR-2 standard with a couple of exceptions:
+book will follow the PSR-2 standard - with a couple of exceptions:
 
 ### 1. Unit Tests
 
-When writing unit tests I follow PSR-2 apart from 2 elements; both regarding
+When writing unit tests I follow PSR-2 apart from 2 elements - both regarding
 the method names for the tests.
 
-* Firstly, instead of using camelCase for test method names I use snake_case.
-This is because the method names are sentences and with snake_case is easier to
-separate the words when reading it.
+* Firstly, instead of using `camelCase` for test method names I use `snake_case`.
+This is because the method names are sentences, and with `snake_case` it's easier
+to separate the words visually when reading it.
 * Secondly I'll omit the `public` access specifier as it's the default in PHP
-and keeps the line shorter with long method names. 
+and keeps the line shorter with long test method names. 
 
 {title="Unit test coding style example", lang=php}
 ~~~~~~~~
@@ -922,7 +927,9 @@ use PhpSpec\ObjectBehavior;
 
 class ExampleSpec extends ObjectBehavior
 {
+    // leanpub-start-insert
     function it_adds_2_numbers_together()
+    // leanpub-end-insert
     {
         $this->add(5, 2)->shouldReturn(7);
     }
@@ -934,8 +941,8 @@ class ExampleSpec extends ObjectBehavior
 When writing template code using PHP I prefer to keep it looking as close to
 HTML as possible. I try to keep the code inside PHP tags to single expressions
 and I use the `foreach :`/`endforeach`, `if :`/`endif`, etc. style of code
-blocks as I think they are easier to match up in this context. Here's an
-example:
+blocks instead of using *braces* as I think they are easier to match up in this
+context. Here's an example:
 
 {title="Neat display template code example", lang=php}
 ~~~~~~~~
