@@ -1386,7 +1386,7 @@ And here it is, a complete solution to our original problem, achieved by TDD:
 <<[src/PhpspecExample/GreatestCommonDivisorFinder.php](examples/chapter-04/phpspec-example/src/PhpspecExample/GreatestCommonDivisorFinder.php)
 
 
-## Test Doubles
+## Test Doubles {#test-doubles}
 
 I've already mentioned of *test doubles* and how they can be used to help test
 units of code in isolation by replacing the unit's dependencies. Now let's take
