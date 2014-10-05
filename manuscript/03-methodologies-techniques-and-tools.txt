@@ -539,7 +539,7 @@ class TemperatureUnit
     {
         $this->assertValueIsValid($value);
 
-        $this->value = (float) $value;
+        $this->value = $value;
     }
 
     /** @return string */
@@ -848,7 +848,12 @@ class EmailAddressPrinter
     /** @var EmailAddressRenderer */
     private $renderer;
 
-    public function print(EmailAddress $address)
+    public function __construct(EmailAddressRenderer $renderer)
+    {
+        $this->renderer = $renderer;
+    }
+
+    public function printAddress(EmailAddress $address)
     {
         echo $this->renderer->render($address) . "\n";
     }
@@ -861,11 +866,11 @@ To use our class we'd simply write something like this:
 ~~~~~~~~
 <?php
 
-$address = 'bill@microsoft.com';
+$address = new EmailAddress('bill@microsoft.com');
 
 $printer = new EmailAddressPrinter(new PlainTextRenderer());
 
-$printer->print($address);
+$printer->printAddress($address);
 ~~~~~~~~
 
 This works great! But then we're told we need to print out the email address on
@@ -883,7 +888,7 @@ class HTMLRenderer implements EmailAddressRenderer
 {
     public function render(EmailAddress $email)
     {
-        return sprintf('<a href="mailto:%1$s">%1$s</a>', htmlentities($email);
+        return sprintf('<a href="mailto:%1$s">%1$s</a>', htmlentities($email));
     }
 }
 ~~~~~~~~
@@ -894,11 +899,11 @@ Our code to make use of this would now look like this:
 ~~~~~~~~
 <?php
 
-$address = 'bill@microsoft.com';
+$address = new EmailAddress('bill@microsoft.com');
 
 $printer = new EmailAddressPrinter(new HTMLRenderer());
 
-$printer->print($address);
+$printer->printAddress($address);
 ~~~~~~~~
 
 Simples! Notice how in order to change the way it behaves we have not altered
@@ -1584,19 +1589,18 @@ with the previous [Naming](#naming) section.
 
 Keep All Entities Small
 
-: Simply put - don't let your let your classes get to long. If they are
-starting to get big then there are probably more classes inside which can be
-extracted out.
+: Simply put - don't let your classes get to long. If they are starting to get
+big then there are probably more classes inside which can be extracted out.
 
 No Classes With More Than Two Instance Variables
 
 : Nice idea but a bit extreme in my opinion! Still it's worth keeping in mind
-as if you're adding lots of properties to your classes, then then are probably
-some composite types hiding in there which should be extracted.
+as if you're adding lots of properties to your classes, then are probably some
+composite types hiding in there which should be extracted.
 
 No Getters/Setters/Properties
 
-: The idea here is to tell the class to perform and action and let it get on
+: The idea here is to tell the class to perform an action and let it get on
 with it; rather than getting values out, changing them and setting them again -
 often referred to as [tell, don't
 ask](http://martinfowler.com/bliki/TellDontAsk.html). Sometimes a getter or
@@ -1637,8 +1641,8 @@ are testing. For example you have:
 | Integration Tests | Test the way that several units of code work together.                                  |
 | Acceptance Tests  | Tests which prove to the customer that the required functionality has been implemented. |
 
-Tests provide confidence in your codebase and confidence in the ability to
-add to and modify the code. When [refactoring](#refactoring), tests let you
+Tests provide confidence in your codebase, and confidence in the ability to add
+to and modify the code. Also, when [refactoring](#refactoring), tests let you
 know that you haven't made a mistake and broken the logic. When adding new or
 modifying existing functionality, tests give you confidence that you haven't
 broken a different feature in the process.
