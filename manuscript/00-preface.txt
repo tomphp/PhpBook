@@ -6,23 +6,21 @@ ideas together in version 3, to something that resembled a fully featured
 language in version 4, through to actually becoming that fully featured
 language in version 5.
 
-One of the fantastic features of PHP is that it's so easy to get up and going
-quickly; you can very easily add some dynamic elements to your existing HTML
-page with very little knowledge or experience. This however is also a problem.
+One of the fantastic features of PHP is that it's so easy to get up and running
+quickly; you can easily add some dynamic elements to your existing HTML page
+with very little knowledge or experience. However, this is also a problem.
 Since anyone can start piecing together snippets of PHP code to get something
 to work, there are many people out there who are writing bad PHP code as they
-have never learnt how to program properly. Badly written code is often
-broken, very hard to add new functionality to, hard to maintain and rarely
-scalable.
+have never learnt how to program properly. Badly written code is often broken,
+very hard to add new functionality to, hard to maintain and rarely scalable.
 
 In this book I hope to incorporate many programming methodologies, techniques
-and tools and apply them in the context of PHP in order to create a well
-designed PHP application. These include [Object Oriented Programming](#oop),
-[Design Patterns](#design-patterns), elements from [Domain Driven
-Design](#ddd), [Refactoring](#refactoring), [The SOLID
-Principals](#the-solid-principles), [Test Driven Development](#tdd) and
-[Behaviour Driven Development](#bdd). If these are all new to you, then this
-will be quite a ride.
+and tools and apply them in the context of PHP to create a well designed
+applications. These include [Object Oriented Programming](#oop), [Design
+Patterns](#design-patterns), elements from [Domain Driven Design](#ddd),
+[Refactoring](#refactoring), [The SOLID Principals](#the-solid-principles),
+[Test Driven Development](#tdd) and [Behaviour Driven Development](#bdd). If
+these are all new to you, then this will be quite a ride.
 
 I do not intend to cover any of these topics extensively. There are already
 many great books and resources covering all of them already and written by far
