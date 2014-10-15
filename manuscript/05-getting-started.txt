@@ -5,7 +5,7 @@
 A brief description of the application we are going to build is as follows:
 
 > The aim is to produce a website, which allows *users* of the site to
-> *view* and *rate* cocktail recipes submitted by other users. They can also 
+> *view* and *rate* cocktail recipes submitted by other users. They can also
 > *submit their own*.
 >
 > Any *visitors* to the site can view the list of recipes *sorted by
@@ -15,13 +15,13 @@ A brief description of the application we are going to build is as follows:
 > A *recipe* consists of the *cocktail name*, the *method* and the list of
 > *measured ingredients*, which consists of the *ingredient* and *amount*. The
 > *recipe* must also keep track of the *user* who *submitted* it.
-> 
+>
 > Ratings will be *star* ratings, with *users* being able to *rate* a recipe
 > with 1 to 5 *stars*.
-> 
+>
 > *Quantities* can be entered as either *millilitres (ml)*, *fluid ounces (fl
 > oz)*, *teaspoons (tsp)* or just a number.
-> 
+>
 > The cocktail *ingredients* available are limited to a selection which can
 > only be added to by an *administrator*.
 
@@ -108,7 +108,7 @@ Let's look at the first [story](#user-stories). Here's the card:
 > A visitor can view a list of recipes
 >
 > * Displays an empty list if there are no recipes
-> * Recipes display the *name of the cocktail*, *the rating* and the *name of 
+> * Recipes display the *name of the cocktail*, *the rating* and the *name of
 > the user who submitted it*
 > * The list should be presented in *descending* order of *rating*
 
@@ -249,7 +249,7 @@ namespace CocktailRater\Testing\Repository;
 
 use CocktailRater\Domain\Repository\RecipeRepository;
 
-final class TestRecipeRepository 
+final class TestRecipeRepository
 {
     public function clear()
     {
@@ -340,7 +340,7 @@ Feature: A visitor can view a list of recipes
 
   Scenario: View an empty list of recipes
     Given there are no recipes
-    When I request a list of recipes      
+    When I request a list of recipes
     Then I should see an empty list
 
   Scenario: Viewing a list with 1 recipe
@@ -635,7 +635,7 @@ W> abstraction. The [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern)
 W> design pattern is a very good tool for this job.
 W>
 W> So, with that said, why am I using the *Assert* library from within the
-W> domain model? The reason is: firstly it's a well-used and stable library 
+W> domain model? The reason is: firstly it's a well-used and stable library
 W> made up of utility methods which have no side effects. Secondly, and more
 W> importantly, I'm using it in a way which adds, what I think, is a missing
 W> feature in the PHP language: namely typehints for scalar types and arrays.
@@ -690,24 +690,24 @@ Feature: A visitor can view a list of recipes
     As a visitor
     I need to be able get a list of recipes
 
-  Scenario: View an empty list of recipes 
-    Given there are no recipes            
-    When I request a list of recipes      
-    Then I should see an empty list       
+  Scenario: View an empty list of recipes
+    Given there are no recipes
+    When I request a list of recipes
+    Then I should see an empty list
 
-  Scenario: Viewing a list with 1 recipe                           
-    Given there's a recipe for "Mojito" by user "tom" with 5 stars 
-    When I request a list of recipes                               
-    Then I should see a list of recipes containing:                
+  Scenario: Viewing a list with 1 recipe
+    Given there's a recipe for "Mojito" by user "tom" with 5 stars
+    When I request a list of recipes
+    Then I should see a list of recipes containing:
       | name   | rating | user |
       | Mojito | 5.0    | tom  |
 
-  Scenario: Recipes are sorted by rating                               
-    Given there's a recipe for "Daquiri" by user "clare" with 4 stars  
-    And there's a recipe for "Pina Colada" by user "jess" with 2 stars 
-    And there's a recipe for "Mojito" by user "tom" with 5 stars       
-    When I request a list of recipes                                   
-    Then I should see a list of recipes containing:                    
+  Scenario: Recipes are sorted by rating
+    Given there's a recipe for "Daquiri" by user "clare" with 4 stars
+    And there's a recipe for "Pina Colada" by user "jess" with 2 stars
+    And there's a recipe for "Mojito" by user "tom" with 5 stars
+    When I request a list of recipes
+    Then I should see a list of recipes containing:
       | name        | rating | user  |
       | Mojito      | 5.0    | tom   |
       | Daquiri     | 4.0    | clare |
@@ -753,7 +753,7 @@ Feature: A visitor can view a list of recipes
 
 You may have already noticed, that when you run Behat now most of our final
 scenario already passes, The only thing which fails is the order in which
-the recipes are listed. To fix this we can go straight into the 
+the recipes are listed. To fix this we can go straight into the
 `ListRecipesHandler`, and sort the recipes there:
 
 <<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario3/src/Application/Visitor/Query/ListRecipesHandler.php)
@@ -814,24 +814,24 @@ Feature: A visitor can view a list of recipes
     As a visitor
     I need to be able get a list of recipes
 
-  Scenario: View an empty list of recipes 
-    Given there are no recipes            
-    When I request a list of recipes      
-    Then I should see an empty list       
+  Scenario: View an empty list of recipes
+    Given there are no recipes
+    When I request a list of recipes
+    Then I should see an empty list
 
-  Scenario: Viewing a list with 1 recipe                           
-    Given there's a recipe for "Mojito" by user "tom" with 5 stars 
-    When I request a list of recipes                               
-    Then I should see a list of recipes containing:                
+  Scenario: Viewing a list with 1 recipe
+    Given there's a recipe for "Mojito" by user "tom" with 5 stars
+    When I request a list of recipes
+    Then I should see a list of recipes containing:
       | name   | rating | user |
       | Mojito | 5.0    | tom  |
 
-  Scenario: Recipes are sorted by rating                               
-    Given there's a recipe for "Daquiri" by user "clare" with 4 stars  
-    And there's a recipe for "Pina Colada" by user "jess" with 2 stars 
-    And there's a recipe for "Mojito" by user "tom" with 5 stars       
-    When I request a list of recipes                                   
-    Then I should see a list of recipes containing:                    
+  Scenario: Recipes are sorted by rating
+    Given there's a recipe for "Daquiri" by user "clare" with 4 stars
+    And there's a recipe for "Pina Colada" by user "jess" with 2 stars
+    And there's a recipe for "Mojito" by user "tom" with 5 stars
+    When I request a list of recipes
+    Then I should see a list of recipes containing:
       | name        | rating | user  |
       | Mojito      | 5.0    | tom   |
       | Daquiri     | 4.0    | clare |
