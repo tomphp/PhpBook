@@ -4,30 +4,30 @@
 
 A brief description of the application we are going to build is as follows:
 
-> The aim is to produce a website which allows *users* of the site to
-> *view* and *rate* cocktail recipes submitted by other users, they can also 
+> The aim is to produce a website, which allows *users* of the site to
+> *view* and *rate* cocktail recipes submitted by other users. They can also 
 > *submit their own*.
 >
 > Any *visitors* to the site can view the list of recipes *sorted by
-> rating*, but they must *register* with a *username*, *email* and *password*
-> in order to *rate* or *add* a *recipe*.
+> rating*. However, a *visitor* must *register* as a *user*, with a *username*,
+> *email* and *password*, in order to *rate* or *submit* *recipes*.
 >
-> A *recipe* consists of the *cocktail name*, the *method* and the list of *measured
-> ingredients* consisting of the *ingredient* and *amount*. It also must keep
-> track of the *user* who submitted it.
+> A *recipe* consists of the *cocktail name*, the *method* and the list of
+> *measured ingredients*, which consists of the *ingredient* and *amount*. The
+> *recipe* must also keep track of the *user* who *submitted* it.
 > 
-> Ratings will be *star* ratings with *users* being able to *rate* a recipe
+> Ratings will be *star* ratings, with *users* being able to *rate* a recipe
 > with 1 to 5 *stars*.
 > 
 > *Quantities* can be entered as either *millilitres (ml)*, *fluid ounces (fl
 > oz)*, *teaspoons (tsp)* or just a number.
 > 
-> The cocktail ingredients available are limited to a selection which can only
-> be added to by an *administrator*.
+> The cocktail *ingredients* available are limited to a selection which can
+> only be added to by an *administrator*.
 
-Now we've got a basic understanding of the application we are going to build let's
-take a quick look at the list of [user stories](#user-stories). These are
-listed in order of priority.
+Now we've got a basic understanding of the application we are going to build,
+let's take a quick look at the list of [user stories](#user-stories). These are
+presented in order of priority.
 
 * A visitor can view a list of recipes
 * A visitor can view a recipe
@@ -38,15 +38,16 @@ listed in order of priority.
 * An administrator can add an ingredient
 
 We will proceed to implement each of these stories in order. This may seem like
-a very basic application but it will provide enough functionality to give a
+a very basic application, but it will provide enough functionality to give a
 good example of how to start building a well designed, extensible application.
-Also, because this is being developed by emulating an *agile* approach, details
-may change as it progresses and extra features may be requested.
+Also, because we will be emulating an *agile* process while building the
+application, details and requirements may change as it progresses, and extra
+features may be requested.
 
 ## Creating the Project
 
-Before jumping in let's quickly set up a project. First create a directory
-for the project:
+Before jumping in, let's quickly set up a project. Start by creating a
+directory to build the application in:
 
 {lang="console"}
 ~~~~~~~~
@@ -58,13 +59,14 @@ Then add the following `composer.json`
 
 <<[composer.json](examples/chapter-05/scenario1/composer.json)
 
-We're using a PSR-4 autoloader here so everything can exist in a
-`CocktailRater` namespace but we can avoid creating an extra directory for it.
+We're using a PSR-4 autoloader here. Using PSR-4 means everything can exist in
+a `CocktailRater` top level namespace, but we can avoid creating an extra
+directory level for it.
 
 I> ### PHPSpec Version
 I>
 I> You may have noticed that the PHPSpec requirement is for a development
-I> version. The reason for this is that there are some features which we will
+I> version. The reason for this is: there are some features which we will
 I> be using which are not in the stable release yet. When this changes I will
 I> update the book.
 
@@ -75,9 +77,9 @@ Now run Composer to install the test tools:
 $ composer install
 ~~~~~~~~
 
-Next up we need to tell PHPSpec about the PSR-4 prefix. We can also configure
-it to format its output using the *pretty* formatter by default so that we
-don't need to put it on the command line every time we run it. To do this
+Next up, we need to tell PHPSpec about the PSR-4 prefix. We can also configure
+it to format its output using the *pretty* formatter by default. That way we
+don't need to put it on the command line every time we run it. To do this,
 create a file called `phpspec.yml` with the following contents:
 
 {title="phpspec.yml", format="yaml"}
@@ -90,18 +92,18 @@ suites:
         psr4_prefix: CocktailRater
 ~~~~~~~~
 
-Finally, initialise Behat ready to start development:
+Finally, initialise Behat so we're ready to start development:
 
 {lang="console"}
 ~~~~~~~~
 $ behat --init
 ~~~~~~~~
 
-All done! Now we can start...
+All done! Now we can start.
 
 ## The First Story
 
-Let's look at the first [story](#user-stories). Here's the story card:
+Let's look at the first [story](#user-stories). Here's the card:
 
 > A visitor can view a list of recipes
 >
@@ -110,12 +112,12 @@ Let's look at the first [story](#user-stories). Here's the story card:
 > the user who submitted it*
 > * The list should be presented in *descending* order of *rating*
 
-From this information we can add the following feature file to the project:
+From this information, we can add the following feature file to the project:
 
 <<[features/visitors-can-list-recipes.feature](examples/chapter-05/scenario1/features/visitors-can-list-recipes.feature)
 
-If you try to run Behat with this feature it will say that the context has
-missing steps, to add the required snippets run:
+If you try to run Behat with this feature, it will say that the context has
+missing steps. To add the required snippets run:
 
 {lang="console"}
 ~~~~~~~~
@@ -126,7 +128,7 @@ Now we can start working to get these *scenarios* to pass.
 
 ## Application Structure
 
-Before jumping straight into writing code let's just take a small moment to
+Before jumping straight into writing code, let's just take a small moment to
 take a look at the structure we plan to use to build the application.
 
 ![Proposed Application Structure](images/05-application-structure.png)
@@ -139,26 +141,27 @@ related implementation details. To achieve this level of separation we'll use
 
 Behind the *domain model* there will be a storage implementation layer for our
 chosen storage system. The storage system has not yet been decided so we'll
-make use of SQLite until we decide. The reason for this choice is that SQLite
-allows the use of a database file without needing to set up a database server
-and it's easier to use than writing our own file-based storage system.
+make use of SQLite until we have chosen which one to use. The reasons for using
+SQLite are that, it allows the use of a database file without needing to set up
+a database server, and it's easier to use than writing our own file-based
+storage system.
 
 In chapter 3 I introduced [CQRS](#cqrs) and stated that while we are not going
-to implement it in our application we will make a distinction between *command*
-and *query* interactions within the application. Therefore, in front of the
-*domain model* we'll have a layer of *commands* and *queries*, all interactions
-with the *domain model* from the *GUI* will go through these.
+to implement it in our application, we will make a distinction between
+*command* and *query* interactions within the application. Therefore, in front
+of the *domain model* we'll have a layer of *commands* and *queries*. All
+interactions with the *domain model* from the *UI* will go through these.
 
-Finally, we'll have the GUI website. We'll start off by mocking this up with
-some basic HTML but as our application becomes more complete we can make use of
-a modern MVC[^mvc] framework. Again we won't worry about which one until later
-on.
+Finally, we'll have the UI website. We'll start off by mocking this up with
+some basic HTML, but as our application becomes more complete, we can make use
+of a modern MVC[^mvc] framework. Again, we won't worry about which one until
+later on.
 
 [^mvc]: The [Model View Controller](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) design pattern.
 
 ## Scenario: View an empty list of recipes
 
-Let's start off by getting the first scenario to pass, as a quick reminder here
+Let's start off by getting the first scenario to pass. As a quick reminder here
 it is:
 
 {title="View an empty list of recipes", lang="cucumber"}
@@ -170,31 +173,31 @@ it is:
 ~~~~~~~~
 
 We're going to use TDD to create our code from the *outside in*. What I mean by
-this is rather than trying to build the model and then get it to do what we
+this is: rather than trying to build the model and then get it to do what we
 need it to do, we'll start with what we want it to do and let that help create
 the model.
 
 ### Fleshing out the FeatureContext
 
 Behat has already added the required *snippet* templates to the
-`FeatureContext` so let's try to pencil in what we want to happen. Take a look
-at the code I have added first then I'll explain it:
+`FeatureContext`, so let's try to pencil in what we want to happen. Take a look
+at the code I have added first, then I'll explain it:
 
 <<[features/bootstrap/FeatureContext.php](examples/chapter-05/scenario1/features/bootstrap/FeatureContext.php)
 
 The thinking I have used here goes something like this:
 
-> In order to list recipes we'll create a query object then somehow we'll
+> In order to list recipes we'll create a query object, then somehow we'll
 > process that query to get the result. This process will involve fetching
 > all existing recipes and returning the result.
 
-The first line of our test states *"Given there are no recipes"*. I'm going
-to use the *Repository* design pattern for the storing of objects, so to
-make this pass we've got to ensure that the *Repository* for storing recipes is
-empty. I've also stated that we're not going to worry about what storage system
-we will be using until later, so in the mean time I've decided to create a
-simple test repository which we'll use to emulate the repository functionality.
-I've decided to name this
+The first line of our test states: *"Given there are no recipes"*. We're going
+to use the *Repository* design pattern for the storing of objects. So, to make
+this test pass, we've got to ensure that the *Repository* for storing recipes
+is empty. I've also stated that we're not going to worry about what storage
+system we will be using until later. So in the mean time, we can create a
+simple test repository, which we'll use to emulate the repository
+functionality.  I've decided to name this
 `CocktailRater\Testing\Repository\TestRecipeRepository`.
 
 With this information, the first thing we need to do is create an instance of
@@ -203,40 +206,40 @@ this repository. I've done this in the `beforeScenario` method in the
 
 W> ### Annotations
 W>
-W> You may also notice that I've added `@BeforeScenario` to the
-W> docblock for this method, this is known as an *annotation* and is required
+W> You may have noticed that I've added `@BeforeScenario` to the
+W> docblock for this method. This is known as an *annotation* and is required
 W> to inform Behat to run this method before it runs each *scenario*.
 W>
 W> Annotation strings in the docblock start with the `@` symbol. Behat
-W> uses annotations for several things, you will see that each snippet function
-W> has a `@Given`, `@When` or `@Then` annotation, again this is not just a
-W> comment but is actually required by Behat in order to work.
+W> uses annotations for several things - you will see that each snippet function
+W> has a `@Given`, `@When` or `@Then` annotation. Again, this is not just a
+W> comment, but is actually required by Behat in order to work.
 
-Next we *clear* the repository to ensure there are no recipes in the
-`thereAreNoRecipes` method.
+Then, in the `thereAreNoRecipes` method, we *clear* the repository to ensure
+there are no recipes currently stored.
 
-Then next line of the test states *"When I request a list of recipes"*. For
+The next line of the test states: *"When I request a list of recipes"*. For
 this we create the query object, run it and store the result. I've decided that
-the *running* of the query will be done by a *query handler* and therefore
+the *running* of the query will be done by a *query handler*, and therefore,
 we'll use the verb *handle* to run it. Also, we know that the *query handler*
-will need to fetch recipes from the *repository* so we pass this to the
+will need to fetch recipes from the *repository*, so we pass this to the
 *handler* via the constructor. All this is put into action in the
 `iRequestAListOfRecipes` method in the `FeatureContext`.
 
-Finally, the last line of the test says *"Then I should see an empty list"*, to
-do this we'll simple check the value in the query result. In order to make a
-Behat snippet fail it must throw an exception. However, rather than writing our
-own checking methods I've decided to make use of the *assert* methods provided
-by PHPUnit. For this test we've used 2 asserts, one to check the result is an
-*array* and the second to check it's empty.
+Finally, the last line of the test says: *"Then I should see an empty list"*.
+To make this pass, we'll simple check the value in the query result. In order
+to make a Behat snippet fail, it must throw an exception. However, rather than
+writing our own checking methods, we can make use of the *assert* methods
+provided by PHPUnit. For this test we've used 2 asserts, one to check the
+result is an *array*, and the second to check it's empty.
 
-At this point if you try to run Behat you'll see PHP error messages saying we've
-referenced classes which don't exist, to fix this lets add the classes.
+At this point, if you try to run Behat you'll see PHP error messages saying
+we've referenced classes which don't exist. To fix this lets add the classes...
 
 ### Writing the Code
 
-The first line of the test requires the *repository* and that it has a method
-called `clear` so to start with let's create that:
+The first line of the test requires the *repository*, and that it has a method
+called `clear`. Let's start by creating that:
 
 {title="src/Testing/Repository/TestRecipeRepository.php", lang="php"}
 ~~~~~~~~
@@ -256,26 +259,27 @@ final class TestRecipeRepository
 
 I> Final
 I>
-I> You may have noticed the use of the `final` keyword. For now I'm just going to
-I> say that I add this to my classes by default, this is not required but is my
-I> preference, I'll explain the reason for this [a bit later on](#final-keyword).
+I> You may have noticed the use of the `final` keyword. For now I'm just going
+I> to say that I add this to my classes by default, this is not required but is
+I> my preference. I'll explain the reason for this
+I> [a bit later on](#final-keyword).
 
 Next up let's create the `ListRecipesQuery`. A query class will contain the
-parameters for the query, in this case there are none so the class simply looks
-like this:
+parameters for the query. In this case there are none, so the class simply
+looks like this:
 
 <<[src/Application/Visitor/Query/ListRecipesQuery.php](examples/chapter-05/scenario1/src/Application/Visitor/Query/ListRecipesQuery.php)
 
 I've chosen to add `Visitor` to the namespace since these are queries which
 will be made by *visitors*.
 
-Now for the interesting bit, the `ListRecipesHandler`. From looking at the
-`FeatureContext` it needs to take a *repository* as a constructor parameter,
-the *query* as a parameter to the `handle` method and return some object which
+Now for the interesting bit: the `ListRecipesHandler`. From looking at the
+`FeatureContext`, this needs to take a *repository* as a constructor parameter,
+the *query* as a parameter to the `handle` method, and return some object which
 has a `getRecipes` method.
 
-Here we don't want to depend on our test repository so we'll create an
-*interface* which will be used in its place. For the return value we'll create
+Here we don't want to depend on our test repository, so we'll create an
+*interface* which will be used in its place. For the return value, we'll create
 a class called `CocktailRater\Application\Visitor\Query\ListRecipesResult`.
 
 Without further ado, here it is:
@@ -283,7 +287,7 @@ Without further ado, here it is:
 <<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario1/src/Application/Visitor/Query/ListRecipesHandler.php)
 
 At this point we've created all the classes that were referenced from the
-`FeatureContext` but this last one has just introduced 2 more: the
+`FeatureContext`, but this last one has just introduced 2 more: the
 `RecipeRepository` and the `ListRecipesResult`. Let's add them to the project
 also (this is what I was referring to when I said we'd work from the *outside
 in*):
@@ -293,15 +297,15 @@ in*):
 <<[src/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario1/src/Domain/Repository/RecipeRepository.php)
 
 The `ListRecipesResult` class simply returns an empty list from
-`getRecipes`, this is all it needs to do for now.
+`getRecipes`. This is all it needs to do to make the test pass.
 
 The `RecipeRepository` interface currently has no methods. This is because the
 only method currently existing in our test repository is `clear`, however this
-method is only relevant for the tests, there is no requirement for this in the
+method is only relevant for the tests so there is no requirement for it in the
 actual application.
 
-Now there's only one thing left to do: the `ListRecipesHandler` class requires
-a `RecipeRepository` to be provided to the constructor but, in the
+Now there's only one thing left to do. The `ListRecipesHandler` class requires
+a `RecipeRepository` to be provided to the constructor, but in the
 `FeatureContext` we've provided a `TestRecipeRepository`. To make this work we
 need to make the test repository implement the interface:
 
@@ -323,24 +327,59 @@ final class TestRecipeRepository implements RecipeRepository
 }
 ~~~~~~~~
 
-At this point we should be able to run Behat and see the first *scenario* pass:
+At this point, we should be able to run Behat and see the first *scenario*
+pass:
 
 {lang="console"}
 ~~~~~~~~
 $ behat
+Feature: A visitor can view a list of recipes
+    In order to view a list of recipes
+    As a visitor
+    I need to be able get a list of recipes
+
+  Scenario: View an empty list of recipes
+    Given there are no recipes
+    When I request a list of recipes      
+    Then I should see an empty list
+
+  Scenario: Viewing a list with 1 recipe
+    Given there's a recipe for "Mojito" by user "tom" with 5 stars
+      TODO: write pending definition
+    When I request a list of recipes
+    Then I should see a list of recipes containing:
+      | name   | rating | user |
+      | Mojito | 5.0    | tom  |
+
+  Scenario: Recipes are sorted by rating
+    Given there's a recipe for "Daquiri" by user "clare" with 4 stars
+      TODO: write pending definition
+    And there's a recipe for "Pina Colada" by user "jess" with 2 stars
+    And there's a recipe for "Mojito" by user "tom" with 5 stars
+    When I request a list of recipes
+    Then I should see a list of recipes containing:
+      | name        | rating | user  |
+      | Mojito      | 5.0    | tom   |
+      | Daquiri     | 4.0    | clare |
+      | Pina Colada | 2.0    | jess  |
+
+3 scenarios (1 passed, 2 pending)
+11 steps (3 passed, 2 pending, 6 skipped)
+0m0.36s (9.95Mb)
 ~~~~~~~~
 
 ## Scenario: View a list with 1 recipe
 
-We got the first scenario to pass without any real logic, to get the next one
-to pass we need to start filling in some of the blanks that we created.
+We got the first scenario to pass without adding any real logic. To get the
+next one to pass we need to start filling in some of the blanks that we've
+created.
 
 ### Updating the FeatureContext
 
-Just like last time we can start by adding some content to our 2 remaining
-methods in the `FeatureContext`. Here I'd just like to point out that you may
+Just like last time, we can start by adding some content to our 2 remaining
+methods in the `FeatureContext`.  Here I'd just like to point out that you may
 find it easier to work with one at a time, but for the sake of not making this
-book too long I'm condensing the processes down a bit.
+book too long, I'm condensing the processes down a bit.
 
 {title="features/bootstrap/FeatureContext.php", lang="php"}
 ~~~~~~~~
@@ -411,12 +450,12 @@ class FeatureContext implements SnippetAcceptingContext
 ~~~~~~~~
 
 In `theresARecipeForByUserWithStars` we're creating a new `Recipe` object. The
-`Recipe` needs a name, rating and user so we can add what we think look like
+`Recipe` needs a name, rating and user, so we can add what we think look like
 sensible dependencies via the constructor. We also *store* this new object in
 the repository.
 
-In the `iShouldSeeAListOfRecipesContaining` method we compare the results
-returned from the query with the table of expected results using PHPUnit's
+In the `iShouldSeeAListOfRecipesContaining` method, we compare the results
+returned from the query, with the table of expected results, using PHPUnit's
 `assertEquals`. I've also used `array_map` to ensure both arrays contain the
 same types since all values in Behat tables are strings.
 
@@ -427,8 +466,9 @@ I>
 I> Before continuing I'd just like to point out that up until this point I've
 I> not created any unit tests. From this point on I'll be using them for all
 I> development in the *domain model*. However, I won't be showing them or the
-I> process as it would take up too many pages but they're all available in the
-I> example code for the book if you want to study them.
+I> process of creating them, as it would take up too many pages. However,
+I> they're all available in the example code for the book if you want to study
+I> them.
 
 Let's start off by adding the new classes to the model:
 
@@ -527,7 +567,7 @@ interface RecipeRepository
 }
 ~~~~~~~~
 
-This also means we need to add the method to the `TestRecipeRepository`:
+This also means that we need to add the method to the `TestRecipeRepository`:
 
 {title="src/Testing/Repository/TestRecipeRepository.php", lang="php"}
 ~~~~~~~~
@@ -556,16 +596,16 @@ final class TestRecipeRepository implements RecipeRepository
 
 ### Making the Scenario Pass
 
-At this point only the last line of the scenario should be failing. We've got
-the template of the model laid out so we just need to fill in the details. To
-start with let's take a look at how the query handler will work:
+At this point, only the last line of the scenario should be failing. We've got
+the template of the model laid out, so we just need to fill in the details. To
+start with, let's take a look at how the query handler will work:
 
 <<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario2/src/Application/Visitor/Query/ListRecipesHandler.php)
 
-It's quite simple, it fetches all recipes from the repository, adds the details
-of each one to the result object and returns it. This does however mean we've
-got a bit of work to do to get it all working. First up let's update the
-classes in the *domain model*:
+It's quite simple really: it fetches all recipes from the repository, adds the
+details of each one to the result object, then returns the result. This looks
+good, but we've got a bit of work to do to get it all working. First up let's
+update the classes in the *domain model*:
 
 <<[src/Domain/Recipe.php](examples/chapter-05/scenario2/src/Domain/Recipe.php)
 
@@ -577,9 +617,9 @@ classes in the *domain model*:
 
 <<[src/Domain/Username.php](examples/chapter-05/scenario2/src/Domain/Username.php)
 
-In the *domain model* we've started to make use of Benjamin Eberlei's
-*[Assert](https://github.com/beberlei/assert)* library. To do this we need to
-install the dependency with Composer by running:
+In the *domain model*, we've started to make use of Benjamin Eberlei's
+*[Assert](https://github.com/beberlei/assert)* library. For this to work we
+need to install the dependency with Composer by running:
 
 {lang="console"}
 ~~~~~~~~
@@ -595,37 +635,38 @@ W> abstraction. The [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern)
 W> design pattern is a very good tool for this job.
 W>
 W> So, with that said, why am I using the *Assert* library from within the
-W> domain model? The reason is: firstly it's a well-used and stable library with
-W> utility methods which have no side effects. Secondly, and more importantly,
-W> I'm using it in a way which adds, what I think, is a missing feature in the
-W> PHP language; namely typehints for scalar types and arrays.
+W> domain model? The reason is: firstly it's a well-used and stable library 
+W> made up of utility methods which have no side effects. Secondly, and more
+W> importantly, I'm using it in a way which adds, what I think, is a missing
+W> feature in the PHP language: namely typehints for scalar types and arrays.
 W>
 W> There is an interesting discussion with Mathais Verraes on the [DDDinPHP
 W> Google Group](https://groups.google.com/forum/#!msg/dddinphp/YGogT1NSbO0/u22c4dgoxdEJ)
-W> about adding dependencies to 3rd party libraries to your domain model. The
-W> bottom line though is, before doing this you should exercise extreme
-W> consideration of what you are about to do.
+W> about adding dependencies to 3rd party libraries to your domain model.
+W> However, the bottom line here is: before doing this you should exercise
+W> extreme consideration of what you are about to do.
 
 One thing which may have caught your eye in the `User` class is the
-`fromValues` *static* method. This is known as a *named constructor*, it's a
-way in which we can provide alternate constructors for classes and is one of
-the few valid uses of the `static` keyword. Since it maintains no state and
-works in a purely *functional* way it is a safe use of `static`. At this point
-in time this has only been used in the unit tests but the neater tests I felt
-were a good enough reason to add it.
+`fromValues` *static* method. This is known as a *named constructor*. It's a
+way in which we can provide alternate constructors for classes, and is one of
+the few valid uses of the `static` keyword. Since it maintains no state, and
+works in a purely *functional* way, it is a safe use of `static`. At this point
+`fromValues` has only been used in the unit tests, even so, I felt the neater
+tests were a good enough reason to add it.
 
-Another thing we have done here is restricted the value allowed for a rating to
-be between 1 and 5. If it falls outside of this range we throw an exception.
-The appropriate exception to be throw here is PHP SPL's `OutOfBoundsException`.
-However, rather than throw it directly we've extended it so that it can be
-tracked down as coming from our application. Let's take a quick look at it:
+Another thing we have done here, is restricted the value allowed for a rating
+to be between 1 and 5. If it falls outside of this range, we throw an
+exception.  The appropriate exception to be throw here is PHP SPL's
+`OutOfBoundsException`.  However, rather than throw it directly, we've extended
+it so that it can be tracked down as coming from our application. Let's take a
+quick look at it:
 
 <<[src/Domain/Exception/OutOfBoundsException.php](examples/chapter-05/scenario2/src/Domain/Exception/OutOfBoundsException.php)
 
-Again you'll notice the use of a *named constructor*, I think this is a really
-neat way to keep the exception messages neat and tidy and in a relevant place.
+Again you'll notice the use of a *named constructor*. I think this is a really
+neat way to keep the exception messages neat and tidy, and in a relevant place.
 
-Next let's quickly update the `ListRecipesResult` class:
+Next, let's quickly update the `ListRecipesResult` class:
 
 <<[src/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario2/src/Application/Visitor/Query/ListRecipesResult.php)
 
@@ -641,16 +682,84 @@ for what we need so far.
 
 You can now run Behat and watch the second scenario pass.
 
+{lang="console"}
+~~~~~~~~
+$ behat
+Feature: A visitor can view a list of recipes
+    In order to view a list of recipes
+    As a visitor
+    I need to be able get a list of recipes
+
+  Scenario: View an empty list of recipes 
+    Given there are no recipes            
+    When I request a list of recipes      
+    Then I should see an empty list       
+
+  Scenario: Viewing a list with 1 recipe                           
+    Given there's a recipe for "Mojito" by user "tom" with 5 stars 
+    When I request a list of recipes                               
+    Then I should see a list of recipes containing:                
+      | name   | rating | user |
+      | Mojito | 5.0    | tom  |
+
+  Scenario: Recipes are sorted by rating                               
+    Given there's a recipe for "Daquiri" by user "clare" with 4 stars  
+    And there's a recipe for "Pina Colada" by user "jess" with 2 stars 
+    And there's a recipe for "Mojito" by user "tom" with 5 stars       
+    When I request a list of recipes                                   
+    Then I should see a list of recipes containing:                    
+      | name        | rating | user  |
+      | Mojito      | 5.0    | tom   |
+      | Daquiri     | 4.0    | clare |
+      | Pina Colada | 2.0    | jess  |
+      Failed asserting that two arrays are equal.
+      --- Expected
+      +++ Actual
+      @@ @@
+       Array (
+           0 => Array (
+      +        0 => 'Mojito'
+      +        1 => 5.0
+      +        2 => 'tom'
+      +    )
+      +    1 => Array (
+               0 => 'Daquiri'
+               1 => 4.0
+               2 => 'clare'
+           )
+      -    1 => Array (
+      +    2 => Array (
+               0 => 'Pina Colada'
+               1 => 2.0
+               2 => 'jess'
+      -    )
+      -    2 => Array (
+      -        0 => 'Mojito'
+      -        1 => 5.0
+      -        2 => 'tom'
+           )
+       )
+
+--- Failed scenarios:
+
+    features/visitors-can-list-recipes.feature:18
+
+3 scenarios (2 passed, 1 failed)
+11 steps (10 passed, 1 failed)
+0m0.05s (10.60Mb)
+~~~~~~~~
+
 ## Scenario: Recipes are sorted by rating
 
-You may have already noticed that when you run Behat now most of our final
-scenario already passes, the only thing which fails is the order in which
+You may have already noticed, that when you run Behat now most of our final
+scenario already passes, The only thing which fails is the order in which
 the recipes are listed. To fix this we can go straight into the 
-`ListRecipesHandler` and sort the recipes there:
+`ListRecipesHandler`, and sort the recipes there:
 
 <<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario3/src/Application/Visitor/Query/ListRecipesHandler.php)
 
-We also need to add new methods to both the `Recipe` and `Rating` classes:
+We also need to add new comparison methods to both the `Recipe` and `Rating`
+classes:
 
 {title="src/Domain/Recipe.php", lang="php"}
 ~~~~~~~~
@@ -697,30 +806,67 @@ final class Rating
 
 That's it, the first feature is done!
 
+{lang="console"}
+~~~~~~~~
+$ behat
+Feature: A visitor can view a list of recipes
+    In order to view a list of recipes
+    As a visitor
+    I need to be able get a list of recipes
+
+  Scenario: View an empty list of recipes 
+    Given there are no recipes            
+    When I request a list of recipes      
+    Then I should see an empty list       
+
+  Scenario: Viewing a list with 1 recipe                           
+    Given there's a recipe for "Mojito" by user "tom" with 5 stars 
+    When I request a list of recipes                               
+    Then I should see a list of recipes containing:                
+      | name   | rating | user |
+      | Mojito | 5.0    | tom  |
+
+  Scenario: Recipes are sorted by rating                               
+    Given there's a recipe for "Daquiri" by user "clare" with 4 stars  
+    And there's a recipe for "Pina Colada" by user "jess" with 2 stars 
+    And there's a recipe for "Mojito" by user "tom" with 5 stars       
+    When I request a list of recipes                                   
+    Then I should see a list of recipes containing:                    
+      | name        | rating | user  |
+      | Mojito      | 5.0    | tom   |
+      | Daquiri     | 4.0    | clare |
+      | Pina Colada | 2.0    | jess  |
+
+3 scenarios (3 passed)
+11 steps (11 passed)
+0m0.04s (10.48Mb)
+~~~~~~~~
+
 ## Tidying Up
 
-Now the feature is complete let's take a little look and see if there's
+Now the feature is complete, let's take a little look and see if there's
 anything we can do to make the code a bit better.
 
 The main thing which needs to be improved here is chaining of methods in the
-*query handler*.  We have created have ugly lines of code like this:
+*query handler*. We've created have ugly lines of code like this:
 
 ~~~~~~~~
 $recipe->getUser()->getUsername()->getValue()
 ~~~~~~~~
 
 Big chains of method calls like this violate the [Law of
-Demeter](http://en.wikipedia.org/wiki/Law_of_Demeter) which states *you should
-only talk to your immediate friends*. What this means is you can **only** call
-methods and access properties only of objects which are properties of the
-current class, which are parameters to the current method, or have been created
-inside the method. This law is pretty much stating the same thing as the
+Demeter](http://en.wikipedia.org/wiki/Law_of_Demeter) which states: *you should
+only talk to your immediate friends*. This means you should **only** call
+methods or access properties of objects which are: properties of the current
+class, are parameters to the current method, or have been created inside the
+method. This law is pretty much stating the same thing as the
 *one dot per line* rule of [Object Calisthenics](#object-calisthenics). Note
-that PHP request the use of `$this->` to methods and properties so it's actual
-*two arrows per line*.
+that PHP requires the use of `$this->` to call methods and access properties,
+so it's actually *two arrows per line*.
 
-So how to solve it? Well on approach might be to ask the top level class
-(*aggregate*) to ask the next level down to return the value and so on like so:
+So, how to this issue? One approach might be to ask the top level class
+(*aggregate*) to ask the next level down to return the value, repeating down
+the hierarchy. Here's an example:
 
 ~~~~~~~~
 class Recipe
@@ -744,15 +890,15 @@ class User
 }
 ~~~~~~~~
 
-However, if you're going to do this for more that 2 or 3 values the interface
+However, if you're going to do this for more than 2 or 3 values, the interface
 is going to start to get pretty bloated. Another way might be to add a method
 to the `Recipe` class to return all its values as an array or value object.
-There are other ways you could do this but for this project let's use a
+There are other ways you could do this, but for this project let's use a
 combination of these 2 methods. If only 1 or 2 getters are required we'll
 consider using them, otherwise we'll use a *read* method to return an object (I
-prefer objects to arrays because the content is defined and it can be immutable
-- even though it's extra code. However, using an array or object with public
-properties might be appropriate for your project).
+prefer objects to arrays because, even though they require extra code, the
+content is well defined and they can be immutable, However, using an array or
+object with public properties, might be appropriate for your project).
 
 ### Exposing Recipe Values
 
@@ -813,33 +959,33 @@ Then we can update our query handler to use these like so:
     }
 ~~~~~~~~
 
-At this point we can also remove `getUsername` from the `User` class and
+At this point, we can also remove `getUsername` from the `User` class and
 `getName`, `getRating` and `getUser` from the `Recipe` class.
 
-Already this is looking a lot neater but we're still violating the *law of
+Already this is looking a lot neater, but we're still violating the *law of
 demeter* at 2 levels in the *handler*. Firstly, we're calling `getDetails` on a
-`Recipe` objects which are not an *immediate friends* of the handler (since they
-fetched from a repository). Secondly, we're calling the *get* methods on the
-details object returned from the `Recipe` objects. Considering this is
-happening just at the application layer in our handler classes I don't really
-think this is the biggest crime and could be left as it is. That said, let's
-still try to tidy it up some more.
+`Recipe` objects which are not an *immediate friends* of the handler (since
+they fetched from a repository). Secondly, we're calling the *get* methods on
+the details object returned from the `Recipe` objects. Considering this is
+happening just at the application layer, I don't really think this is the
+biggest crime and therefore could be left as is. That said, let's still try to
+tidy it up some more.
 
-To do this let's get rid of all the calls to the *getters* on the details
+To do this, let's get rid of all the calls to the *getters* on the details
 objects. We can do this by simply passing in the details object to the result
 class constructor. The problem with this is that is adds a dependency on the
 *domain model* from anywhere that a result object is used. When using a
-language like Java, C++ or C# this becomes something that really needs to be
-fixed as separate packages need to be able to be compiled and deployed
-independently, however, PHP doesn't work like that (maybe one day it will).
-Even so, it's probably still good practice to work this way, also since we
-don't want any other layers which talk to the application to create *result*
-objects let's make the *result* into an *interface*. Then we can have a
-concrete result *Data Transfer Object* which can know about the *details* class, because the
-dependency from outside is on the interface only it's decoupled form the
-*domain*.
+language like Java, C++ or C#, this becomes something that really needs to be
+fixed, since separate packages need to be able to be compiled and deployed
+independently. However, PHP doesn't work like that (maybe one day it will).
+Even so, it's probably still good practice to work this way. Also, since we
+don't want any other layers which talk to the application, to create *result*
+objects, let's make the *result* into an *interface*. Then we can have a
+concrete result *Data Transfer Object*, which can know about the *details*
+class. Because the dependency from outside is now on the interface only, it's
+decoupled form the *domain*.
 
-Now we have this:
+Here's the updated code:
 
 <<[src/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario3-tidied/src/Application/Visitor/Query/ListRecipesResult.php)
 
@@ -861,35 +1007,37 @@ Now we have this:
     }
 ~~~~~~~~
 
-That's almost it now, the handler is much neater but we've still not quite
-conformed to the *Law of Demeter* because it still gets the recipe from the
-*repository*. In most circumstances, particularly in the *domain model* I'm
-very diligent about obeying the *Law of Demeter*, however, in this circumstance
-I feel we've done enough. A good exercise is to consider how to obey it
-completely in the handler but for now I'm going to leave it as it is.
+That's almost done! The handler is much neater. But we've still not quite
+conformed to the *Law of Demeter*, because it still gets the recipe from the
+*repository*. In most circumstances, particularly in the *domain model*, I'm
+very diligent about obeying the *Law of Demeter*. However, in this
+circumstance, I feel we've done enough. A good exercise is, to consider how to
+obey it completely in the handler, but for now I'm going to leave it as it is.
 
 ### Have we gone too far?
 
-You might be thinking to yourself that this is all a bit excessive. We have an
-*aggregate* which returns a details value object, which is then copied into a
-results DTO which looks almost the same, and we have an extra interface to
-describe the *result* DTO. Isn't simply passing back the *details* value
-object from the handler be sufficient? Or, is that even too much and the
-*details* class is overkill and a simple associative array would have done. You
-may even be thinking this looks far too much like Java.
+You might be thinking to yourself that this is all a bit excessive. That we
+have an *aggregate*, which returns a details value object, which is then copied
+into a results DTO, which looks almost the same as the value object, and we
+have an extra interface to describe the *result* DTO. You might also think that
+simply passing back the *details* value object from the handler would be
+sufficient. Or, that even that would be too much, and the *details* class is
+overkill, and a simple associative array would have done. You may even be
+thinking this looks far too much like Java.
 
-If you are thinking all this you are right, none of this is necessary but it
-depends on the scale of the project, how many people are going to be working
-with the code, the growth expectancy of the project and even the budget. What
-we've done here is apply best practices, we've made the code as explicit and
-self documented as possible and future developers (and our future selves) will
-thank us for this.
+If you are thinking any of these things you are right! None of this is
+necessary. But, depending on the scale of the project, how many people are
+going to be working with the code, the growth expectancy of the project, and
+even the budget, this level of detail may be extremely valuable. What we've
+done here is apply best practices, we've made the code as explicit and self
+documented as possible. As a result future developers (and our future selves)
+will thank us for this.
 
 ## What Next?
 
 So far we've managed to get the first feature's tests to pass. However, we've
 done it in quite an isolated way by considering this single *query* on its
-own. In the next chapter we'll quickly add the second feature then we can
+own. In the next chapter we'll quickly add the second feature, then we can
 analyse the two to find similarities. We'll then use this knowledge to
 *refactor* what we have into a more generic form. After that we'll try to
 display the application's output on a page.

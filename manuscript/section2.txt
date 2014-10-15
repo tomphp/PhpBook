@@ -1,4 +1,4 @@
 -# Building the Application
 
-This is the main part of the book, here we'll work through the complete process
-of building a robust, extensible & scalable application from scratch.
+This is the main part of the book. Here we'll work through the complete process
+of building a robust, extensible and scalable application from scratch.
