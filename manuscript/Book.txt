@@ -9,4 +9,3 @@ section2.txt
 06-adding-the-second-feature.txt
 07-common-query-system.txt
 08-creating-a-simple-ui.txt
-09-phing.txt

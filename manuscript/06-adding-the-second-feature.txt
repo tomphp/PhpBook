@@ -7,24 +7,24 @@ Let's take a look at the story card for the next feature:
 > * Displays name, rating, user, and the method
 > * Displays ingredients with quantities and units
 
-As before I shall provide the acceptance tests:
+As before, I'll also provide the acceptance tests:
 
 <<[features/visitors-can-view-a-recipe.feature](examples/chapter-06/feature2/features/visitors-can-view-a-recipe.feature)
 
 In the last chapter I put a lot of focus on the TDD process and the way the
-code evolved. Doing this for the whole book would get pretty long winded, so as
-we progress I'll be doing this less and instead focusing on the specific points
-and decisions made in each step.
+code evolved. Doing this for the whole book would get pretty long winded. So,
+as we progress I'll be doing this less, and instead focusing on the specific
+points and decisions made in each step.
 
-In this chapter we want to implement the second feature which requires a very
-similar process to that in the previous chapter so I'll cover it in less
-detail. Once we have this done we're going to spend a bit time analysing what
-we have created so far and try refactor it a bit, apply some principles and get
-it as tidy as possible.
+In this chapter we want to implement the second feature. This requires a very
+similar process to that in the previous chapter, so I'll cover it in less
+detail. Once we have done this, we're going to spend a bit time analysing what
+we have created so far and try refactor it a bit, apply some principles, and
+get it as tidy as possible.
 
 ## The FeatureContext
 
-First up let's quickly append the new *snippet* templates to the feature
+First up, let's quickly append the new *snippet* templates to the feature
 context by running:
 
 {lang="console"}
@@ -32,23 +32,24 @@ context by running:
 $ behat --append-snippets
 ~~~~~~~~
 
-Now the feature context needs to be updated, here's what I've come up with:
+Now we need to update feature context. Here's what I came up with this time up
+with:
 
 <<[features/bootstrap/FeatureContext.php](examples/chapter-06/feature2/features/bootstrap/FeatureContext.php)
 
 This has got a bit complex because we're building the `Recipe` objects over a
-sequence of steps. Since the `Recipe` is immutable and takes of its values via
-the constructor we have to store the details until we have them all and can
+sequence of steps. Since the `Recipe` is immutable and takes its values via the
+constructor, we have to store the details until we have them all, and then we
 create the object in `iRequestToViewRecipeFor`. Also, once a `Recipe` is stored
 we save the allocated ID. The `FeatureContext` definitely needs to be tidied up
-a bit but before we look at doing that lets see the actual implementation which
-makes this pass.
+a bit, but before we look at doing that lets see the actual implementation
+which makes the new tests pass.
 
 ## The Implementation
 
 I'm just going to show you all the code now, there is a fair bit of it but it
 should all be pretty self explanatory. I'll point out a couple of small bits
-and then well look at ways we can improve it.
+and then we'll look at ways we can improve it.
 
 <<[src/Application/Visitor/Query/ViewRecipeQuery.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeQuery.php)
 
@@ -56,7 +57,7 @@ This time the *query* contains the *ID* of the recipe to be viewed.
 
 <<[src/Application/Visitor/Query/ViewRecipeHandler.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeHandler.php)
 
-The *handler* makes a new request called `findById` to the repository.
+The *handler* makes a new request to the repository called `findById`.
 
 <<[src/Application/Visitor/Query/ViewRecipeResult.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeResult.php)
 
@@ -69,9 +70,9 @@ data.
 
 <<[src/Testing/Repository/TestRecipeRepository.php](examples/chapter-06/feature2/src/Testing/Repository/TestRecipeRepository.php)
 
-The repository now has the concept of a recipe ID, in the test repository we
-just generation an incremental one and provide and extra method so the test
-suite can retrieve the last generated one.
+The repository now has the concept of a recipe ID. In the test repository we
+just generate an incremental number for the ID. We also provide and extra
+method so the test suite can retrieve the last one generated.
 
 <<[src/Domain/RecipeId.php](examples/chapter-06/feature2/src/Domain/RecipeId.php)
 
@@ -85,10 +86,10 @@ a few more *value objects* being created also:
 <<[src/Domain/MeasuredIngredientDetails.php](examples/chapter-06/feature2/src/Domain/MeasuredIngredientDetails.php)
 
 Because a `MeasuredIngredient` currently only has 3 values which need to be
-displayed I chose to use getters rather than create a dedicated details class.
-We create an *interface* containing them though as this could change at some
-point and depending on the interface means there'll be fewer changes required
-if this happens.
+displayed, we can use getters rather than create a dedicated details class.
+However, we also create an *interface* containing though as this could change
+at some point. By depending on the interface, it means there'll be fewer
+changes required if this happens.
 
 <<[src/Domain/Method.php](examples/chapter-06/feature2/src/Domain/Method.php)
 
@@ -101,24 +102,24 @@ if this happens.
 <<[src/Domain/Unit.php](examples/chapter-06/feature2/src/Domain/Unit.php)
 
 These are all pretty plain but it's worth taking a quick look a `Unit`. This is
-basically how to achieve an *enumeration* in PHP. It's basically a value object
-which accepts a finite set of values, each defined as a class constant. Using
-this you would create a *unit* of millilitres like this: `new Unit(Unit::ML)`.
+basically how to achieve an *enumeration* in PHP. It's a value object which
+accepts a finite set of values, each defined as a class constant. Using this
+you would create a *unit* of millilitres like this: `new Unit(Unit::ML)`.
 
-That's it, the test passes now and the feature has been implemented. Next up,
+That's it. The test passes now and the feature has been implemented. Next up,
 let's try and improve the code.
 
 ## The Builder Pattern
 
-The first issue I'd like to tackle is the complex building the `Recipe` in the
-`FeatureContext`. I think a nice way to tidy this up a bit would be to use
+The first issue I'd like to tackle is the complex building of the `Recipe` in
+the `FeatureContext`. I think a nice way to tidy this up a bit would be to use
 the [builder design pattern](http://en.wikipedia.org/wiki/Builder_pattern).
 
 First of all let's create a `RecipeBuilder`:
 
 <<[src/Domain/Builder/RecipeBuilder.php](examples/chapter-06/builder-pattern/src/Domain/Builder/RecipeBuilder.php)
 
-Now we can use the builder in the `FeatureContext` but adding the following
+Now we can use the builder in the `FeatureContext` by adding the following
 method:
 
 {title="features/bootstrap/FeatureContext.php", lang="php"}
@@ -141,7 +142,7 @@ method:
     // leanpub-end-insert
 ~~~~~~~~
 
-And updating these:
+And updating these ones:
 
 {title="features/bootstrap/FeatureContext.php", lang="php"}
 ~~~~~~~~
@@ -221,20 +222,20 @@ could definitely be useful later on.
 ## The Ingredients Collection
 
 Inside `Recipe` we have an array of `MeasuredIngredient` objects. If think
-remember back to the section on [Object Calisthenics](#object-calisthenics)
-you'll remember the rule *First Class Collections*, this tells us not to use
-arrays in our classes but rather create collection classes to encapsulate them.
-Let's do that here, it's not much effort and it may be useful later on:
+remember back to the section on [Object Calisthenics](#object-calisthenics),
+you'll remember the rule *First Class Collections*. This tells us not to use
+arrays in our classes, but rather create collection classes to encapsulate
+them.  Let's do that here, it's not much effort and it may be useful later on:
 
 <<[src/Domain/MeasuredIngredients.php](examples/chapter-06/measured-ingredient-collection/src/Domain/MeasuredIngredients.php)
 
 Since our `MeasuredIngredients` class implements `MeasuredIngredientDetails`,
 the `getDetails` method currently just returns the list of `MeasuredIngredient`
 objects. I've used a docblock `@return` comment here to indicate that the
-actual intent here is to return a list of `MeasuredIngredientDetails`.  This
+actual intent here is to return a list of `MeasuredIngredientDetails`. This
 means the methods outside of this interface should not me accessed on the
 objects returned from `getDetails`. In a strongly typed language this would be
-enforced but sadly, in PHP it currently is not.
+enforced, but sadly, in PHP it currently is not.
 
 We also need to update the `Recipe` and `RecipeBuilder` classes to use this
 new collection class:
@@ -321,36 +322,36 @@ class RecipeBuilder
 
 ## DRY - Don't Repeat Yourself
 
-DRY is a simple software principle which I've not yet mentioned and its name
-pretty much sums it up. Applying DRY simply means if you find yourself typing
-the same piece of code more than once, then extract it out into a
-function, method, class or anything else which may be appropriate.
+DRY is a simple software principle which I've not mentioned yet. Its name
+pretty much explains it's intent. Applying DRY simply means: if you find
+yourself typing the same piece of code more than once, then extract it out into
+a function, method, class or anything else which may be appropriate.
 
-I've already applied this principle in some places, for example the
+I've already applied this principle in some places. For example, the
 `getResultField` method in the `FeatureContext`. However, let's find some other
 places to apply it.
 
 ### Value Objects
 
 One place we seem to have a lot of repetition is in our single value value
-objects. We can use traits here to tidy them up, let's take a look.
+objects. We can use traits here to tidy them up. Let's take a look.
 
 I> ### Traits
 I>
 I> PHP recently introduced `traits` in version 5.4. These are a way to include
 I> common bits of code into multiple classes, almost in a copy & paste style.
 I> Traits in PHP should be used to remove the repetition of small bit of code
-I> rather than performing complex tasks. Such tasks should be extracted into
-I> dedicated classes.
+I> rather than performing complex tasks. Such complex tasks should be extracted
+I> into dedicated classes.
 I>
-I> You define the *methods* and *properties* in your `trait`, you can then use
+I> You define the *methods* and *properties* in your `trait`. Then you can use
 I> those methods and properties in any class by including `use TraitName;` in
-I> the body of the class.
+I> the class body.
 I>
-I> One other thing I'll mention about traits is that because classes `use` them
-I> rather than `extend` them then `parent` is not available to call a method
-I> in the `trait` which has been *overridden*. If you do want to *override*
-I> a method and call the version in the `trait` from the class you will need
+I> One other thing I'll mention about traits is: because classes `use` traits
+I> rather than `extend` them, the `parent` keyword is not available to call a method
+I> in the `trait` which has been *overridden* in the class. If you do want to *override*
+I> a method and call the version in the `trait` from the class, you will need
 I> to rename the method from the trait. You can do this like so:
 I>
 I> `use TheTrait { TheTrait::methodName as traitMethodName; }`
@@ -379,8 +380,8 @@ We've successfully removed lots of repetition here!
 
 ### Exceptions
 
-We've also got some repetition in some exception classes, we can also tidy them
-up with a similar use of *traits*:
+We've also got some repetition in some exception classes. Again, we can also
+tidy them up with a similar use of *traits*:
 
 <<[src/Domain/Exception/ExceptionFactory.php](examples/chapter-06/dry/src/Domain/Exception/ExceptionFactory.php)
 
@@ -396,11 +397,12 @@ D> Since we've put all this effort into creating nice exception messages, let's
 D> quickly talk about them.
 D>
 D> Exception messages should not be designed to
-D> display to the users of the application, they should be caught before they
-D> get to the UI, logged, then a user friendly message displayed on screen.
-D> The exception messages are for the developers, they should be logged so problems
-D> and bugs can be tracked down. With this in mind, make your exception messages contain
-D> as much context as necessary for the developer to understand the problem.
+D> display to the users of the application. They should be caught before they
+D> get to the UI, then logged, then a user friendly message can be displayed on
+D> screen. The exception messages are for the developers, they should be logged
+D> so problems and bugs can be tracked down. With this in mind, make your
+D> exception messages contain as much context as necessary for the developer to
+D> understand the problem.
 D>
 D> ### Example
 D>
@@ -409,27 +411,27 @@ D> reasonable message to display to the user might be:
 D>
 D> *"A recipe with ID '123' was not found."*
 D>
-D> But is this a good exception message? Actually it's not really as there's some missing
-D> context here, the user knows who they are but to someone reading that
-D> message in a log it is unclear. A better message might say:
+D> But is this a good exception message? Actually it's not really since there's
+D> some missing context here. The user knows who they are but to someone
+D> reading that message in a log it is unclear. A better message might say:
 D>
 D> *"A recipe with ID '123' could not be found for user with ID '456'."*
 D>
 D> This is much more helpful.
 
-Applying DRY certainly doesn't have to involve using *traits*, in fact they are
-used pretty rarely in comparison to *methods* and *classes*. It just happen
+Applying DRY certainly doesn't have to involve using *traits*! In fact, they are
+used pretty rarely in comparison to *methods* and *classes*. It just happened
 that they were well suited to our 2 examples.
 
 ## Some Thoughts
 
-In this chapter we've tidied up the code we've written without paying any real
+In this chapter, we've tidied up the code we've written, without paying any real
 attention to the application architecture as a whole. This is always a useful
 and essential process to maintain a healthy code base. It's also worth pointing
-out that this doesn't (and isn't generally) done as a separate task, as you get
-used to spotting these patterns they will be things which you'll be apply as
-your developing the code.
+out that this doesn't (and isn't generally) done as a separate task. As you get
+used to spotting these patterns, they will be things which you'll be apply as
+you're developing the code.
 
-In the next chapter we'll take a look at the structure of what we have and see
-if we can apply a little bit more refactoring to generalise the similarities
-between out *queries* and the way the are *handled*.
+In the next chapter we'll take a look at the structure of what we have so far.
+We'll see if we can apply a little bit more refactoring to generalise the
+similarities between our *queries* and the way the are *handled*.
