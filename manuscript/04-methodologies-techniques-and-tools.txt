@@ -641,7 +641,7 @@ a parameter that was [typehinted](#typehints) in the method argument list. This
 is really a benefit of typehints rather than of value objects. However, by using
 value objects abundantly you will have more types to typehint for.
 
-## Entities
+## Entities {#entities}
 
 *Entities* make up an important part of the business model of most
 applications. Unlike [value objects](#value-objects-and-immutability) they are
@@ -1347,7 +1347,7 @@ What might seem an exception to this rule is, methods working in a functional
 way. However, since the state they modify is not used again, it does not
 actually break this rule.
 
-## Naming
+## Naming {#naming}
 
 When writing code, you have to decide on the names of many things. These include
 *variables*, *classes* and *methods*. Choosing the names of these carefully,

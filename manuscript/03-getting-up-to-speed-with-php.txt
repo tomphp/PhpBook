@@ -117,7 +117,7 @@ about *namespaces* to continue with this book. However, if you do want to learn
 more about them, then the full documentation for PHP namespaces can be found in
 the [manual](http://php.net/manual/en/language.namespaces.php).
 
-## Typehints
+## Typehints {#typehints}
 
 PHP is a dynamically typed language. It has a few basic, scalar types:
 
@@ -288,7 +288,7 @@ for choosing to do so.
 
 ## Front Controllers
 
-The front controller is a [design pattern](#design-patter) for web applications
+The front controller is a [design pattern](#design-patterns) for web applications
 which involves creating a single entry point into your application. It requires
 you to configure your webserver to redirect all requests to a single PHP script
 which then processes the request and decides what content to display.
@@ -375,7 +375,7 @@ version `2.2.16`, you can simply do this by adding the following to the
 FallbackResource /index.php
 ~~~~~~~~
 
-## Standards
+## Standards {#standards}
 
 As a language gets more powerful it often allows many ways and approaches to
 achieve the same thing. Each person then has their own preferences of how they
@@ -571,7 +571,7 @@ Using the previous PSR-0 example: if the prefix `MyApp` is chosen then the
 `Contact` class definition can remain exactly the same, but the file is instead
 stored in `/home/tom/projects/AutoloadExample/src/Entity/Contact.php`.
 
-## Composer
+## Composer {#composer}
 
 Composer is a dependency manager for PHP. It allows you to specify all the
 libraries and tools that your PHP project depends on in a simple JSON file. It
