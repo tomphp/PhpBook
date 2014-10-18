@@ -1,8 +1,8 @@
 # Creating a Simple User Interface
 
 So far we've implemented the functionality of 2 of our requested features, the
-problem is however, we still have nothing to show to the customer. When working
-on an Agile project you need to show the customer the progress very regularly
+problem is however, we still have nothing to show to the stakeholder. When working
+on an Agile project you need to show the stakeholder the progress very regularly
 to get feedback and direction on how to continue. In this chapter we'll get
 what we have done so far to show on a page. We'll start of doing this as simply
 as possible, then we'll use a modern framework to create a more serious

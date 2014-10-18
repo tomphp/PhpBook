@@ -19,9 +19,9 @@ our application are: *acceptance tests* and *unit tests*.
 ### Acceptance Tests {#acceptance-tests}
 
 *Acceptance tests* are high level tests which confirm to the developer **and**
-the customer, that the required features have been implemented and are
+the stakeholder, that the required features have been implemented and are
 working properly. Since these tests are about producing the features that the
-customer requests, they are ideally produced with the customer's presence and
+stakeholder requests, they are ideally produced with the stakeholder's presence and
 input and in a form which they can understand.
 
 A typical example might be to write something down like this:
@@ -54,15 +54,15 @@ function test_that_listing_customers_when_there_are_none_will_return_an_empty_li
 }
 ~~~~~~~~
 
-This works. The comments are there to explain the test in terms the customer
+This works. The comments are there to explain the test in terms the stakeholder
 can understand, and the code checks the conditions are met. That said, it does
-mix up the customer's language with the programmer's, and it relies on the
+mix up the stakeholder's language with the programmer's, and it relies on the
 comments being present and correct. Therefore, if you are working with the
-customer to produce acceptance tests, then there is a better tool for the job.
+stakeholder to produce acceptance tests, then there is a better tool for the job.
 It's called *Cucumber*, and in PHP it's implemented by a tool called
 [Behat](http://behat.org/).
 
-*Cucumber* scripts are tests written in a language that the customer can read
+*Cucumber* scripts are tests written in a language that the stakeholder can read
 and write in also. Tests are grouped as *features*, which are a collection of
 *scenarios*. These *scenarios* look very much like the original test rules we
 started with:
@@ -157,12 +157,12 @@ functionality that we add. We'll then use Behat to run the tests.
 ### Unit Tests
 
 *Unit tests* are for the development team's benefit. They are not written with
-the customer's help; in fact the customer may event not know they exist.
-Instead, they are created by the developer as the code is written, and they
-test little bits of code as isolated *units*. A unit is a small piece of code
-which performs a specific task. Often, we treat each class as a unit, but there
-are situations where multiple classes, or a subsection of a single class, could
-be considered a unit. Saying that, PHPSpec (the main tool we will be using for
+the stakeholder's help; in fact they may event not know they exist.  Instead,
+they are created by the developer as the code is written, and they test little
+bits of code as isolated *units*. A unit is a small piece of code which
+performs a specific task. Often, we treat each class as a unit, but there are
+situations where multiple classes, or a subsection of a single class, could be
+considered a unit. Saying that, PHPSpec (the main tool we will be using for
 unit testing) does enforce that each class is a *unit*. As a result, this will
 be the way that we shall mostly be working.
 
@@ -275,10 +275,10 @@ With PHPSpec](#unit-testing-with-phpspec) section.
 ## The Double Feedback Loop
 
 *Acceptance tests* and *unit tests* support the development process in a
-*double feedback loop*. *Acceptance tests* come from the *customer* in order of
+*double feedback loop*. *Acceptance tests* come from the *stakeholder* in order of
 priority. The *developers* then implement the features using *unit tests* with
 the *red, green, refactor cycle*, until the *acceptance tests* pass.  At this
-point, the feature can be delivered to the *customer* and the next set of
+point, the feature can be delivered to the *stakeholder* and the next set of
 *acceptance tests* will be produced.
 
 ![The Double Feedback Loop](images/04-double-feedback-loop.png)

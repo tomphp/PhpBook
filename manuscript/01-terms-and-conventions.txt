@@ -1,0 +1,95 @@
+# Terms and Conventions
+
+## Some Terms
+
+Before getting started, I'd just like to introduce a few terms which I'll be
+using in this book. If you're used to reading about software development and
+architecture, then these may seem quite obvious. But if this is you're first
+real entry point into these topics, then it's probably useful to point these
+out now.
+
+### Stakeholder
+
+When I talk about the *stakeholder*, I'm referring to the person (or persons)
+responsible for requesting the features you have to build into the application.
+If you're a freelancer and you're building a application for one of your
+clients, or if you work for a development company and you're working on a team
+building an application for one of the company's clients, then client is the
+*stakeholder*. If your working in house at a company, and your developing
+software for the employees, and the management team are telling your want needs
+to be built: then the management team are the stakeholders.
+
+Basically, the stakeholders are the people who will pay your or your company if
+you build what then want. They choose what features are needed, and you have to
+keep them happy!
+
+### Domain
+
+The *domain* is the real world process or environment which you are trying to
+translate into software. If you are building an e-commerce application, then
+the domain is the sales process.
+
+Every project's domain will be unique. The sales process of a small
+manufacturer with 10 products' will be different to that of a company selling
+thousands of products from multiple warehouses.
+
+The *domain* is considered to be the *problem space*. This is because it
+contains the problems which you need to solve in order to model it in software.
+
+### Domain Model
+
+The *domain model* is the solutions to the domain's *problems*, it is
+considered to be the *solutions space*. The *domain model* is the core of your
+application and it models just the *domain*. It does not the User Interface, the
+Database Layer, a Framework, API requests; it is a pure model of the data and
+logic in the *domain*.
+
+A bit later on I'll introduce [Domain Driven Design](#ddd) which is a process
+that holds the design of the *domain model* at utmost importance when creating
+software.
+
+## Conventions
+
+In this book I will often instruct you to run commands in the terminal.
+Whenever I show a command to be run, it will be in fixed width text and
+preceded by a '$' symbol, like this:
+
+{lang="console"}
+~~~~~~~~
+$ ls -l
+~~~~~~~~
+
+When executing the command, do not include the `$` symbol. For the example
+above, simply type `ls -l` into the terminal window, then press the `Enter` key
+on your keyboard.
+
+Other times I will show the output of a command executed in the terminal. In
+this case I'll use the same fixed with font, but there will be no preceding
+`$`, like so:
+
+{lang="console"}
+~~~~~~~~
+total 13640
+-rw-rw-r-- 1 tom tom      142 Aug 20 23:49 LICENSE.md
+drwxrwxr-x 4 tom tom     4096 Oct 18 14:15 manuscript
+-rw-rw-r-- 1 tom tom      956 Aug 20 23:56 README.md
+-rw-rw-r-- 1 tom tom 13952786 Sep 24 22:25 tags
+~~~~~~~~
+
+Finally, there are times where I'll show the command and the output in one
+block of text. The commands will be preceded by the `$` symbol, and the output
+will be in the lines which follow without the `$` symbol:
+
+{lang="console"}
+~~~~~~~~
+$ ls -l
+total 13640
+-rw-rw-r-- 1 tom tom      142 Aug 20 23:49 LICENSE.md
+drwxrwxr-x 4 tom tom     4096 Oct 18 14:15 manuscript
+-rw-rw-r-- 1 tom tom      956 Aug 20 23:56 README.md
+-rw-rw-r-- 1 tom tom 13952786 Sep 24 22:25 tags
+~~~~~~~~
+
+Everything else should hopefully be self explanatory.
+
+Next we'll look at the tools you will need to work through this book.

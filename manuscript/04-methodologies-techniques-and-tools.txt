@@ -1375,14 +1375,14 @@ of Mathias Verraes' [blog](http://verraes.net/).
 When creating methods, make the intent of the method's purpose clear in terms
 of the business language.
 
-Say for example, a customer moves house and needs to have their address updated
+Say for example: a customer moves house and needs to have their address updated
 in the system. What might seem like an obvious approach would be to add a
 `setAddress` method to the `Customer` class. This works but it's not as
 informative as it could be. A better method name might be 'moveHouse'.
 
 So far so good, but what if the customer's address was entered into the system
 incorrectly and it just needs to be amended? Does it make sense to call
-`moveHouse` to update it? Of course not, so we add a `amendPostalAddress`
+`moveHouse` to update it? Of course not! So we add a `amendPostalAddress`
 method also:
 
 {title="Good method names", lang=php}
@@ -1635,11 +1635,11 @@ interface or API via a testing framework.
 There are different types of test. These are categorised depending on what they
 are testing. For example you have:
 
-| Name              | Purpose                                                                                 |
-|-------------------|-----------------------------------------------------------------------------------------|
-| Unit Tests        | Test small, isolated units of code.                                                     |
-| Integration Tests | Test the way that several units of code work together.                                  |
-| Acceptance Tests  | Tests which prove to the customer that the required functionality has been implemented. |
+| Name              | Purpose                                                                                    |
+|-------------------|--------------------------------------------------------------------------------------------|
+| Unit Tests        | Test small, isolated units of code.                                                        |
+| Integration Tests | Test the way that several units of code work together.                                     |
+| Acceptance Tests  | Tests which prove to the stakeholder that the required functionality has been implemented. |
 
 Tests provide confidence in your codebase, and confidence in the ability to add
 to and modify the code. Also, when [refactoring](#refactoring), tests let you
@@ -1799,18 +1799,18 @@ in the documents section of http://cqrs.wordpress.com/
 methodologies such as *[Extreme Programming
 (XP)](http://en.wikipedia.org/wiki/Extreme_programming)* and
 *[SCRUM](http://en.wikipedia.org/wiki/Scrum_(software_development))*. It
-accepts the fact that, getting from the customer's idea to the final product, is
-not something that can be set as a rigid path from the beginning. As the
-project progresses, the customer's ideas evolve and technical challenges might
-affect the way the project progresses.
+accepts the fact that, getting from the stakeholder's idea to the final
+product, is not something that can be set as a rigid path from the beginning.
+As the project progresses, the stakeholder's ideas evolve and technical
+challenges might affect the way the project progresses.
 
-With *agile* development, the customer is heavily involved with the development
+With *agile* development, the stakeholder is heavily involved with the development
 process, and the project is broken down into manageable sized tasks. The
-customer prioritises the tasks, then the development team works in small
-bursts of time, to get the tasks completed and delivered to the customer - in
+stakeholder prioritises the tasks, then the development team works in small
+bursts of time, to get the tasks completed and delivered to the stakeholder - in
 order of priority. In XP these bursts of time are called *iterations*, whereas
 in SCRUM they're known as *sprints*. After each *iteration*/*sprint*, the
-customer and development team review what has been done and decide what to
+stakeholder and development team review what has been done and decide what to
 tackle next.
 
 Agile is about the approach to work and the idea that things can change as they
@@ -1837,7 +1837,7 @@ decided on for a story, then that feature can be implemented.
 
 One thing to note is that a story is not a specification! It's intentionally
 vague and it's purpose is to exist as a *request for conversation*. When it is
-time to implement a story, the team (which includes the customer) should
+time to implement a story, the team (which includes the stakeholder) should
 discuss the story and decide on the details - this will result in the
 generation of the *acceptance tests*. For the purpose of this book, I'll
 provide the story and tests as though this conversation has already taken
