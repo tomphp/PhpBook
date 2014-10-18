@@ -7,4 +7,3 @@ section1.txt
 05-an-introduction-to-testing-and-tdd.txt
 section2.txt
 06-getting-started.txt
-07-adding-the-second-feature.txt
