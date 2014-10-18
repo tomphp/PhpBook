@@ -51,17 +51,17 @@ I'm just going to show you all the code now, there is a fair bit of it but it
 should all be pretty self explanatory. I'll point out a couple of small bits
 and then we'll look at ways we can improve it.
 
-<<[src/Application/Visitor/Query/ViewRecipeQuery.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeQuery.php)
+<<[src/Application/Query/ViewRecipeQuery.php](examples/chapter-06/feature2/src/Application/Query/ViewRecipeQuery.php)
 
 This time the *query* contains the *ID* of the recipe to be viewed.
 
-<<[src/Application/Visitor/Query/ViewRecipeHandler.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeHandler.php)
+<<[src/Application/Query/ViewRecipeHandler.php](examples/chapter-06/feature2/src/Application/Query/ViewRecipeHandler.php)
 
 The *handler* makes a new request to the repository called `findById`.
 
-<<[src/Application/Visitor/Query/ViewRecipeResult.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeResult.php)
+<<[src/Application/Query/ViewRecipeResult.php](examples/chapter-06/feature2/src/Application/Query/ViewRecipeResult.php)
 
-<<[src/Application/Visitor/Query/ViewRecipeResultData.php](examples/chapter-06/feature2/src/Application/Visitor/Query/ViewRecipeResultData.php)
+<<[src/Application/Query/ViewRecipeResultData.php](examples/chapter-06/feature2/src/Application/Query/ViewRecipeResultData.php)
 
 There's nothing really special in the *result*, it's just the collection of
 data.

@@ -5,10 +5,10 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 // leanpub-start-insert
-use CocktailRater\Application\Visitor\Query\ListRecipes;
-use CocktailRater\Application\Visitor\Query\ListRecipesHandler;
-use CocktailRater\Application\Visitor\Query\ListRecipesQuery;
-use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
+use CocktailRater\Application\Query\ListRecipes;
+use CocktailRater\Application\Query\ListRecipesHandler;
+use CocktailRater\Application\Query\ListRecipesQuery;
+use CocktailRater\Application\Query\ListRecipesQueryHandler;
 use CocktailRater\Testing\Repository\TestRecipeRepository;
 use PHPUnit_Framework_Assert as Assert;
 // leanpub-end-insert

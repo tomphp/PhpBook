@@ -268,10 +268,7 @@ Next up let's create the `ListRecipesQuery`. A query class will contain the
 parameters for the query. In this case there are none, so the class simply
 looks like this:
 
-<<[src/Application/Visitor/Query/ListRecipesQuery.php](examples/chapter-05/scenario1/src/Application/Visitor/Query/ListRecipesQuery.php)
-
-I've chosen to add `Visitor` to the namespace since these are queries which
-will be made by *visitors*.
+<<[src/Application/Query/ListRecipesQuery.php](examples/chapter-05/scenario1/src/Application/Query/ListRecipesQuery.php)
 
 Now for the interesting bit: the `ListRecipesHandler`. From looking at the
 `FeatureContext`, this needs to take a *repository* as a constructor parameter,
@@ -280,11 +277,11 @@ has a `getRecipes` method.
 
 Here we don't want to depend on our test repository, so we'll create an
 *interface* which will be used in its place. For the return value, we'll create
-a class called `CocktailRater\Application\Visitor\Query\ListRecipesResult`.
+a class called `CocktailRater\Application\Query\ListRecipesResult`.
 
 Without further ado, here it is:
 
-<<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario1/src/Application/Visitor/Query/ListRecipesHandler.php)
+<<[src/Application/Query/ListRecipesHandler.php](examples/chapter-05/scenario1/src/Application/Query/ListRecipesHandler.php)
 
 At this point we've created all the classes that were referenced from the
 `FeatureContext`, but this last one has just introduced 2 more: the
@@ -292,7 +289,7 @@ At this point we've created all the classes that were referenced from the
 also (this is what I was referring to when I said we'd work from the *outside
 in*):
 
-<<[src/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario1/src/Application/Visitor/Query/ListRecipesResult.php)
+<<[src/Application/Query/ListRecipesResult.php](examples/chapter-05/scenario1/src/Application/Query/ListRecipesResult.php)
 
 <<[src/Domain/Repository/RecipeRepository.php](examples/chapter-05/scenario1/src/Domain/Repository/RecipeRepository.php)
 
@@ -389,10 +386,10 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use CocktailRater\Application\Visitor\Query\ListRecipes;
-use CocktailRater\Application\Visitor\Query\ListRecipesHandler;
-use CocktailRater\Application\Visitor\Query\ListRecipesQuery;
-use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
+use CocktailRater\Application\Query\ListRecipes;
+use CocktailRater\Application\Query\ListRecipesHandler;
+use CocktailRater\Application\Query\ListRecipesQuery;
+use CocktailRater\Application\Query\ListRecipesQueryHandler;
 // leanpub-start-insert
 use CocktailRater\Domain\CocktailName;
 use CocktailRater\Domain\Rating;
@@ -600,7 +597,7 @@ At this point, only the last line of the scenario should be failing. We've got
 the template of the model laid out, so we just need to fill in the details. To
 start with, let's take a look at how the query handler will work:
 
-<<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario2/src/Application/Visitor/Query/ListRecipesHandler.php)
+<<[src/Application/Query/ListRecipesHandler.php](examples/chapter-05/scenario2/src/Application/Query/ListRecipesHandler.php)
 
 It's quite simple really: it fetches all recipes from the repository, adds the
 details of each one to the result object, then returns the result. This looks
@@ -668,7 +665,7 @@ neat way to keep the exception messages neat and tidy, and in a relevant place.
 
 Next, let's quickly update the `ListRecipesResult` class:
 
-<<[src/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario2/src/Application/Visitor/Query/ListRecipesResult.php)
+<<[src/Application/Query/ListRecipesResult.php](examples/chapter-05/scenario2/src/Application/Query/ListRecipesResult.php)
 
 Finally, we need to update the functionality of the repository to return the
 list of recipes stored:
@@ -756,7 +753,7 @@ scenario already passes, The only thing which fails is the order in which
 the recipes are listed. To fix this we can go straight into the
 `ListRecipesHandler`, and sort the recipes there:
 
-<<[src/Application/Visitor/Query/ListRecipesHandler.php](examples/chapter-05/scenario3/src/Application/Visitor/Query/ListRecipesHandler.php)
+<<[src/Application/Query/ListRecipesHandler.php](examples/chapter-05/scenario3/src/Application/Query/ListRecipesHandler.php)
 
 We also need to add new comparison methods to both the `Recipe` and `Rating`
 classes:
@@ -936,7 +933,7 @@ And add the following method to `User` and `Recipe`:
 
 Then we can update our query handler to use these like so:
 
-{title="CocktailRater/Application/Visitor/ListRecipesHandler.php", lang="php"}
+{title="CocktailRater/Application/Query/ListRecipesHandler.php", lang="php"}
 ~~~~~~~~
     /** @return ListRecipesResult */
     public function handle(ListRecipesQuery $query)
@@ -987,11 +984,11 @@ decoupled form the *domain*.
 
 Here's the updated code:
 
-<<[src/Application/Visitor/Query/ListRecipesResult.php](examples/chapter-05/scenario3-tidied/src/Application/Visitor/Query/ListRecipesResult.php)
+<<[src/Application/Query/ListRecipesResult.php](examples/chapter-05/scenario3-tidied/src/Application/Query/ListRecipesResult.php)
 
-<<[src/Application/Visitor/Query/ListRecipesResultData.php](examples/chapter-05/scenario3-tidied/src/Application/Visitor/Query/ListRecipesResultData.php)
+<<[src/Application/Query/ListRecipesResultData.php](examples/chapter-05/scenario3-tidied/src/Application/Query/ListRecipesResultData.php)
 
-{title="CocktailRater/Application/Visitor/ListRecipesHandler.php", lang="php"}
+{title="CocktailRater/Application/Query/ListRecipesHandler.php", lang="php"}
 ~~~~~~~~
     /** @return ListRecipesResult */
     public function handle(ListRecipesQuery $query)
