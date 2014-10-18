@@ -4,10 +4,10 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use CocktailRater\Application\Visitor\Query\ListRecipes;
-use CocktailRater\Application\Visitor\Query\ListRecipesHandler;
-use CocktailRater\Application\Visitor\Query\ListRecipesQuery;
-use CocktailRater\Application\Visitor\Query\ListRecipesQueryHandler;
+use CocktailRater\Application\Query\ListRecipes;
+use CocktailRater\Application\Query\ListRecipesHandler;
+use CocktailRater\Application\Query\ListRecipesQuery;
+use CocktailRater\Application\Query\ListRecipesQueryHandler;
 // leanpub-start-insert
 use CocktailRater\Domain\CocktailName;
 use CocktailRater\Domain\Rating;
