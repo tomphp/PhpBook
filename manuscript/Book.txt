@@ -9,5 +9,3 @@ section1.txt
 section2.txt
 06-getting-started.txt
 07-adding-the-second-feature.txt
-08-common-query-system.txt
-09-creating-a-simple-ui.txt
