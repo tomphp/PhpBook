@@ -30,7 +30,7 @@ translate into software. If you are building an e-commerce application, then
 the domain is the sales process.
 
 Every project's domain will be unique. The sales process of a small
-manufacturer with 10 products' will be different to that of a company selling
+manufacturer with 10 products will be different to that of a company selling
 thousands of products from multiple warehouses.
 
 The *domain* is considered to be the *problem space*. This is because it
