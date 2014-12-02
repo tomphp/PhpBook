@@ -62,7 +62,7 @@ tend to install it via [Rodney Quillo's
 PPA](https://launchpad.net/~rquillo/+archive/ubuntu/ansible) since it's more
 up to date than the version in the Software Center.
 
-### Creating a Vagrant Config for PHP Development
+### Creating a Vagrant Config for PHP Development {#vagrant-intro}
 
 Once you have Vagrant, VirtualBox and Ansible installed, it's time to build a
 Vagrant configuration.

@@ -51,6 +51,19 @@ about software design principles. If you have less experience than this you may
 struggle to keep up. If you have more then there may be less to be learnt from
 this book but hopefully it will still be helpful.
 
+## Source Code {#source-code}
+
+The example source code for this book is included as part of the Leanpub
+purchase. You can download it via your [Leanpub
+Dashboard](https://leanpub.com/dashboard).
+
+## Discussing Book Content {#discussion-group}
+
+I have created a Google Group which can be used by readers of this book to
+discuss the ideas and content. This group can be found at:
+
+https://groups.google.com/forum/#!forum/modern-application-development-in-php
+
 ## Getting in Contact
 
 I'd love to hear from you! Whether it's about something in the book which you
@@ -63,3 +76,16 @@ You can find me on:
 Twitter: @tomphp
 Email: tom@x2k.co.uk
 Skype: x2kmusic
+
+## Thanks {#thanks}
+
+Many people have contributed to the creation of this book, as well as to my
+journey to get to this point of creating it. I would like to say thanks to:
+
+My parents for inspiring and encouraging me to do positive things in my life.
+My collegues Felix and Rob for our daily debates and mutual encouragement to
+develop our skills further. John and Jamie for employing me in this industry
+and John for all his mentoring. George and Ollie for engaging with lengthy
+technical phone calls. Matthew for his inspiration and support to create this
+book. Rob, Felix, Lowri, Loki, Peter, Lee and Steph for pointing out errors
+and typos.

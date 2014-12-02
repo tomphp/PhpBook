@@ -4,3 +4,9 @@ Since this book is being published early, there is bound to be some feedback
 which will result in the changing and correction of content. Whenever a notable
 update is made, it will be documented here so that you locate it easily. This
 will not include addition of new, planned chapters.
+
+### 2nd December 2014
+* Update Preface to include sections on [Source Code](#source-code),
+[Discussing Book Content](#discussion-group) and [Thanks](#thanks).
+* Changed the Vagrant box IP address in [Creating a Vagrant Config for PHP
+Development](#vagrant-intro).
