@@ -85,7 +85,7 @@ this example choose the following options:
 |------------------|-------------------------------|
 | Operating System | Ubuntu Trusty Tahr (14.04) 64 |
 | Name             | VagrantExample                |
-| IP Address       | 192.168.5.1                   |
+| IP Address       | 192.168.5.10                  |
 | Memory           | 512                           |
 | Shared Folder    | ./                            |
 | Webserver        | Apache + PHP5                 |
@@ -148,7 +148,7 @@ allow Vagrant to `sudo` to update some config files. Just be patient.
 When it is done, open your browser and enter the IP address we selected earlier
 into the location bar like so:
 
-`http://192.168.5.1/`
+`http://192.168.5.10/`
 
 If all has gone to plan you should see `Hello wonderful World!` displayed on
 the page! Success! - we have created a PHP development environment for our

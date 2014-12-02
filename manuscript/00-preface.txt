@@ -16,7 +16,7 @@ very hard to add new functionality to, hard to maintain and rarely scalable.
 
 In this book I hope to incorporate many programming methodologies, techniques
 and tools and apply them in the context of PHP to create a well designed
-applications. These include [Object Oriented Programming](#oop), [Design
+application. These include [Object Oriented Programming](#oop), [Design
 Patterns](#design-patterns), elements from [Domain Driven Design](#ddd),
 [Refactoring](#refactoring), [The SOLID Principals](#the-solid-principles),
 [Test Driven Development](#tdd) and [Behaviour Driven Development](#bdd). If
@@ -30,7 +30,7 @@ introduction to many of these methodologies, techniques and tools and show you
 how to get started quickly using them with PHP.
 
 This book aims to introduce you to what you need to start building a well
-designed, manageable and extensible, medium size PHP application. The approach
+designed, manageable, and extensible medium size PHP application. The approach
 and process of working throughout this book should also fit very well into an
 *Agile* process of working. However, it will only deal with the actual
 development and architecture of the project rather than the full planning,

@@ -14,13 +14,13 @@ When I talk about the *stakeholder*, I'm referring to the person (or persons)
 responsible for requesting the features you have to build into the application.
 If you're a freelancer and you're building a application for one of your
 clients, or if you work for a development company and you're working on a team
-building an application for one of the company's clients, then client is the
-*stakeholder*. If your working in house at a company, and your developing
-software for the employees, and the management team are telling your want needs
+building an application for one of the company's clients, then the client is the
+*stakeholder*. If your working in-house at a company, and you're developing
+software for the employees, and the management team are telling you what needs
 to be built: then the management team are the stakeholders.
 
-Basically, the stakeholders are the people who will pay your or your company if
-you build what then want. They choose what features are needed, and you have to
+Basically, the stakeholders are the people who will pay you or your company if
+you build what they want. They choose what features are needed, and you have to
 keep them happy!
 
 ### Domain
@@ -40,9 +40,9 @@ contains the problems which you need to solve in order to model it in software.
 
 The *domain model* is the solutions to the domain's *problems*, it is
 considered to be the *solutions space*. The *domain model* is the core of your
-application and it models just the *domain*. It does not the User Interface, the
-Database Layer, a Framework, API requests; it is a pure model of the data and
-logic in the *domain*.
+application and it models just the *domain*. It does not include the User
+Interface, the Database Layer, a Framework, API requests; it is a pure model of
+the data and logic in the *domain*.
 
 A bit later on I'll introduce [Domain Driven Design](#ddd) which is a process
 that holds the design of the *domain model* at utmost importance when creating
