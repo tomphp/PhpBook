@@ -1,6 +1,73 @@
 # Common Query System
 
-We're going to take a short break from adding features here and take analyse
-what we have created so far. We have 2 *queries* implemented and they have a
-lot in common with each other. In this chapter we'll combine them to create a
-common querying mechanism.
+In the last 2 chapters we started to build our application. In this chapter
+we're going to start analysing the 2 queries we have built so far, and try
+create a common way to use them. In a dynamically typed language, this is very
+straight forward, whereas, in a statically typed language you have to use
+certain techniques to make this possible. Since PHP is a dynamically typed
+language which we are mostly using in a statically typed way, this chapter will
+explore the range of possibilities available and weight up the pros and cons to
+try and find an appropriate solution. While the outcome will result in some
+updates to our application, the chapter will serve more as an investigation
+into the possible routes to solving this in PHP.
+
+## The Problem
+
+First up let's look at how we use out 2 queries:
+
+{title="List Recipes Query"}
+~~~~~~~~
+<?php
+
+$query = new ListRecipesQuery();
+
+$handler = new ListRecipesHandler($recipeRepository);
+
+$result = $handler->handle($query);
+
+// do stuff with $result
+~~~~~~~~
+
+{title="View Recipe Query"}
+~~~~~~~~
+<?php
+
+$query = new ViewRecipesQuery(12);
+
+$handler = new ViewRecipeHandler($recipeRepository);
+
+$result = $handler->handle($query);
+
+// do stuff with $result
+~~~~~~~~
+
+It's very clear here that the process is the same for each query. Therefore,
+there should some way to remove the ceremony of creating a query, creating the
+appropriate handler and then invoking the handler.
+
+## Creating the Handler
+
+Since we've chosen a sensible convention for the naming of the Query, Handler
+and Result objects, let's try using PHP's ability to create classes by name to
+remove the need to create the correct handler. To do this, let's create a query
+handler which will handle all our queries but letting it create the require
+handler.
+
+{title="QueryHandler.php"}
+~~~~~~~~~
+<?php
+
+namespace Application;
+
+class QueryHandler
+{
+    public function handle($query)
+    {
+        // Get handler from class name
+
+        // Invoke handler on query
+
+        // Return result
+    }
+}
+~~~~~~~~~
