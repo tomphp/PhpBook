@@ -1,19 +1,20 @@
 # Common Query System
 
 In the last 2 chapters we started to build our application. In this chapter
-we're going to start analysing the 2 queries we have built so far, and try
+we're going to start analysing the 2 queries we have built so far to try and
 create a common way to use them. In a dynamically typed language, this is very
 straight forward, whereas, in a statically typed language you have to use
 certain techniques to make this possible. Since PHP is a dynamically typed
 language which we are mostly using in a statically typed way, this chapter will
-explore the range of possibilities available and weight up the pros and cons to
+explore the range of possibilities available and weigh up the pros and cons to
 try and find an appropriate solution. While the outcome will result in some
 updates to our application, the chapter will serve more as an investigation
-into the possible routes to solving this in PHP.
+into the possible routes to solving this in PHP. For this reason, I suggest you
+read this chapter in its entirety before trying out any of the examples.
 
 ## The Problem
 
-First up let's look at how we use out 2 queries:
+First up, let's look at how we use our 2 queries:
 
 {title="List Recipes Query"}
 ~~~~~~~~
@@ -47,11 +48,11 @@ appropriate handler and then invoking the handler.
 
 ## Creating the Handler
 
-Since we've chosen a sensible convention for the naming of the Query, Handler
-and Result objects let's try using PHP's ability to create classes by name to
-remove the need to create the correct handler. To do this, let's create a query
-handler which will handle all our queries by letting it create the require
-handler.
+Since we've chosen a sensible convention for the naming of the *Query*,
+*Handler* and *Result* objects. Let's try using PHP's ability to create classes
+by name, to remove the need to create the correct handler. To do this, let's
+create a *query handler* class, which will handle all our queries by letting it
+create the require handler.
 
 {title="src/Application/QueryHandler.php"}
 ~~~~~~~~~
@@ -123,15 +124,16 @@ class QueryHandler
 W> ### Exception Classes
 W>
 W> For brevity, I'm not including the source of the exception classes here.
-W> There's nothing really interesting in them but is you want to see them you
+W> There's nothing really interesting in them, but, if you want to see them you
 W> can look in the included source code for this chapter.
 
 T> ### QueryHandlerSpec
 T>
-T> The spec file for the QueryHandler class is somewhat interesting. It doesn't
-T> really contain idiomatic PHPSpec tests and the techniques used there should
-T> not be overused. However, sometimes the approaches in there are useful, so
-T> it's worth studying that file in the include source code for this chapter.
+T> The spec file for the QueryHandler class is somewhat interesting. It contains
+T> some *not so idiomatic PHPSpec tests*. The techniques applied in this spec
+T> there should not be overused, however, sometimes these approaches are
+T> useful. Therefore, it's worth studying that file in the include source code
+T> for this chapter.
 
 After creating this QueryHandler class, we can also make the following
 modifications to Behat's FeatureContext class:
@@ -195,14 +197,33 @@ class FeatureContext implements SnippetAcceptingContext
 }
 ~~~~~~~~
 
-At this point, the Behat acceptance tests should still pass. And from looking
+At this point, the Behat acceptance tests should still pass. And, from looking
 at the FeatureContext and new QueryHandler, you can see we've started to pull
 together the common aspects of the our 2 queries.
 
 Now, taking another look at the QueryHandler, you can see that quite a lot of
 the code is actually error checking. It's checks that a Query *appears* to be
 a Query, and a Handler implements a *handle* method. It should be pretty
-obvious that interface would be a better fit here, so lets update it and give
-that a go.
+obvious that type hinting should be a better fit here. Let's have a go at
+doing this.
 
-## Creating Query and Handler Interfaces
+## First Attempt at Type Checking
+
+Since we've recognise that handlers are used in a common way, let's start off
+by defining a Handler interface:
+
+{title="src/Application/Handler.php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Application;
+
+interface Handler
+{
+    public function handle($query);
+}
+~~~~~~~~
+
+This simply defines the `handle()` method for a handler. Since each handler
+requires a different query type we can't define that type here and will have to
+do some type checking ourselves in the handlers.
