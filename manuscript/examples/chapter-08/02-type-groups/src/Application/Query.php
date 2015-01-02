@@ -2,6 +2,6 @@
 
 namespace CocktailRater\Application;
 
-interface Result
+abstract class Query
 {
 }

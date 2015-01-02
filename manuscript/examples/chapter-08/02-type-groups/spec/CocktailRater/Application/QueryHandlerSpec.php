@@ -6,7 +6,6 @@ use CocktailRater\Application\Exception\NoMatchingHandlerException;
 use CocktailRater\Application\Exception\NotAHandlerException;
 use CocktailRater\Application\Handler;
 use CocktailRater\Application\Query;
-use CocktailRater\Application\Result;
 use CocktailRater\Domain\Repository\RecipeRepository;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -47,15 +46,15 @@ class QueryHandlerSpec extends ObjectBehavior
     }
 }
 
-class BadlyNamed implements Query
+class BadlyNamed extends Query
 {
 }
 
-class MissingHandlerQuery implements Query
+class MissingHandlerQuery extends Query
 {
 }
 
-class BadHandlerQuery implements Query
+class BadHandlerQuery extends Query
 {
 }
 
@@ -63,7 +62,7 @@ class BadHandlerHandler
 {
 }
 
-class GoodQuery implements Query
+class GoodQuery extends Query
 {
 }
 
@@ -75,7 +74,7 @@ class GoodHandler implements Handler
     }
 }
 
-class GoodResult implements Result
+class GoodResult
 {
     private $query;
 

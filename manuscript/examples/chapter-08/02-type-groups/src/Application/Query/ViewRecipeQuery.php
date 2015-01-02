@@ -6,7 +6,7 @@ use Assert\Assertion;
 // leanpub-start-insert
 use CocktailRater\Application\Query;
 
-final class ViewRecipeQuery implements Query
+final class ViewRecipeQuery extends Query
 // leanpub-end-insert
 {
     /** @var string */

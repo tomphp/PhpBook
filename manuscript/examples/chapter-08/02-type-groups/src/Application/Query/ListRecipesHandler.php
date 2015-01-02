@@ -3,6 +3,7 @@
 namespace CocktailRater\Application\Query;
 
 // leanpub-start-insert
+use Assert\Assertion;
 use CocktailRater\Application\Handler;
 use CocktailRater\Application\Query;
 // leanpub-end-insert
@@ -21,9 +22,17 @@ final class ListRecipesHandler implements Handler
         $this->repository = $repository;
     }
 
-    /** @return ListRecipesResult */
-    public function handle(ListRecipesQuery $query)
+    // leanpub-start-insert
+    /**
+     * @param ListRecipesQuery
+     *
+     * @return ListRecipesResult
+     */
+    public function handle(Query $query)
     {
+        Assertion::isInstanceOf($query, ListRecipesQuery::class);
+        // leanpub-end-insert
+
         return new ListRecipesResultData(
             array_map(function (Recipe $recipe) {
                 return $recipe->getDetails();

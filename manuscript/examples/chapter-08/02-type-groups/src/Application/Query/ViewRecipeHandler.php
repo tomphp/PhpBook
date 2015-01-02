@@ -2,6 +2,9 @@
 
 namespace CocktailRater\Application\Query;
 
+// leanpub-start-insert
+use Assert\Assertion;
+// leanpub-end-insert
 use CocktailRater\Application\Exception\InvalidIdException;
 // leanpub-start-insert
 use CocktailRater\Application\Handler;
@@ -25,15 +28,19 @@ final class ViewRecipeHandler implements Handler
         $this->repository = $repository;
     }
 
+    // leanpub-start-insert
     /**
+     * @param ViewRecipeQuery $query
+     *
      * @return ViewRecipeResult
      *
      * @throws InvalidIdException
      */
-    // leanpub-start-insert
-    public function handle(ViewRecipeQuery $query)
-    // leanpub-end-insert
+    public function handle(Query $query)
     {
+        Assertion::isInstanceOf($query, ViewRecipeQuery::class);
+        // leanpub-end-insert
+
         return new ViewRecipeResultData(
             $this->findRecipe($query)->getDetails()
         );
@@ -44,7 +51,7 @@ final class ViewRecipeHandler implements Handler
      *
      * @throws InvalidIdException
      */
-    private function findRecipe($query)
+    private function findRecipe(ViewRecipeQuery $query)
     {
         try {
             return $this->repository->findById(new RecipeId($query->getId()));
