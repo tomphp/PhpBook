@@ -5,7 +5,6 @@ namespace spec\CocktailRater\Application\Query;
 use Assert\Assertion;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use CocktailRater\Application\Query;
 use CocktailRater\Application\Query\ListRecipesQuery;
 use CocktailRater\Domain\Repository\RecipeRepository;
 use InvalidArgumentException;
@@ -22,7 +21,7 @@ class ListRecipesHandlerSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('CocktailRater\Application\Handler');
     }
 
-    function it_only_accepts_ListRecipesQuery(Query $badQuery)
+    function it_only_accepts_ListRecipesQuery(\stdClass $badQuery)
     {
         // Create a version of the exception we want to check for
         try {

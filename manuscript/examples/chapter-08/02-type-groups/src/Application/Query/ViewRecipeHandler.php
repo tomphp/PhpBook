@@ -8,7 +8,6 @@ use Assert\Assertion;
 use CocktailRater\Application\Exception\InvalidIdException;
 // leanpub-start-insert
 use CocktailRater\Application\Handler;
-use CocktailRater\Application\Query;
 // leanpub-end-insert
 use CocktailRater\Domain\RecipeId;
 use CocktailRater\Domain\MeasuredIngredient;
@@ -36,7 +35,7 @@ final class ViewRecipeHandler implements Handler
      *
      * @throws InvalidIdException
      */
-    public function handle(Query $query)
+    public function handle($query)
     {
         Assertion::isInstanceOf($query, ViewRecipeQuery::class);
         // leanpub-end-insert

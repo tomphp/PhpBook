@@ -1,6 +1,1 @@
 formatter.name: pretty
-
-suites:
-    default:
-        namespace: CocktailRater
-        psr4_prefix: CocktailRater

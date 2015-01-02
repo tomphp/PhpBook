@@ -5,7 +5,6 @@ namespace spec\CocktailRater\Application\Query;
 use Assert\Assertion;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use CocktailRater\Application\Query;
 use CocktailRater\Application\Query\ViewRecipeQuery;
 use CocktailRater\Domain\Repository\RecipeRepository;
 use CocktailRater\Domain\RecipeId;
@@ -25,7 +24,7 @@ class ViewRecipeHandlerSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('CocktailRater\Application\Handler');
     }
 
-    function it_only_accepts_ViewRecipeQuery(Query $badQuery)
+    function it_only_accepts_ViewRecipeQuery(\stdClass $badQuery)
     {
         // Create a version of the exception we want to check for
         try {

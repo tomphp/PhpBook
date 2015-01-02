@@ -3,11 +3,8 @@
 namespace CocktailRater\Application\Query;
 
 use Assert\Assertion;
-// leanpub-start-insert
-use CocktailRater\Application\Query;
 
-final class ViewRecipeQuery extends Query
-// leanpub-end-insert
+final class ViewRecipeQuery
 {
     /** @var string */
     private $id;

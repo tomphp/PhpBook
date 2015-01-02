@@ -5,7 +5,6 @@ namespace spec\CocktailRater\Application;
 use CocktailRater\Application\Exception\NoMatchingHandlerException;
 use CocktailRater\Application\Exception\NotAHandlerException;
 use CocktailRater\Application\Handler;
-use CocktailRater\Application\Query;
 use CocktailRater\Domain\Repository\RecipeRepository;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -46,15 +45,15 @@ class QueryHandlerSpec extends ObjectBehavior
     }
 }
 
-class BadlyNamed extends Query
+class BadlyNamed
 {
 }
 
-class MissingHandlerQuery extends Query
+class MissingHandlerQuery
 {
 }
 
-class BadHandlerQuery extends Query
+class BadHandlerQuery
 {
 }
 
@@ -62,13 +61,13 @@ class BadHandlerHandler
 {
 }
 
-class GoodQuery extends Query
+class GoodQuery
 {
 }
 
 class GoodHandler implements Handler
 {
-    public function handle(Query $query)
+    public function handle($query)
     {
         return new GoodResult($query);
     }

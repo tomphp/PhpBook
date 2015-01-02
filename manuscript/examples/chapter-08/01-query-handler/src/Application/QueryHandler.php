@@ -21,6 +21,8 @@ class QueryHandler
      * @throws InvalidArgumentException   If $query is not a query object.
      * @throws NoMatchingHandlerException
      * @throws NotAHandlerException
+     *
+     * @return mixed
      */
     public function handle($query)
     {
@@ -40,6 +42,7 @@ class QueryHandler
         }
     }
 
+    /** @return string */
     private function getHandlerName($query)
     {
         return substr(get_class($query), 0, -5) . 'Handler';

@@ -6,7 +6,6 @@ use CocktailRater\Application\Exception\NoMatchingHandlerException;
 use CocktailRater\Application\Exception\NotAHandlerException;
 // leanpub-start-insert
 use CocktailRater\Application\Handler;
-use CocktailRater\Application\Query;
 use CocktailRater\Application\Result;
 // leanpub-end-insert
 use CocktailRater\Domain\Repository\RecipeRepository;
@@ -28,14 +27,12 @@ class QueryHandler
      * @throws NoMatchingHandlerException
      * @throws NotAHandlerException
      *
-     * @return Result
+     * @return mixed
      */
     // leanpub-end-insert
-    public function handle(Query $query)
+    public function handle($query)
     {
-        // leanpub-start-insert
-        $this->assertQueryIsNamedCorrectly($query);
-        // leanpub-end-insert
+        $this->assertIsAQuery($query);
         $this->assertQueryHandlerExists($query);
 
         $handlerName = $this->getHandlerName($query);
@@ -44,25 +41,20 @@ class QueryHandler
         return $handler->handle($query);
     }
 
-    // leanpub-start-insert
-    private function assertQueryIsNamedCorrectly(Query $query)
-    // leanpub-end-insert
+    private function assertIsAQuery($query)
     {
         if ('Query' !== substr(get_class($query), -5, 5)) {
             throw new InvalidArgumentException();
         }
     }
 
-    // leanpub-start-insert
-    private function getHandlerName(Query $query)
-    // leanpub-end-insert
+    /** @return string */
+    private function getHandlerName($query)
     {
         return substr(get_class($query), 0, -5) . 'Handler';
     }
 
-    // leanpub-start-insert
-    private function assertQueryHandlerExists(Query $query)
-    // leanpub-end-insert
+    private function assertQueryHandlerExists($query)
     {
         $handlerName = $this->getHandlerName($query);
 
