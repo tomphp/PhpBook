@@ -77,19 +77,13 @@ Now run Composer to install the test tools:
 $ composer install
 ~~~~~~~~
 
-Next up, we need to tell PHPSpec about the PSR-4 prefix. We can also configure
-it to format its output using the *pretty* formatter by default. That way we
-don't need to put it on the command line every time we run it. To do this,
-create a file called `phpspec.yml` with the following contents:
+We can also configure it to format its output using the *pretty* formatter by
+default. That way we don't need to put it on the command line every time we run
+it. To do this, create a file called `phpspec.yml` with the following contents:
 
 {title="phpspec.yml", format="yaml"}
 ~~~~~~~~
 formatter.name: pretty
-
-suites:
-    default:
-        namespace: CocktailRater
-        psr4_prefix: CocktailRater
 ~~~~~~~~
 
 Finally, initialise Behat so we're ready to start development:
