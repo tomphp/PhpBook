@@ -21,7 +21,6 @@ class QueryHandler
         $this->recipeRepository = $recipeRepository;
     }
 
-    // leanpub-start-insert
     /**
      * @throws InvalidArgumentException   If $query is not a query object.
      * @throws NoMatchingHandlerException
@@ -29,7 +28,6 @@ class QueryHandler
      *
      * @return mixed
      */
-    // leanpub-end-insert
     public function handle($query)
     {
         $this->assertIsAQuery($query);

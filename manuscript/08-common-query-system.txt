@@ -54,72 +54,7 @@ by name, to remove the need to create the correct handler. To do this, let's
 create a *query handler* class, which will handle all our queries by letting it
 create the require handler.
 
-{title="src/Application/QueryHandler.php"}
-~~~~~~~~~
-<?php
-
-namespace CocktailRater\Application;
-
-use CocktailRater\Application\Exception\NoMatchingHandlerException;
-use CocktailRater\Application\Exception\NotAHandlerException;
-use CocktailRater\Domain\Repository\RecipeRepository;
-use InvalidArgumentException;
-
-class QueryHandler
-{
-    /** @var RecipeRepository */
-    private $recipeRepository;
-
-    public function __construct(RecipeRepository $recipeRepository)
-    {
-        $this->recipeRepository = $recipeRepository;
-    }
-
-    /**
-     * @throws InvalidArgumentException   If $query is not a query object.
-     * @throws NoMatchingHandlerException
-     * @throws NotAHandlerException
-     */
-    public function handle($query)
-    {
-        $this->assertIsAQuery($query);
-        $this->assertQueryHandlerExists($query);
-
-        $handlerName = $this->getHandlerName($query);
-        $handler = new $handlerName($this->recipeRepository);
-
-        return $handler->handle($query);
-    }
-
-    private function assertIsAQuery($query)
-    {
-        if ('Query' !== substr(get_class($query), -5, 5)) {
-            throw new InvalidArgumentException();
-        }
-    }
-
-    private function getHandlerName($query)
-    {
-        return substr(get_class($query), 0, -5) . 'Handler';
-    }
-
-    private function assertQueryHandlerExists($query)
-    {
-        $handlerName = $this->getHandlerName($query);
-
-        if (!class_exists($handlerName)) {
-            throw NoMatchingHandlerException::notFound(
-                get_class($query),
-                $handlerName
-            );
-        }
-
-        if (!method_exists($handlerName, 'handle')) {
-            throw NotAHandlerException::missingHandleMethod($handlerName);
-        }
-    }
-}
-~~~~~~~~~
+<<[src/Application/QueryHandler.php](examples/chapter-08/01-query-handler/src/Application/QueryHandler.php)
 
 W> ### Exception Classes
 W>
@@ -207,23 +142,148 @@ a Query, and a Handler implements a *handle* method. It should be pretty
 obvious that type hinting should be a better fit here. Let's have a go at
 doing this.
 
-## First Attempt at Type Checking
+## The Query Handler Interface
 
 Since we've recognise that handlers are used in a common way, let's start off
 by defining a Handler interface:
 
-{title="src/Application/Handler.php"}
+<<[src/Application/QueryHandler.php](examples/chapter-08/02-handler-interface/src/Application/Handler.php)
+
+This simply defines the `handle()` method for a handler. Since each handler
+requires a different query type we can't define that type here and will have to
+do some type checking ourselves in the handlers.
+
+Now we can also make this little update to the QueryHandler to check the
+type rather than the handler's class name:
+
+{title="src/Application/QueryHandler.php"}
 ~~~~~~~~
 <?php
 
 namespace CocktailRater\Application;
 
-interface Handler
+// ...
+
+class QueryHandler
 {
-    public function handle($query);
+    // ...
+
+    private function assertQueryHandlerExists($query)
+    {
+        $handlerName = $this->getHandlerName($query);
+
+        if (!class_exists($handlerName)) {
+            throw NoMatchingHandlerException::notFound(
+                get_class($query),
+                $handlerName
+            );
+        }
+
+        // leanpub-start-insert
+        if (!is_subclass_of($handlerName, Handler::class)) {
+            throw NotAHandlerException::missingHandleMethod($handlerName);
+        }
+        // leanpub-end-insert
+    }
 }
 ~~~~~~~~
 
-This simply defines the `handle()` method for a handler. Since each handler
-requires a different query type we can't define that type here and will have to
-do some type checking ourselves in the handlers.
+So far so good, but now let's look at how it effects the handler classes:
+
+{title="src/Application/Query/ListRecipesHandler.php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Application\Query;
+
+// leanpub-start-insert
+use Assert\Assertion;
+use CocktailRater\Application\Handler;
+// leanpub-end-insert
+// ...
+
+// leanpub-start-insert
+final class ListRecipesHandler implements Handler
+// leanpub-end-insert
+{
+    // ...
+
+    // leanpub-start-insert
+    /**
+     * @param ListRecipesQuery
+     *
+     * @return ListRecipesResult
+     */
+    public function handle($query)
+    {
+        Assertion::isInstanceOf($query, ListRecipesQuery::class);
+        // leanpub-end-insert
+
+        return new ListRecipesResultData(
+            array_map(function (Recipe $recipe) {
+                return $recipe->getDetails();
+            },
+            $this->getAllRecipesSortedByRating())
+        );
+    }
+
+    // ...
+}
+~~~~~~~~
+
+{title="src/Application/Query/ViewRecipeHandler.php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Application\Query;
+
+// leanpub-start-insert
+use Assert\Assertion;
+// leanpub-end-insert
+use CocktailRater\Application\Exception\InvalidIdException;
+// leanpub-start-insert
+use CocktailRater\Application\Handler;
+// leanpub-end-insert
+// ...
+
+// leanpub-start-insert
+final class ViewRecipeHandler implements Handler
+// leanpub-end-insert
+{
+    // ...
+
+    // leanpub-start-insert
+    /**
+     * @param ViewRecipeQuery $query
+     *
+     * @return ViewRecipeResult
+     *
+     * @throws InvalidIdException
+     */
+    public function handle($query)
+    {
+        Assertion::isInstanceOf($query, ViewRecipeQuery::class);
+        // leanpub-end-insert
+
+        return new ViewRecipeResultData(
+            $this->findRecipe($query)->getDetails()
+        );
+    }
+
+    // ...
+}
+~~~~~~~~
+
+In both of the handlers we now added manual type checking for the `$query`
+parameter. This works and theoretically there's nothing really wrong with it.
+In pure dynamically typed languages this would be the norm. In strong
+statically typed languages you'd have to go a bit further to get this approach
+to work (involving a base type and type casting). There is, however, a more
+elegant solution which gets all the type information into the class definition
+by passing in the query as a constructor parameter instead. Let's give it a
+try.
+
+### Using Constructor Parameters
+
+This time let's work backwards; I'll start by showing the handlers and then
+adjust the other parts as required.
