@@ -352,7 +352,9 @@ make it work. This could be done by making all result objects descend from a
 `Result` base type, then leave it down to the code invoking the handler to
 downcast the result to the correct type. Here's an example in Java:
 
-TODO: Java example
+<<[Using a Base Result Type in Java](examples/chapter-08/04-java-casting-example/src/Main.java)
+
+TODO: Cons
 
 ### Receiving the Result via a Dependency
 
@@ -368,10 +370,11 @@ TODO: Write
 
 ### Our Choice
 
-In a static language we'd have to employ one of these techniques. However, I
-feel that simply using PHP's dynamic typing and leaving the handler to return
-the result is fine in this situation. This can kind of be equated to *Using a
-Base Result Type*, except the explicit downcast is not required in PHP.
+In a statically typed language we'd have to employ one of these techniques.
+However, I feel that simply using PHP's dynamic typing and leaving the handler
+to return the result is fine in this situation. This can kind of be equated to
+*Using a Base Result Type*, except the explicit downcast is not required in
+PHP.
 
 ## Summary
 
