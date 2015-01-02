@@ -5,7 +5,6 @@ namespace CocktailRater\Application;
 use CocktailRater\Application\Exception\NoMatchingHandlerException;
 use CocktailRater\Application\Exception\NotAHandlerException;
 use CocktailRater\Application\Handler;
-use CocktailRater\Application\Result;
 use CocktailRater\Domain\Repository\RecipeRepository;
 use InvalidArgumentException;
 

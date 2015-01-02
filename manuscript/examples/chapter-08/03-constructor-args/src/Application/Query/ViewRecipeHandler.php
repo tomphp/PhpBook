@@ -2,7 +2,6 @@
 
 namespace CocktailRater\Application\Query;
 
-use Assert\Assertion;
 use CocktailRater\Application\Exception\InvalidIdException;
 use CocktailRater\Application\Handler;
 use CocktailRater\Domain\RecipeId;

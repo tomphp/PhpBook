@@ -6,7 +6,6 @@ use CocktailRater\Application\Exception\NoMatchingHandlerException;
 use CocktailRater\Application\Exception\NotAHandlerException;
 // leanpub-start-insert
 use CocktailRater\Application\Handler;
-use CocktailRater\Application\Result;
 // leanpub-end-insert
 use CocktailRater\Domain\Repository\RecipeRepository;
 use InvalidArgumentException;

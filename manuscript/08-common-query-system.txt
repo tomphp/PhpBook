@@ -283,7 +283,110 @@ elegant solution which gets all the type information into the class definition
 by passing in the query as a constructor argument instead. Let's give it a
 try.
 
-### Using Constructor Arguments
+## Using Constructor Arguments
 
 This time let's work backwards; I'll start by showing the handlers and then
 adjust the other parts as required.
+
+<<[src/Application/Query/ListRecipesHandler.php](examples/chapter-08/03-constructor-args/src/Application/Query/ListRecipesHandler.php)
+
+<<[src/Application/Query/ViewRecipeHandler.php](examples/chapter-08/03-constructor-args/src/Application/Query/ViewRecipeHandler.php)
+
+As you can see, we've removed the need for the manual type checking. This has
+also made public interface of the class more specific (and therefore
+informative). This has also simplified the `Handler` interface:
+
+<<[src/Application/Hander.php](examples/chapter-08/03-constructor-args/src/Application/Hander.php)
+
+For this to actually work, we also need to update the `QueryHandler` to pass
+the query into the handler on construction:
+
+{title="src/Application/QueryHandler.php"}
+~~~~~~~~
+<?php
+
+namespace CocktailRater\Application;
+
+// ...
+
+class QueryHandler
+{
+    // ...
+
+    /**
+     * @throws InvalidArgumentException   If $query is not a query object.
+     * @throws NoMatchingHandlerException
+     * @throws NotAHandlerException
+     *
+     * @return mixed
+     */
+    public function handle($query)
+    {
+        $this->assertIsAQuery($query);
+        $this->assertQueryHandlerExists($query);
+
+        $handlerName = $this->getHandlerName($query);
+
+        // leanpub-start-insert
+        $handler = new $handlerName($query, $this->recipeRepository);
+
+        return $handler->handle();
+        // leanpub-end-insert
+    }
+
+    // ...
+}
+~~~~~~~~
+
+## Thinking About the Result Type
+
+Since PHP doesn't currently allow you to specify the return type for methods
+and functions, it's often easy to forget about them. There's nothing in our
+current handlers which checks or documents the type of the result objects,
+instead we've just got PHPDoc comments which aren't checked.
+
+### Using a Base Result Type
+
+Again, in a statically typed language what we have would need to be modified in order to
+make it work. This could be done by making all result objects descend from a
+`Result` base type, then leave it down to the code invoking the handler to
+downcast the result to the correct type. Here's an example in Java:
+
+TODO: Java example
+
+### Receiving the Result via a Dependency
+
+Another approach would be to send the result values back via a dependency
+waiting to receive them rather. This *receiver* could then be passed to the
+constructor in the same way that we did it with the query.
+
+TODO: Example
+
+### Via a Callback
+
+TODO: Write
+
+### Our Choice
+
+In a static language we'd have to employ one of these techniques. However, I
+feel that simply using PHP's dynamic typing and leaving the handler to return
+the result is fine in this situation. This can kind of be equated to *Using a
+Base Result Type*, except the explicit downcast is not required in PHP.
+
+## Summary
+
+Static typing provides lots of useful information, but requires more work.
+Dynamic typing allows you to work more productively, but with less safety.
+PHP's type hints, in theory, give the best of both worlds. But they also
+provide a dilemma: don't you get super explicit and over engineer everything,
+or do you forget typing and get things done quickly? Therefore, when developing
+in PHP, an important skill is learning hope much of a static typing mindset to
+apply. The balance will also vary depending on the project. This skill is
+earned through practice and experience.
+
+## What Next?
+
+In the next chapter things start to get exciting. We'll start thinking about
+building the user interface so that we can demo our features to the
+stakeholder. We'll also be getting our acceptance tests to test this user
+interface.
