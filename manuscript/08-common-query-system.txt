@@ -280,10 +280,10 @@ In pure dynamically typed languages this would be the norm. In strong
 statically typed languages you'd have to go a bit further to get this approach
 to work (involving a base type and type casting). There is, however, a more
 elegant solution which gets all the type information into the class definition
-by passing in the query as a constructor parameter instead. Let's give it a
+by passing in the query as a constructor argument instead. Let's give it a
 try.
 
-### Using Constructor Parameters
+### Using Constructor Arguments
 
 This time let's work backwards; I'll start by showing the handlers and then
 adjust the other parts as required.
