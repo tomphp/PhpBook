@@ -318,7 +318,7 @@ As you can see, we've removed the need for the manual type checking. This has
 also made public interface of the class more specific (and therefore
 informative). This has also simplified the `Handler` interface:
 
-<<[src/Application/Hander.php](examples/chapter-08/03-constructor-args/src/Application/Hander.php)
+<<[src/Application/Handler.php](examples/chapter-08/03-constructor-args/src/Application/Handler.php)
 
 For this to actually work, we also need to update the `QueryHandler` to pass
 the query into the handler on construction:
@@ -421,7 +421,7 @@ class ListRecipesReceiverImpl implements ListRecipesReceiver
     {
         $this->recipes[] = [
             'name'   => $name,
-            'rating' => $rating'
+            'rating' => $rating
         ];
     }
 
@@ -506,9 +506,8 @@ class ListRecipesHandler implements Handler
     /** @var RecipeRepository */
     private $repository;
 
-    public function __construct(
-        RecipeRepository $repository
-    ) {
+    public function __construct(RecipeRepository $repository)
+    {
         $this->repository = $repository;
     }
 
