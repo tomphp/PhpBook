@@ -300,11 +300,11 @@ Let's take a look at an example:
 First, let's look at the traditional approach of using PHP. Create 2 files
 inside an empty folder, the first one we'll call `page1.php`:
 
-<<[page1.php](examples/chapter-02/front-controller/01-traditional-approach/page1.php)
+<<[page1.php](examples/chapter-03/front-controller/01-traditional-approach/page1.php)
 
 And the second one we'll call `page2.php`
 
-<<[page2.php](examples/chapter-02/front-controller/01-traditional-approach/page2.php)
+<<[page2.php](examples/chapter-03/front-controller/01-traditional-approach/page2.php)
 
 Next open a terminal and `cd` into the directory containing these files, Now,
 use the following command to start up PHP's built in webserver:
@@ -329,7 +329,7 @@ controller* is better so let's take a look at that.
 Create a new folder and this time create a single file called `index.php`
 containing:
 
-<<[index.php](examples/chapter-02/front-controller/02-single-entry-point/index.php)
+<<[index.php](examples/chapter-03/front-controller/02-single-entry-point/index.php)
 
 Then, in the terminal `cd` to this new directory. This time start the PHP
 built in webserver with the name of the file we want to use as the application
@@ -352,7 +352,7 @@ to get the actual URI requested.
 
 Next, let's modify the `index.php` file to look like this:
 
-<<[index.php](examples/chapter-02/front-controller/03-simple-front-controller/index.php)
+<<[index.php](examples/chapter-03/front-controller/03-simple-front-controller/index.php)
 
 Now if we go to our browser and go to `http://localhost:8080/page1` or
 `http://localhost:8080/page2` then they work as expected. Also, going to
@@ -656,7 +656,7 @@ just carry on.
 Next up, create a file in the project folder called `composer.json` and add the
 following content:
 
-<<[composer.json](examples/chapter-02/composer/01-autoloader/composer.json)
+<<[composer.json](examples/chapter-03/composer/01-autoloader/composer.json)
 
 What we have told Composer to do here is set up its autoloader, to locate any
 classes in the `ComposerExample` namespace, by using the PSR-0 file structure
@@ -686,11 +686,11 @@ $ mkdir -p src/ComposerExample
 Then create a file called `src/ComposerExample/HelloApplication.php` with the
 following content:
 
-<<[src/ComposerExample/HelloApplication.php](examples/chapter-02/composer/01-autoloader/src/ComposerExample/HelloApplication.php)
+<<[src/ComposerExample/HelloApplication.php](examples/chapter-03/composer/01-autoloader/src/ComposerExample/HelloApplication.php)
 
 Finally, create a file called `run.php` containing:
 
-<<[run.php](examples/chapter-02/composer/01-autoloader/run.php)
+<<[run.php](examples/chapter-03/composer/01-autoloader/run.php)
 
 Now to see it work run:
 
@@ -739,11 +739,11 @@ $ composer update
 This should download the ConsoleKit package, which will now be ready to use.
 Let's update our `ComposerExample\HelloApplication` class to look like this:
 
-<<[src/ComposerExample/HelloApplication.php](examples/chapter-02/composer/02-dependency/src/ComposerExample/HelloApplication.php)
+<<[src/ComposerExample/HelloApplication.php](examples/chapter-03/composer/02-dependency/src/ComposerExample/HelloApplication.php)
 
 And let's add a new class called `ComposerExample\HelloCommand` like so:
 
-<<[src/ComposerExample/HelloCommand.php](examples/chapter-02/composer/02-dependency/src/ComposerExample/HelloCommand.php)
+<<[src/ComposerExample/HelloCommand.php](examples/chapter-03/composer/02-dependency/src/ComposerExample/HelloCommand.php)
 
 Now to try to run it:
 
@@ -767,7 +767,7 @@ checks that your code follows a given coding style, lets add it to our project.
 To use it update the `composer.json` file to include the CodeSniffer
 development dependency:
 
-<<[composer.json](examples/chapter-02/composer/02-dependency/composer.json)
+<<[composer.json](examples/chapter-03/composer/02-dependency/composer.json)
 
 Once again, tell Composer to update its dependencies by running:
 

@@ -9,7 +9,7 @@ Let's take a look at the story card for the next feature:
 
 As before, I'll also provide the acceptance tests:
 
-<<[features/visitors-can-view-a-recipe.feature](examples/chapter-06/feature2/features/visitors-can-view-a-recipe.feature)
+<<[features/visitors-can-view-a-recipe.feature](examples/chapter-07/feature2/features/visitors-can-view-a-recipe.feature)
 
 In the last chapter I put a lot of focus on the TDD process and the way the
 code evolved. Doing this for the whole book would get pretty long winded. So,
@@ -35,7 +35,7 @@ $ behat --append-snippets
 Now we need to update feature context. Here's what I came up with this time up
 with:
 
-<<[features/bootstrap/FeatureContext.php](examples/chapter-06/feature2/features/bootstrap/FeatureContext.php)
+<<[features/bootstrap/FeatureContext.php](examples/chapter-07/feature2/features/bootstrap/FeatureContext.php)
 
 This has got a bit complex because we're building the `Recipe` objects over a
 sequence of steps. Since the `Recipe` is immutable and takes its values via the
@@ -51,39 +51,39 @@ I'm just going to show you all the code now, there is a fair bit of it but it
 should all be pretty self explanatory. I'll point out a couple of small bits
 and then we'll look at ways we can improve it.
 
-<<[src/Application/Query/ViewRecipeQuery.php](examples/chapter-06/feature2/src/Application/Query/ViewRecipeQuery.php)
+<<[src/Application/Query/ViewRecipeQuery.php](examples/chapter-07/feature2/src/Application/Query/ViewRecipeQuery.php)
 
 This time the *query* contains the *ID* of the recipe to be viewed.
 
-<<[src/Application/Query/ViewRecipeHandler.php](examples/chapter-06/feature2/src/Application/Query/ViewRecipeHandler.php)
+<<[src/Application/Query/ViewRecipeHandler.php](examples/chapter-07/feature2/src/Application/Query/ViewRecipeHandler.php)
 
 The *handler* makes a new request to the repository called `findById`.
 
-<<[src/Application/Query/ViewRecipeResult.php](examples/chapter-06/feature2/src/Application/Query/ViewRecipeResult.php)
+<<[src/Application/Query/ViewRecipeResult.php](examples/chapter-07/feature2/src/Application/Query/ViewRecipeResult.php)
 
-<<[src/Application/Query/ViewRecipeResultData.php](examples/chapter-06/feature2/src/Application/Query/ViewRecipeResultData.php)
+<<[src/Application/Query/ViewRecipeResultData.php](examples/chapter-07/feature2/src/Application/Query/ViewRecipeResultData.php)
 
 There's nothing really special in the *result*, it's just the collection of
 data.
 
-<<[src/Domain/Repository/RecipeRepository.php](examples/chapter-06/feature2/src/Domain/Repository/RecipeRepository.php)
+<<[src/Domain/Repository/RecipeRepository.php](examples/chapter-07/feature2/src/Domain/Repository/RecipeRepository.php)
 
-<<[src/Testing/Repository/TestRecipeRepository.php](examples/chapter-06/feature2/src/Testing/Repository/TestRecipeRepository.php)
+<<[src/Testing/Repository/TestRecipeRepository.php](examples/chapter-07/feature2/src/Testing/Repository/TestRecipeRepository.php)
 
 The repository now has the concept of a recipe ID. In the test repository we
 just generate an incremental number for the ID. We also provide and extra
 method so the test suite can retrieve the last one generated.
 
-<<[src/Domain/RecipeId.php](examples/chapter-06/feature2/src/Domain/RecipeId.php)
+<<[src/Domain/RecipeId.php](examples/chapter-07/feature2/src/Domain/RecipeId.php)
 
-<<[src/Domain/Recipe.php](examples/chapter-06/feature2/src/Domain/Recipe.php)
+<<[src/Domain/Recipe.php](examples/chapter-07/feature2/src/Domain/Recipe.php)
 
 We've added a few new fields added to the `Recipe` class. This has lead to
 a few more *value objects* being created also:
 
-<<[src/Domain/MeasuredIngredient.php](examples/chapter-06/feature2/src/Domain/MeasuredIngredient.php)
+<<[src/Domain/MeasuredIngredient.php](examples/chapter-07/feature2/src/Domain/MeasuredIngredient.php)
 
-<<[src/Domain/MeasuredIngredientDetails.php](examples/chapter-06/feature2/src/Domain/MeasuredIngredientDetails.php)
+<<[src/Domain/MeasuredIngredientDetails.php](examples/chapter-07/feature2/src/Domain/MeasuredIngredientDetails.php)
 
 Because a `MeasuredIngredient` currently only has 3 values which need to be
 displayed, we can use getters rather than create a dedicated details class.
@@ -91,15 +91,15 @@ However, we also create an *interface* containing though as this could change
 at some point. By depending on the interface, it means there'll be fewer
 changes required if this happens.
 
-<<[src/Domain/Method.php](examples/chapter-06/feature2/src/Domain/Method.php)
+<<[src/Domain/Method.php](examples/chapter-07/feature2/src/Domain/Method.php)
 
-<<[src/Domain/Ingredient.php](examples/chapter-06/feature2/src/Domain/Ingredient.php)
+<<[src/Domain/Ingredient.php](examples/chapter-07/feature2/src/Domain/Ingredient.php)
 
-<<[src/Domain/IngredientName.php](examples/chapter-06/feature2/src/Domain/IngredientName.php)
+<<[src/Domain/IngredientName.php](examples/chapter-07/feature2/src/Domain/IngredientName.php)
 
-<<[src/Domain/Amount.php](examples/chapter-06/feature2/src/Domain/Amount.php)
+<<[src/Domain/Amount.php](examples/chapter-07/feature2/src/Domain/Amount.php)
 
-<<[src/Domain/Unit.php](examples/chapter-06/feature2/src/Domain/Unit.php)
+<<[src/Domain/Unit.php](examples/chapter-07/feature2/src/Domain/Unit.php)
 
 These are all pretty plain but it's worth taking a quick look a `Unit`. This is
 basically how to achieve an *enumeration* in PHP. It's a value object which
@@ -117,7 +117,7 @@ the [builder design pattern](http://en.wikipedia.org/wiki/Builder_pattern).
 
 First of all let's create a `RecipeBuilder`:
 
-<<[src/Domain/Builder/RecipeBuilder.php](examples/chapter-06/builder-pattern/src/Domain/Builder/RecipeBuilder.php)
+<<[src/Domain/Builder/RecipeBuilder.php](examples/chapter-07/builder-pattern/src/Domain/Builder/RecipeBuilder.php)
 
 Now we can use the builder in the `FeatureContext` by adding the following
 method:
@@ -227,7 +227,7 @@ you'll remember the rule *First Class Collections*. This tells us not to use
 arrays in our classes, but rather create collection classes to encapsulate
 them.  Let's do that here, it's not much effort and it may be useful later on:
 
-<<[src/Domain/MeasuredIngredients.php](examples/chapter-06/measured-ingredient-collection/src/Domain/MeasuredIngredients.php)
+<<[src/Domain/MeasuredIngredients.php](examples/chapter-07/measured-ingredient-collection/src/Domain/MeasuredIngredients.php)
 
 Since our `MeasuredIngredients` class implements `MeasuredIngredientDetails`,
 the `getDetails` method currently just returns the list of `MeasuredIngredient`
@@ -358,23 +358,23 @@ I> `use TheTrait { TheTrait::methodName as traitMethodName; }`
 
 First up, let's add the new traits:
 
-<<[src/Domain/SingleValue.php](examples/chapter-06/dry/src/Domain/SingleValue.php)
+<<[src/Domain/SingleValue.php](examples/chapter-07/dry/src/Domain/SingleValue.php)
 
-<<[src/Domain/StringValue.php](examples/chapter-06/dry/src/Domain/StringValue.php)
+<<[src/Domain/StringValue.php](examples/chapter-07/dry/src/Domain/StringValue.php)
 
 Now we can refactor our single value value objects:
 
-<<[src/Domain/CocktailName.php](examples/chapter-06/dry/src/Domain/CocktailName.php)
+<<[src/Domain/CocktailName.php](examples/chapter-07/dry/src/Domain/CocktailName.php)
 
-<<[src/Domain/IngredientName.php](examples/chapter-06/dry/src/Domain/IngredientName.php)
+<<[src/Domain/IngredientName.php](examples/chapter-07/dry/src/Domain/IngredientName.php)
 
-<<[src/Domain/Method.php](examples/chapter-06/dry/src/Domain/Method.php)
+<<[src/Domain/Method.php](examples/chapter-07/dry/src/Domain/Method.php)
 
-<<[src/Domain/Rating.php](examples/chapter-06/dry/src/Domain/Rating.php)
+<<[src/Domain/Rating.php](examples/chapter-07/dry/src/Domain/Rating.php)
 
-<<[src/Domain/RecipeId.php](examples/chapter-06/dry/src/Domain/RecipeId.php)
+<<[src/Domain/RecipeId.php](examples/chapter-07/dry/src/Domain/RecipeId.php)
 
-<<[src/Domain/Username.php](examples/chapter-06/dry/src/Domain/Username.php)
+<<[src/Domain/Username.php](examples/chapter-07/dry/src/Domain/Username.php)
 
 We've successfully removed lots of repetition here!
 
@@ -383,13 +383,13 @@ We've successfully removed lots of repetition here!
 We've also got some repetition in some exception classes. Again, we can also
 tidy them up with a similar use of *traits*:
 
-<<[src/Domain/Exception/ExceptionFactory.php](examples/chapter-06/dry/src/Domain/Exception/ExceptionFactory.php)
+<<[src/Domain/Exception/ExceptionFactory.php](examples/chapter-07/dry/src/Domain/Exception/ExceptionFactory.php)
 
-<<[src/Domain/Exception/OutOfBoundsException.php](examples/chapter-06/dry/src/Domain/Exception/OutOfBoundsException.php)
+<<[src/Domain/Exception/OutOfBoundsException.php](examples/chapter-07/dry/src/Domain/Exception/OutOfBoundsException.php)
 
-<<[src/Domain/Repository/Exception/NoSuchEntityException.php](examples/chapter-06/dry/src/Domain/Repository/Exception/NoSuchEntityException.php)
+<<[src/Domain/Repository/Exception/NoSuchEntityException.php](examples/chapter-07/dry/src/Domain/Repository/Exception/NoSuchEntityException.php)
 
-<<[src/Application/Exception/InvalidIdException.php](examples/chapter-06/dry/src/Application/Exception/InvalidIdException.php)
+<<[src/Application/Exception/InvalidIdException.php](examples/chapter-07/dry/src/Application/Exception/InvalidIdException.php)
 
 D> ## Exception Messages
 D>

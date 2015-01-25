@@ -553,7 +553,7 @@ You can try running Behat again, but it will fail since there is no
 `BookList` class. To create this quickly set up the autoloader by updating the 
 `composer.json` to look like this:
 
-<<[composer.json](examples/chapter-04/behat-example/composer.json)
+<<[composer.json](examples/chapter-05/behat-example/composer.json)
 
 Next, create the directory for the source code and update Composer:
 
@@ -756,7 +756,7 @@ methods which have been added to the class, so that they look like this:
 
 Finally, update `BehatExample\BookList` to contain a working implementation:
 
-<<[src/BehatExample/BookList.php](examples/chapter-04/behat-example/src/BehatExample/BookList.php)
+<<[src/BehatExample/BookList.php](examples/chapter-05/behat-example/src/BehatExample/BookList.php)
 
 Then run Behat to see the tests pass:
 
@@ -835,7 +835,7 @@ $ cd phpspec-example
 
 And configure Composer for the project:
 
-<<[composer.json](examples/chapter-04/phpspec-example/composer.json)
+<<[composer.json](examples/chapter-05/phpspec-example/composer.json)
 
 {lang="console"}
 ~~~~~~~~
@@ -1383,7 +1383,7 @@ doesn't require any additional refactoring. Maybe we could just add some
 Here is this final result. A complete solution to our original problem,
 achieved by TDD:
 
-<<[src/PhpspecExample/GreatestCommonDivisorFinder.php](examples/chapter-04/phpspec-example/src/PhpspecExample/GreatestCommonDivisorFinder.php)
+<<[src/PhpspecExample/GreatestCommonDivisorFinder.php](examples/chapter-05/phpspec-example/src/PhpspecExample/GreatestCommonDivisorFinder.php)
 
 ## Test Doubles {#test-doubles}
 
@@ -1665,7 +1665,7 @@ chosen when working with PHPUnit.
 
 Here's the examples with PHPUnit:
 
-<<[tests/MockExampleTest.php](examples/chapter-04/test-doubles/tests/MockExampleTest.php)
+<<[tests/MockExampleTest.php](examples/chapter-05/test-doubles/tests/MockExampleTest.php)
 
 #### PHPSpec & Prophecy
 
@@ -1679,7 +1679,7 @@ the test method, and PHPSpec will create and inject the mock automatically.
 
 Here's the same examples with PHPSpec:
 
-<<[spec/ExamplesSpec.php](examples/chapter-04/test-doubles/spec/ExamplesSpec.php)
+<<[spec/ExamplesSpec.php](examples/chapter-05/test-doubles/spec/ExamplesSpec.php)
 
 ## Katas
 
