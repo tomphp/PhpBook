@@ -1,16 +1,15 @@
 # Common Query System
 
 In the last 2 chapters we started to build our application. In this chapter
-we're going to start analysing the 2 queries we have built so far to try and
-create a common way to use them. In a dynamically typed language, this is very
-straight forward, whereas, in a statically typed language you have to use
-certain techniques to make this possible. Since PHP is a dynamically typed
-language which we are mostly using in a statically typed way, this chapter will
-explore the range of possibilities available and weigh up the pros and cons to
-try and find an appropriate solution. While the outcome will result in some
-updates to our application, the chapter will serve more as an investigation
-into the possible routes to solving this in PHP. For this reason, I suggest you
-read this chapter in its entirety before trying out any of the examples.
+we're going to start analysing the 2 queries we have built, and to try to
+create a common way to use them.
+
+In a dynamically typed language this is very straight forward, whereas, in a
+statically typed language you have to use certain techniques to make this
+possible. Since PHP is a dynamically typed language but we are mostly using in
+a statically typed mindset - this chapter will explore the range of
+possibilities available, and weigh up the pros and cons to try and find an
+appropriate solution. 
 
 ## The Problem
 
@@ -43,23 +42,23 @@ $result = $handler->handle($query);
 ~~~~~~~~
 
 It's very clear here that the process is the same for each query. Therefore,
-there should some way to remove the ceremony of creating a query, creating the
-appropriate handler and then invoking the handler.
+there should some way to remove the ceremony of *creating a query, creating the
+appropriate handler and then invoking the handler*.
 
 ## Creating the Handler
 
 Since we've chosen a sensible convention for the naming of the *Query*,
-*Handler* and *Result* objects. Let's try using PHP's ability to create classes
-by name, to remove the need to create the correct handler. To do this, let's
+*Handler* and *Result* classes. Let's try using PHP's ability to create classes
+by name to remove the need to create the correct handler. To do this, let's
 create a *query handler* class, which will handle all our queries by letting it
-create the require handler.
+create the required handler.
 
 <<[src/Application/QueryHandler.php](examples/chapter-08/01-query-handler/src/Application/QueryHandler.php)
 
 W> ### Exception Classes
 W>
 W> For brevity, I'm not including the source of the exception classes here.
-W> There's nothing really interesting in them, but, if you want to see them you
+W> There's nothing really interesting in them, but, if you want to see them, you
 W> can look in the included source code for this chapter.
 
 T> ### QueryHandlerSpec
@@ -132,26 +131,49 @@ class FeatureContext implements SnippetAcceptingContext
 }
 ~~~~~~~~
 
-At this point, the Behat acceptance tests should still pass. And, from looking
+At this point, the Behat acceptance tests should still pass. Also, from looking
 at the FeatureContext and new QueryHandler, you can see we've started to pull
 together the common aspects of the our 2 queries.
 
-Now, taking another look at the QueryHandler, you can see that quite a lot of
-the code is actually error checking. It's checks that a Query *appears* to be
-a Query, and a Handler implements a *handle* method. It should be pretty
-obvious that type hinting should be a better fit here. Let's have a go at
-doing this.
-
 ## The Query Handler Interface
 
-Since we've recognise that handlers are used in a common way, let's start off
-by defining a Handler interface:
+Now, taking another look at the QueryHandler, you can see that quite a lot of
+the code is actually error checking. One of the checks is that the Handler class
+has a method called *handle*:
+
+{title="Testing the handler's interface", lang="php"}
+~~~~~~~~
+    // ...
+
+    private function assertQueryHandlerExists($query)
+    {
+        $handlerName = $this->getHandlerName($query);
+
+        if (!class_exists($handlerName)) {
+            throw NoMatchingHandlerException::notFound(
+                get_class($query),
+                $handlerName
+            );
+        }
+
+        // leanpub-start-insert
+        if (!method_exists($handlerName, 'handle')) {
+            throw NotAHandlerException::missingHandleMethod($handlerName);
+        }
+        // leanpub-end-insert
+    }
+
+    // ...
+~~~~~~~~
+
+Since we are validating the public interface of the Handler, surely it makes
+sense to do this using an actual 'interface':
 
 <<[src/Application/QueryHandler.php](examples/chapter-08/02-handler-interface/src/Application/Handler.php)
 
 This simply defines the `handle()` method for a handler. Since each handler
-requires a different query type we can't define that type here and will have to
-do some type checking ourselves in the handlers.
+requires a different query type, we can't define that type here and will have
+to do some type checking ourselves in the handlers.
 
 Now we can also make this little update to the QueryHandler to check the
 type rather than the handler's class name:
@@ -274,14 +296,14 @@ final class ViewRecipeHandler implements Handler
 }
 ~~~~~~~~
 
-In both of the handlers we now added manual type checking for the `$query`
-parameter. This works and theoretically there's nothing really wrong with it.
-In pure dynamically typed languages this would be the norm. In strong
-statically typed languages you'd have to go a bit further to get this approach
-to work (involving a base type and type casting). There is, however, a more
-elegant solution which gets all the type information into the class definition
-by passing in the query as a constructor argument instead. Let's give it a
-try.
+In both of the handlers we've now added manual type checking for the `$query`
+argument. This works, and theoretically there's nothing really wrong with it;
+in pure dynamically typed languages this would be the norm, but in statically
+typed languages you'd have to go a bit further to get this approach to work
+(involving a base type and type casting). There is, however, a more elegant
+solution. A solution which gets all the type information into the class
+definition by passing in the query as a constructor argument instead. Let's
+give it a try.
 
 ## Using Constructor Arguments
 
@@ -341,40 +363,190 @@ class QueryHandler
 ## Thinking About the Result Type
 
 Since PHP doesn't currently allow you to specify the return type for methods
-and functions, it's often easy to forget about them. There's nothing in our
-current handlers which checks or documents the type of the result objects,
-instead we've just got PHPDoc comments which aren't checked.
+and functions (it should be coming in PHP 7!), it's often easy to forget about
+them. There's nothing in our code for our current handlers which checks or
+documents the type of the result objects - instead we've just used PHPDoc
+comments, but these aren't checked or enforced.
 
-### Using a Base Result Type
+### Using a Base Result Type {#using-a-base-result-type}
 
-Again, in a statically typed language what we have would need to be modified in order to
-make it work. This could be done by making all result objects descend from a
-`Result` base type, then leave it down to the code invoking the handler to
-downcast the result to the correct type. Here's an example in Java:
+Again, in a statically typed language, what we have would need to be modified
+in order to make it work. This could be done by making all result objects
+descend from a `Result` base type, then leave it down to the code invoking the
+handler to downcast the result to the correct type. Here's an example in Java:
 
 <<[Using a Base Result Type in Java](examples/chapter-08/04-java-casting-example/src/Main.java)
 
-TODO: Cons
+The main concern with this approach, is that the method signature states a
+specific return type but it actually returns a subtype of that type. This
+subtype also contains additional implementation which is accessed and therefore
+is a violation of the *Liskov Substitution Principle*. Does that mean it
+shouldn't be used? Not necessarily, however, I do believe alternatives should
+be considered before doing so.
 
 ### Receiving the Result via a Dependency
 
 Another approach would be to send the result values back via a dependency
-waiting to receive them rather. This *receiver* could then be passed to the
+waiting to accept them. This *receiver* dependency could be passed to the
 constructor in the same way that we did it with the query.
 
-TODO: Example
+Since we will not be using this approach, I'll just provide some example code
+rather than modifying our application.
+
+{title="Reciever example", type="php"}
+~~~~~~~~
+<?php
+
+interface Handler
+{
+    /** @return void */
+    public function handle();
+}
+
+interface ListRecipesReceiver
+{
+    /**
+     * @param string $name
+     * @param float  $rating
+     */
+    public function addRecipe($name, $rating);
+}
+
+class ListRecipesReceiverImpl implements ListRecipesReceiver
+{
+    /** @var array */
+    private $recipes = [];
+
+    public function addRecipe($name, $rating)
+    {
+        $this->recipes[] = [
+            'name'   => $name,
+            'rating' => $rating'
+        ];
+    }
+
+    /** @return array */
+    public function getRecipes()
+    {
+        return $this->recipes;
+    }
+}
+
+class ListRecipesHandler implements Handler
+{
+    /** @var ListRecipesReceiver */
+    private $receiver;
+
+    /** @var RecipeRepository */
+    private $repository;
+
+    public function __construct(
+        ListRecipesReceiver $receiver, 
+        RecipeRepository $repository
+    ) {
+        $this->receiver   = $receiver;
+        $this->repository = $repository;
+    }
+
+    public function handle()
+    {
+        foreach ($this->repository->getAllRecipesSortedByRating() as $recipe) {
+            $details = $recipe->getDetails();
+
+            $this->receiver->addRecipe(
+                $details->getName(),
+                $details->getRating()
+            );
+        }
+    }
+}
+
+// Example usage:
+
+$receiver = new ListRecipesReceiverImpl();
+$handler = new ListRecipesHandler($receiver, $repository);
+
+$handler->handle();
+
+foreach ($receiver->getRecipes() as $recipe) {
+    echo "Cocktail: {$recipe['name']}, Rating {$recipe['rating']}<br>";
+}
+~~~~~~~~
+
+There are both pros and cons to this approach.
+
+The main pro is that the public interface of your handler is accurate and
+specific - it's easy to see what the class's dependencies are.
+
+The biggest con is the obfuscation of what is going on in the code which
+invokes the handler. By adding a mutable receiver, state changes but it's not
+immediately obvious.
+
+This is a good way of achieving the goal in a *correct* way from a typing point
+of view. However, by sticking with what we have, I've chosen to sacrifice a
+little bit of interface descriptiveness, for a little bit of clarity.
 
 ### Via a Callback
 
-TODO: Write
+In a similar way to using a receiver, you could also use a callback. Again, we
+won't be using this so I'll just show example code.
+
+{title="Reciever example"}
+~~~~~~~~
+<?php
+
+interface Handler
+{
+    /** @return void */
+    public function handle();
+}
+
+class ListRecipesHandler implements Handler
+{
+    /** @var RecipeRepository */
+    private $repository;
+
+    public function __construct(
+        RecipeRepository $repository
+    ) {
+        $this->repository = $repository;
+    }
+
+    public function handle(Closure $callback)
+    {
+        foreach ($this->repository->getAllRecipesSortedByRating() as $recipe) {
+            $details = $recipe->getDetails();
+
+            $callback($details->getName(), $details->getRating());
+        }
+    }
+}
+
+// Example usage:
+
+$handler = new ListRecipesHandler($receiver, $repository);
+
+$handler->handle(function ($name, $rating) {
+    echo "Cocktail: {$name}, Rating {rating}<br>";
+});
+~~~~~~~~
+
+In many ways, this is kinda neat.
+
+Many languages promote this style of programming, specifically functional
+languages and when working with asynchronous systems. You will find the use of
+callbacks abundant when using Javascript for example.
+
+Again, this approach is a very good and valid one. However, for our application
+I still feel what we have is the most clear to understand.
 
 ### Our Choice
 
-In a statically typed language we'd have to employ one of these techniques.
-However, I feel that simply using PHP's dynamic typing and leaving the handler
-to return the result is fine in this situation. This can kind of be equated to
-*Using a Base Result Type*, except the explicit downcast is not required in
-PHP.
+In a statically typed language we'd have to employ one of these other
+techniques. However, I feel that simply using PHP's dynamic typing and leaving
+the handler to return the result is fine in this situation. This can kind of be
+equated to [Using a Base Result Type](#using-a-base-result-type), except the
+explicit downcast is not required in PHP.
 
 ## Summary
 
@@ -383,7 +555,7 @@ Dynamic typing allows you to work more productively, but with less safety.
 PHP's type hints, in theory, give the best of both worlds. But they also
 provide a dilemma: don't you get super explicit and over engineer everything,
 or do you forget typing and get things done quickly? Therefore, when developing
-in PHP, an important skill is learning hope much of a static typing mindset to
+in PHP, an important skill is learning how much of a static typing mindset to
 apply. The balance will also vary depending on the project. This skill is
 earned through practice and experience.
 
