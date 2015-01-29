@@ -1,0 +1,13 @@
+{
+    "require-dev": {
+        "behat/behat": "3.*",
+        "behat/mink": "1.6.0",
+        "behat/mink-extension": "2.0.1",
+        "behat/mink-goutte-driver": "1.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MinkExample\\": "src/"
+        }
+    }
+}
